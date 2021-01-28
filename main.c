@@ -2,6 +2,7 @@
 
 int main()
 {
-	printf("Hello, World!\n");
-	return 0;
+	char* i;
+
+	i = "only for parser branch";
 }
