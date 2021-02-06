@@ -42,14 +42,14 @@ void *get_map(int fd)
 	return (map_start);
 }
 
-int main()
-{
-	int fd;
-	struct n_map *map;
-
-	fd = open("../map.noncub", O_RDONLY);
-	if (fd <= 0)
-		return (1);
-	map = get_map(fd);
-
-}
+//int main()
+//{
+//	int fd;
+//	struct n_map *map;
+//
+//	fd = open("../map.noncub", O_RDONLY);
+//	if (fd <= 0)
+//		return (1);
+//	map = get_map(fd);
+//
+//}
