@@ -1,12 +1,7 @@
 #include <stdio.h>
 #include <fcntl.h>
-#include "gnl/get_next_line.h"
-
-struct n_map
-{
-	char			*line;
-	struct n_map	*n;
-} t_map;
+#include "hdrs/get_next_line.h"
+#include "hdrs/map_puuser.h"
 
 void	*add_el(struct n_map *map, char **line)
 {
@@ -29,6 +24,7 @@ void *get_map(int fd)
  	struct n_map *map;
 	char		*line;
 	struct n_map *map_start;
+
 	i = 0;
 	map = ft_calloc(1 , sizeof(t_map));
 	map->n = NULL;
