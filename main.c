@@ -7,8 +7,6 @@
 #define RES_Y	1080
 
 
-
-
 typedef struct  s_pos
 {
 	int			x;
@@ -85,29 +83,6 @@ void put_n_pixel(t_vars *vars, int i, int j, int n, unsigned int color)
 	}
 }
 
-void	grad_line_top(t_data *img, int color, int width)
-{
-	int 	i;
-	int		j;
-	static	int rofl;
-	int len;
-	int lol;
-
-	len	= 255 * 7;
-	lol	= len / 255;
-	i	= -1;
-	j	= -1;
-	while (++i < len)
-	{
-		while (++j < width)
-			my_mlx_pixel_put(img, i , j + rofl, color);
-		j = -1;
-		if(i % lol == 0)
-			color++;
-	}
-	rofl += width;
-}
-
 void 		scene_put(t_vars *vars, unsigned int color)
 {
 	struct n_map *start;
@@ -140,33 +115,20 @@ void 		scene_put(t_vars *vars, unsigned int color)
 		vars->map = vars->map->n;
 	}
 	vars->map = start;
-//	mlx_put_image_to_window(vars->mlx, vars->win, vars->data_im->img, 0, 0);
 }
 
 int     render_next_frame(t_vars *vars)
 {
-	t_data		img;
+
 	static int color = 0xFC69900;
 	static int cnt = 0;
 	static int i = 1;
-//	mlx_hook(vars->win, 2, 1L << 0, key_commands, &vars);
-
-	img.img = mlx_new_image(vars->mlx, RES_X, RES_Y);
-
-	vars->data_im = &img;
-	vars->data_im->addr = mlx_get_data_addr(vars->data_im->img,
-			 					&vars->data_im->bits_per_pixel,
-				 					&vars->data_im->line_length,
-										 &vars->data_im->endian);
 
 		scene_put(vars, 0xC6AC5B);
 		for(int j = 0; j < 15; j++)
 			for (int i = 0; i < 15; i++)
 				my_mlx_pixel_put(vars->data_im, vars->pos.x + i, vars->pos.y
 				+ j,color);
-//		my_mlx_pixel_put(vars->data_im, vars->pos.x, vars->pos.y,
-//					 vars->pos.color);
-//	grad_line_top(vars->data_im, 0xFC69900, 20);
 	color += i;
 	cnt += i;
 	if (cnt == 255)
@@ -177,6 +139,7 @@ int     render_next_frame(t_vars *vars)
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->data_im->img, 0, 0);
 }
 
+
 int main()
 {
 	void    *mlx;
@@ -184,6 +147,7 @@ int main()
 	t_vars      vars;
 	t_data		img;
 	int fd;
+
 //	struct n_map *map;
 
 	fd = open("../map.noncub", O_RDONLY);
@@ -193,8 +157,20 @@ int main()
 	vars.mlx = mlx_init();
 	pos_init(&vars.pos);
 	vars.win = mlx_new_window(vars.mlx, RES_X, RES_Y, "Hello world!");
+
+	img.img = mlx_new_image(vars.mlx, RES_X, RES_Y);
+
+	vars.data_im = &img;
+	vars.data_im->addr = mlx_get_data_addr(vars.data_im->img,
+											&vars.data_im->bits_per_pixel,
+											&vars.data_im->line_length,
+											&vars.data_im->endian);
+
+
 	mlx_loop_hook(vars.mlx, render_next_frame, &vars);
 	mlx_hook(vars.win, 2, 1L << 0, key_commands, &vars);
+//	mlx_put_image_to_window(vars.mlx, vars.win, vars.data_im->img, 0, 0);
+//	scene_put(vars, 0xC6AC5B);
 	mlx_loop(vars.mlx);
 
 
