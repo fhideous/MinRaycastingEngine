@@ -179,10 +179,10 @@ int     render_next_frame(t_vars *vars)
 
 int main()
 {
-	void    *mlx;
-	void	*mlx_win;
+//	void    *mlx;
+//	void	*mlx_win;
 	t_vars      vars;
-	t_data		img;
+//	t_data		img;
 	int fd;
 //	struct n_map *map;
 
