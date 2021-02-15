@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "minilibx_opengl_20191021/mlx.h"
+#include "mlx_linux//mlx.h"
 #include "hdrs/map_puuser.h"
 #include <fcntl.h>
 

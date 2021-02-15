@@ -1,17 +1,65 @@
 #include <stdio.h>
 #include <fcntl.h>
-#include "hdrs/get_next_line.h"
+//#include "hdrs/get_next_line.h"
 #include "hdrs/map_puuser.h"
+#include "stdlib.h"
+#include "lib/libft.h"
+
 
 void	*add_el(struct n_map *map, char **line)
 {
 	struct n_map *tmp;
 
-	tmp = malloc(sizeof(char));
+	tmp = malloc(sizeof(t_map));
 	map->n = tmp;
 	tmp->line = *line;
 	tmp->n = NULL;
 	return (tmp);
+}
+
+void list_free(struct n_map **map)
+{
+	struct n_map* cur = *map;
+	struct n_map* next;
+
+	while (cur != NULL)
+	{
+		next = cur->n;
+		free(cur->line);
+		free(cur);
+		cur = next;
+	}
+	*map = NULL;
+}
+
+int map_struct_strs(struct n_map *map, char ***strs, int size)
+{
+	int line_l;
+
+	if(!(strs = ft_calloc(size + 1, sizeof(char*))))
+		return (-1);
+	while (map)
+	{
+		line_l = ft_strlen(map->line);
+		if(!(**strs = ft_calloc(line_l + 1, sizeof(char))))
+			return (-1);
+		ft_memcpy(**strs, map->line, line_l);
+		map = map->n;
+	}
+	return (0);
+}
+
+int list_size(struct n_map *map)
+{
+	size_t	i;
+
+	i = 0;
+	while(map)
+	{
+		i++;
+		map = map->n;
+	}
+	return (i);
 }
 
 /*
@@ -20,32 +68,25 @@ void	*add_el(struct n_map *map, char **line)
 
 void *get_map(int fd)
 {
-	int		i;
  	struct n_map *map;
 	char		*line;
 	struct n_map *map_start;
+	char		**map_strs;
 
-	i = 0;
-	map = ft_calloc(1 , sizeof(t_map));
+	map = ft_calloc(1 , sizeof(struct n_map));
+	map_start = map;
 	map->n = NULL;
 	get_next_line(fd, &map->line);
-	map_start = map;
 	while (get_next_line(fd, &line))
 	{
 		map->n = add_el(map, &line);
 		map = map->n;
 	}
-	return (map_start);
-}
+	map->n = add_el(map, &line);
+	map = map->n;
+	if((map_struct_strs(map_start, &map_strs, list_size(map_start))) == -1)
+		return(NULL);
 
-//int main()
-//{
-//	int fd;
-//	struct n_map *map;
-//
-//	fd = open("../map.noncub", O_RDONLY);
-//	if (fd <= 0)
-//		return (1);
-//	map = get_map(fd);
-//
-//}
+	list_free(&map_start);
+	return (map_strs);
+}
