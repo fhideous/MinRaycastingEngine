@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include <stdio.h>
 #include "hdrs/map_puuser.h"
 #include <fcntl.h>
@@ -36,3 +37,5 @@ int main()
 	ss_free(map);
 	return 0;
 }
+=======
+>>>>>>> 2eeeae576b45b386bb47406825035d62fda8ec95
