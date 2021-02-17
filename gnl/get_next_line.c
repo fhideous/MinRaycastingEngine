@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../hdrs/get_next_line.h"
+//#include "../hdrs/get_next_line.h"
+#include "../lib/libft.h"
+#include "stdlib.h"
+# include <unistd.h>
+
 
 int             find_transl(const char *str)
 {

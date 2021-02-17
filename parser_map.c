@@ -6,31 +6,12 @@
 #include "lib/libft.h"
 
 
-void	*add_el(struct n_map *map, char **line)
+void del_f(void *ch)
 {
-	struct n_map *tmp;
-
-	tmp = malloc(sizeof(t_map));
-	map->n = tmp;
-	tmp->line = *line;
-	tmp->n = NULL;
-	return (tmp);
+	free(ch);
+	ch = NULL;
 }
 
-void list_free(struct n_map **map)
-{
-	struct n_map* cur = *map;
-	struct n_map* next;
-
-	while (cur != NULL)
-	{
-		next = cur->n;
-		free(cur->line);
-		free(cur);
-		cur = next;
-	}
-	*map = NULL;
-}
 
 int map_struct_strs(struct n_map *map, char ***strs, int size)
 {
@@ -49,44 +30,45 @@ int map_struct_strs(struct n_map *map, char ***strs, int size)
 	return (0);
 }
 
-int list_size(struct n_map *map)
-{
-	size_t	i;
-
-	i = 0;
-	while(map)
-	{
-		i++;
-		map = map->n;
-	}
-	return (i);
-}
 
 /*
  * map parsing
  */
 
-void *get_map(int fd)
+static char	**list_to_massive(t_list **hd, size_t len)
 {
- 	struct n_map *map;
-	char		*line;
-	struct n_map *map_start;
-	char		**map_strs;
+	char	  **map;
+	int		  i;
+	t_list	*tmp;
+	t_list	*old;
 
-	map = ft_calloc(1 , sizeof(struct n_map));
-	map_start = map;
-	map->n = NULL;
-	get_next_line(fd, &map->line);
-	while (get_next_line(fd, &line))
+	if (!(map = ft_calloc(len + 1, sizeof(char *))))
+		return (NULL);
+	tmp = *hd;
+	i = -1;
+	while (len--)
 	{
-		map->n = add_el(map, &line);
-		map = map->n;
+		old = tmp;
+		map[++i] = tmp->data;
+		tmp = tmp->next;
+		free(old);
 	}
-	map->n = add_el(map, &line);
-	map = map->n;
-	if((map_struct_strs(map_start, &map_strs, list_size(map_start))) == -1)
-		return(NULL);
+	return (map);
+}
 
-	list_free(&map_start);
-	return (map_strs);
+char		**get_map(char *path)
+{
+	char	*line;
+	int		fd;
+	t_list	*hd;
+	char	**map;
+
+	hd = NULL;
+	line = NULL;
+	fd = open(path, O_RDONLY);
+	while (get_next_line(fd, &line) == 1)
+		ft_lstadd_back(&hd, ft_lstnew(line));
+	ft_lstadd_back(&hd, ft_lstnew(line));
+	map = list_to_massive(&hd, ft_lstsize(hd));
+	return (map);
 }
