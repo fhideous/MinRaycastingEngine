@@ -38,21 +38,21 @@ void	free_map(t_cub_map *map)
 
 int main()
 {
-//	t_win      vars;
 	int fd;
-	char		**map;
 	int i;
 	char *path = "../map.cub";
+	t_all		game;
 	t_cub_map full_map;
-//	printf("HI");
 
 	fd = open(path, O_RDONLY);
-
 	parse_set(&full_map, fd);
-//	map	= get_map(fd);
-	i = -1;
-	while (full_map.map[++i])
-		ft_putendl_fd(full_map.map[i], 1);
+	game.map = full_map.map;
+	find_player(game.map, &game.plr);
+//	i = -1;
+//	while (full_map.map[++i])
+//		ft_putendl_fd(full_map.map[i], 1);
+
+
 
 	free_map(&full_map);
 	close(fd);
