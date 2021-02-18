@@ -5,29 +5,10 @@
 #include "stdlib.h"
 #include "lib/libft.h"
 
-
 void del_f(void *ch)
 {
 	free(ch);
 	ch = NULL;
-}
-
-
-int map_struct_strs(struct n_map *map, char ***strs, int size)
-{
-	int line_l;
-
-	if(!(strs = ft_calloc(size + 1, sizeof(char*))))
-		return (-1);
-	while (map)
-	{
-		line_l = ft_strlen(map->line);
-		if(!(**strs = ft_calloc(line_l + 1, sizeof(char))))
-			return (-1);
-		ft_memcpy(**strs, map->line, line_l);
-		map = map->n;
-	}
-	return (0);
 }
 
 
@@ -56,16 +37,18 @@ static char	**list_to_massive(t_list **hd, size_t len)
 	return (map);
 }
 
-char		**get_map(char *path)
+/*
+ * line приходит из parse_set
+ */
+
+char		**get_map(int fd, char *line)
 {
-	char	*line;
-	int		fd;
 	t_list	*hd;
 	char	**map;
 
 	hd = NULL;
-	line = NULL;
-	fd = open(path, O_RDONLY);
+	if (line)
+		ft_lstadd_back(&hd, ft_lstnew(line));
 	while (get_next_line(fd, &line) == 1)
 		ft_lstadd_back(&hd, ft_lstnew(line));
 	ft_lstadd_back(&hd, ft_lstnew(line));

@@ -76,7 +76,7 @@ typedef struct	s_cub_map
 	char		**map;
 }				  t_cub_map;
 
-char	**get_map(char *);
-
+char	**get_map(int fd, char *line);
+int		parse_set(t_cub_map *, int);
 
 #endif
