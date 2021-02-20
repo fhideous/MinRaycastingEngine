@@ -1,10 +1,10 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
-//#include "lib/libft.h"
+#include "../lib/libft.h"
+#include "../minilibx_opengl_20191021/mlx.h"
 
 #define SCALE 16
-
 /*
  * window
  */
@@ -34,19 +34,25 @@ typedef struct	s_point
  * player
  */
 
+typedef struct	s_ray
+{
+	float		x;
+	float		y;
+	float		len;
+	float		angle;
+}				  t_ray;
+
 typedef struct	s_plr
 {
 	float		x;
 	float		y;
-	float		dir;
-	float		start;
-	float		end;
+	t_ray		ray;
 }				  t_plr;
 
 typedef struct	s_all
 {
 	t_win		*win;
-	t_plr		*plr;
+	t_plr		plr;
 	char		**map;
 }				  t_all;
 
@@ -78,5 +84,5 @@ typedef struct	s_cub_map
 
 char	**get_map(int fd, char *line);
 int		parse_set(t_cub_map *, int);
-
+int		create_win(t_cub_map, t_all, t_win);
 #endif
