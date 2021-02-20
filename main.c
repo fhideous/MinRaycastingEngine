@@ -56,7 +56,6 @@ void	free_map(t_cub_map *map)
 
 int main()
 {
-	t_win      vars;
 	int fd;
 	char		**map;
 	int i;
