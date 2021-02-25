@@ -4,6 +4,7 @@
 #include "hdrs/map_puuser.h"
 #include "stdlib.h"
 #include "lib/libft.h"
+//#include "lib/libft.h"
 
 void del_f(void *ch)
 {

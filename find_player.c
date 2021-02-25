@@ -33,7 +33,7 @@ int find_player(char **map, t_plr *player)
 		angle = 3 * M_PI / 2;
 	if (angle == -1)
 		return (-1);
-	player->dir.x = player->x + STEP_X * cos(angle);
-	player->dir.y = player->y + STEP_Y * sin(angle);
+//	player->dir.x = player->x + STEP_X * cos(angle);
+//	player->dir.y = player->y + STEP_Y * sin(angle);
 	return(0);
 }

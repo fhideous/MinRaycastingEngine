@@ -3,8 +3,9 @@
 
 #include "../lib//libft.h"
 #include <math.h>
-#define SCALE 16
+#include <mlx.h>
 
+#define SCALE 16
 /*
  * len of player vector
  */
@@ -40,23 +41,25 @@ typedef struct	s_point
  * player
  */
 
-typedef struct s_ray
+
+typedef struct	s_ray
 {
-	float			x;
-	float			y;
-	float 			len;
-}				t_ray;
+	float		x;
+	float		y;
+	float		len;
+	float		angle;
+}				  t_ray;
 
 typedef struct	s_plr
 {
-	float			x;
-	float			y;
-	t_ray 			dir;
+	float		x;
+	float		y;
+	t_ray		ray;
 }				  t_plr;
 
 typedef struct	s_all
 {
-	t_win		*win;
+	t_win		win;
 	t_plr		plr;
 	char		**map;
 }				  t_all;
@@ -89,6 +92,10 @@ typedef struct	s_cub_map
 
 char	**get_map(int fd, char *line);
 int		parse_set(t_cub_map *, int);
+//<<<<<<< HEAD
 int		find_player(char **, t_plr *);
 
+//=======
+int		create_win(t_cub_map, t_all, t_win);
+//>>>>>>> 90776d9f482c1e3589f876080490ccff4548c3fe
 #endif
