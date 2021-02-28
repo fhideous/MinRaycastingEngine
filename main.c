@@ -68,25 +68,24 @@ int main()
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
 
-//	full_map	= get_map(fd, );
-
-
 	all.map = full_map.map;
-	all.plr.x = 11 * SCALE;
-	all.plr.y = 27 * SCALE;
+	find_player(all.map, &all.plr);
 
-//	find_player(all.map, &all.plr);
-
-	all.plr.ray.x = all.plr.x + 0.6 * SCALE;
-	all.plr.ray.y = all.plr.y;
-	all.plr.ray.len = 0.6 * SCALE;
+//	all.plr.x = 11 * SCALE;
+//	all.plr.y = 27 * SCALE;
 
 
-	all.plr.ray.angle = acos((all.plr.x /
-							  sqrt(all.plr.x * all.plr.x +
-								   all.plr.y * all.plr.y))) / 57.3;
 
-	create_win(full_map, all, all.win);
+//	all.plr.ray.x = all.plr.x + 0.6 * SCALE;
+//	all.plr.ray.y = all.plr.y;
+//	all.plr.ray.len = 0.6 * SCALE;
+
+
+//	all.plr.ray.angle = acos((all.plr.x /
+//							  sqrt(all.plr.x * all.plr.x +
+//								   all.plr.y * all.plr.y))) / 57.3;
+
+	create_win(full_map, all);
 	i = -1;
 	while (full_map.map[++i])
 		ft_putendl_fd(full_map.map[i], 1);

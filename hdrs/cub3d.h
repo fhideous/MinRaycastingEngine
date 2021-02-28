@@ -4,6 +4,7 @@
 #include "../lib//libft.h"
 #include <math.h>
 #include <mlx.h>
+#include "stdio.h"
 
 #define SCALE 16
 /*
@@ -47,7 +48,7 @@ typedef struct	s_ray
 	float		x;
 	float		y;
 	float		len;
-	float		angle;
+//	float		angle;
 }				  t_ray;
 
 typedef struct	s_plr
@@ -59,7 +60,7 @@ typedef struct	s_plr
 
 typedef struct	s_all
 {
-	t_win		win;
+	t_win		*full_win;
 	t_plr		plr;
 	char		**map;
 }				  t_all;
@@ -90,12 +91,15 @@ typedef struct	s_cub_map
 	char		**map;
 }				  t_cub_map;
 
-char	**get_map(int fd, char *line);
-int		parse_set(t_cub_map *, int);
-//<<<<<<< HEAD
-int		find_player(char **, t_plr *);
+char		**get_map(int fd, char *line);
+int			parse_set(t_cub_map *, int);
+int			find_player(char **, t_plr *);
 
-//=======
-int		create_win(t_cub_map, t_all, t_win);
-//>>>>>>> 90776d9f482c1e3589f876080490ccff4548c3fe
+void		ft_rotate(t_ray *x, t_ray *y, float angle);
+int			add_ray(t_all *all);
+
+int			create_win(t_cub_map, t_all);
+
+void 		scene_put(t_all *vars, t_cub_map *);
+void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 #endif

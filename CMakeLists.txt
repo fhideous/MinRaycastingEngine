@@ -10,7 +10,7 @@ set(SOURCE_DIR_LIBFT /home/fhideous/CLionProjects/cub3d/lib/libft.a)
 
 add_executable(cub3d main.c parser_map.c gnl/get_next_line.c
         parse_set.c find_player.c create_win.c
-        lib/libft.h hdrs/get_next_line.h hdrs/cub3d.h)
+        lib/libft.h hdrs/get_next_line.h hdrs/cub3d.h scene_put.c ray.c)
 
 target_link_libraries(cub3d  ${SOURCE_DIR_LIBFT})
 

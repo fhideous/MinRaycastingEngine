@@ -8,7 +8,7 @@ int find_player(char **map, t_plr *player)
 {
 	int i;
 	int j;
-	double angle;
+	float angle;
 
 	i = 0;
 	while((map[i]))
@@ -33,7 +33,8 @@ int find_player(char **map, t_plr *player)
 		angle = 3 * M_PI / 2;
 	if (angle == -1)
 		return (-1);
-//	player->dir.x = player->x + STEP_X * cos(angle);
-//	player->dir.y = player->y + STEP_Y * sin(angle);
+	player->ray.x = player->x + STEP_X * cosf(angle);
+	player->ray.y = player->y + STEP_Y * sinf(angle);
+	player->ray.len = 0.2;
 	return(0);
 }
