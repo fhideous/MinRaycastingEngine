@@ -42,11 +42,13 @@ void 		scene_put(t_all *vars, t_cub_map *full_map)
 			i += 1;
 			(*start)++;
 		}
+		(*start) -= i;
 		i = 0;
 		j++;
 		start++;
 //		vars->map = vars->map->n;
 	}
+	start -= j;
 //	vars->map = start;
 	mlx_put_image_to_window(vars->full_win->mlx,
 							vars->full_win->win, vars->full_win->img, 0, 0);
