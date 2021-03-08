@@ -17,8 +17,8 @@ int		add_plr(t_all *all)
 
 	for(int j = 0; j < SCALE; j++)
 		for (int i = 0; i < SCALE; i++)
-			my_mlx_pixel_put(all->full_win, i + all->plr.x * SCALE,
-					j + all->plr.y * SCALE, color);
+			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 2,
+					j + all->plr.y -SCALE / 2, color);
 
 	mlx_put_image_to_window(all->full_win->mlx,
 							all->full_win->win, all->full_win->img, 0, 0);

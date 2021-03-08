@@ -6,7 +6,7 @@
 #include <mlx.h>
 #include "stdio.h"
 
-#define SCALE 16
+#define SCALE 32
 /*
  * len of player vector
  */
@@ -48,7 +48,7 @@ typedef struct	s_ray
 	float		x;
 	float		y;
 	float		len;
-//	float		angle;
+	float		angle;
 }				  t_ray;
 
 typedef struct	s_plr
@@ -102,4 +102,7 @@ int			create_win(t_cub_map, t_all);
 
 void 		scene_put(t_all *vars, t_cub_map *);
 void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
+
+void print_ray(t_win *, t_ray start, t_ray end, float);
+
 #endif
