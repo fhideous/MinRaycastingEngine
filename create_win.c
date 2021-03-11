@@ -15,10 +15,10 @@ int		add_plr(t_all *all)
 	static int cnt = 0;
 	static int i = 1;
 
-	for(int j = 0; j < SCALE; j++)
-		for (int i = 0; i < SCALE; i++)
-			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 2,
-					j + all->plr.y -SCALE / 2, color);
+	for(int j = 0; j < SCALE / 4; j++)
+		for (int i = 0; i < SCALE /4; i++)
+			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 4 / 2,
+					j + all->plr.y -SCALE / 4 / 2, color);
 
 	mlx_put_image_to_window(all->full_win->mlx,
 							all->full_win->win, all->full_win->img, 0, 0);
@@ -64,9 +64,11 @@ int     render_next_frame(t_all *all)
 //								  &all->full_win->line_length,
 //								  &all->full_win->endian);
 
-//	add_plr(all);
-//	scene_put(all, all->full_map);
+
+
 	add_flour(all);
+//	scene_put(all, all->full_map);
+//	add_plr(all);
 	add_ray(all, &all->full_map->resolution);
 
 }

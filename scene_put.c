@@ -10,8 +10,8 @@ void put_n_pixel(t_all *vars, int i, int j, int n, unsigned int color)
 	while (++it < n )
 	{
 		while (++jt < n)
-			my_mlx_pixel_put(vars->full_win, jt + i * SCALE,
-							 it + j * SCALE, color);
+			my_mlx_pixel_put(vars->full_win, jt + i * SCALE / 4,
+							 it + j * SCALE / 4, color);
 		jt = -1;
 	}
 }
@@ -32,11 +32,11 @@ void 		scene_put(t_all *vars, t_cub_map *full_map)
 		while (**(start))
 		{
 			if(**(start) == '1')
-				put_n_pixel(vars,i, j, SCALE,0xE3CC87);
+				put_n_pixel(vars,i, j, SCALE / 4,0xE3CC87);
 			if (**(start) == '2')
-				put_n_pixel(vars,i, j, SCALE, 0xF0958659);
+				put_n_pixel(vars,i, j, SCALE / 4, 0xF0958659);
 			if(**(start) == '0')
-				put_n_pixel(vars,i, j, SCALE, 0xF0958659);
+				put_n_pixel(vars,i, j, SCALE / 4, 0xF0958659);
 //			if (*(vars->map->line) == 'N')
 //				put_n_pixel(vars,i, j, n, 0xE3D29F);
 			i += 1;

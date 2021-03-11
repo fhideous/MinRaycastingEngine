@@ -94,4 +94,5 @@ int parse_set(t_cub_map *full_map, int fd)
 			free(line_bn);
 	}
 	free(line);
+	close(fd);
 }

@@ -39,8 +39,8 @@ int			key_commands(int keycode, t_all *all)
 	else if (keycode == 115)
 		all->plr.y += STEP_Y;
 	else if (keycode == 65361)
-		all->plr.ray.angle -= 0.2;
+		all->plr.ray.angle -= 0.1;
 	else if (keycode == 65363)
-		all->plr.ray.angle += 0.2;
+		all->plr.ray.angle += 0.1;
 
 }

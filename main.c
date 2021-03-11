@@ -59,11 +59,10 @@ int main()
 	int fd;
 	int i;
 	char *path = "../map.cub";
-
+//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
 
-	//	printf("HI");
 
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
@@ -72,23 +71,9 @@ int main()
 	all.map = full_map.map;
 	find_player(all.map, &all.plr);
 
-//	all.plr.x = 11 * SCALE;
-//	all.plr.y = 27 * SCALE;
-
-
-
-//	all.plr.ray.x = all.plr.x + 0.6 * SCALE;
-//	all.plr.ray.y = all.plr.y;
-//	all.plr.ray.len = 0.6 * SCALE;
-
-
-//	all.plr.ray.angle = acos((all.plr.x /
-//							  sqrt(all.plr.x * all.plr.x +
-//								   all.plr.y * all.plr.y))) / 57.3;
 
 	create_win(&full_map, &all);
 
 	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
-	close(fd);
 	return 0;
 }
