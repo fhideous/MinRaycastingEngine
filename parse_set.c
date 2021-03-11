@@ -90,7 +90,8 @@ int parse_set(t_cub_map *full_map, int fd)
 	while (get_next_line(fd, &line) == 1)
 	{
 		line_bn = line;
-		if ((choise_type(fd, line, full_map)) != 5)
+		if((choise_type(fd, line, full_map)) != 5)
 			free(line_bn);
 	}
+	free(line);
 }

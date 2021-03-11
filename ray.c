@@ -41,6 +41,7 @@ void find_crossing(t_all *all, float  angle, t_win *win)
 int		add_ver_line(int n, float len, int max_high, t_win *full_win) {
 	int i;
 	i = 0;
+
 	while (i < (int)(len / 2)) {
 		my_mlx_pixel_put(full_win, n,
 						 i + (int)(max_high) / 2, 0xF0958659);
@@ -65,13 +66,17 @@ int		add_ray(t_all *all,const t_point *res)
 
 	n = 0;
 	angle = -30;
+//	ft_rotate(all->plr.ray, )
 	while (angle <= 30)
 	{
+		high = cos(angle / 57.2958 );
+		if (high == 0)
+			high = 1;
 		find_crossing(all, all->plr.ray.angle + angle / 57.2958,
 					   all->full_win);
 //		high = ABS (SCALE / all->plr.ray.len * res->x / 2 / tan(angle / 57.2958));
-		add_ver_line(n, SCALE / all->plr.ray.len / 2 * res->y, res->y, all->full_win);
 		angle += (float)60 / res->x;
+		add_ver_line(n,SCALE / all->plr.ray.len / 2 * res->y / high, res->y, all->full_win);
 		n++;
 	}
 }

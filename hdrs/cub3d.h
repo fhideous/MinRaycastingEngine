@@ -7,13 +7,13 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-#define SCALE 256
+#define SCALE 32
 #define ANGLE_STEP 1
 /*
  * len of player vector
  */
-#define STEP_X 0.2
-#define STEP_Y 0.2
+#define STEP_X 5
+#define STEP_Y 5
 
 /*
  * window
@@ -102,13 +102,15 @@ int			find_player(char **, t_plr *);
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *);
 
-int			create_win(t_cub_map, t_all);
+int			create_win(t_cub_map *, t_all *);
 
-void 		scene_put(t_all *vars, t_cub_map *);
 void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 
-void print_ray(t_win *, t_ray start, t_ray end, float);
+void 		scene_put(t_all *vars, t_cub_map *);
+void		print_ray(t_win *, t_ray *start, t_ray *end, float);
+void		free_map(t_cub_map *map);
 
-int             key_commands(int keycode, t_all *all);
+
+int			key_commands(int keycode, t_all *all);
 
 #endif

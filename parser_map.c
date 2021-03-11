@@ -49,10 +49,17 @@ char		**get_map(int fd, char *line)
 
 	hd = NULL;
 	if (line)
+	{
 		ft_lstadd_back(&hd, ft_lstnew(line));
+		free(line);
+	}
 	while (get_next_line(fd, &line) == 1)
+	{
 		ft_lstadd_back(&hd, ft_lstnew(line));
+		free(line);
+	}
 	ft_lstadd_back(&hd, ft_lstnew(line));
+	free(line);
 	map = list_to_massive(&hd, ft_lstsize(hd));
 	return (map);
 }

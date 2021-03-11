@@ -24,15 +24,15 @@ void ss_free(char** mas)
 void	free_map(t_cub_map *map)
 {
 	free(map->e_texture);
-	map->e_texture = NULL;
+//	map->e_texture = NULL;
 	free(map->s_texture);
-	map->s_texture = NULL;
+//	map->s_texture = NULL;
 	free(map->w_texture);
-	map->w_texture = NULL;
+//	map->w_texture = NULL;
 	free(map->n_texture);
-	map->n_texture = NULL;
+//	map->n_texture = NULL;
 	free(map->sprite);
-	map->sprite = NULL;
+//	map->sprite = NULL;
 	ss_free(map->map);
 }
 
@@ -68,6 +68,7 @@ int main()
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
 
+
 	all.map = full_map.map;
 	find_player(all.map, &all.plr);
 
@@ -85,12 +86,9 @@ int main()
 //							  sqrt(all.plr.x * all.plr.x +
 //								   all.plr.y * all.plr.y))) / 57.3;
 
-	create_win(full_map, all);
-	i = -1;
-	while (full_map.map[++i])
-		ft_putendl_fd(full_map.map[i], 1);
+	create_win(&full_map, &all);
 
-	free_map(&full_map);
+	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
 	close(fd);
 	return 0;
 }
