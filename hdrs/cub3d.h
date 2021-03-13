@@ -24,7 +24,8 @@ typedef struct	s_win
 	void		*mlx;
 	void		*win;
 	void		*img;
-	void		*addr;
+	unsigned int	*addr;
+//	void	*addr;
 	int			line_length;
 	int			bits_per_pixel;
 	int			endian;
@@ -86,6 +87,15 @@ typedef struct	s_cub_map
 
 	char		**map;
 }				  t_cub_map;
+
+typedef struct	s_texture
+{
+	void 	*img;
+	unsigned  int	*addr;
+//	void	*addr;
+	int		width;
+	int		heigh;
+}				t_texture;
 
 typedef struct	s_all
 {

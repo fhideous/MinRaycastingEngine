@@ -24,7 +24,7 @@ int		add_plr(t_all *all)
 							all->full_win->win, all->full_win->img, 0, 0);
 }
 
-add_flour(t_all *all)
+void add_flour(t_all *all)
 {
 	int i;
 	int j;
@@ -67,8 +67,8 @@ int     render_next_frame(t_all *all)
 
 
 	add_flour(all);
-//	scene_put(all, all->full_map);
-//	add_plr(all);
+	scene_put(all, all->full_map);
+	add_plr(all);
 	add_ray(all, &all->full_map->resolution);
 
 }
@@ -81,7 +81,6 @@ int		render_plr_frame(t_all *all)
 
 int	create_win(t_cub_map *full_map, t_all *all)
 {
-	void *mlx;
 	t_win 	*win;
 
 	win = malloc(sizeof(t_win));

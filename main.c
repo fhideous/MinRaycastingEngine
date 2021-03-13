@@ -36,23 +36,57 @@ void	free_map(t_cub_map *map)
 	ss_free(map->map);
 }
 
+#define SCALE_TEX 10
+void	add_pixel_size(unsigned int *w_addr, unsigned int *addr, int x, int y)
+{
+	int i;
+	int j;
+	i = -1;
+	j = -1;
+	while (++i != SCALE_TEX)
+	{
+		while (++j != SCALE_TEX)
+		{
+			w_addr[SCALE_TEX * x + j + 640 * (SCALE_TEX * y +i)] = addr[x + y * 32];
+		}
+		j = -1;
+	}
+}
 
-//typedef struct  s_data {
-//	void        *img;
-//	char        *addr;
-//	int         bits_per_pixel;
-//	int         line_length;
-//	int         endian;
-//}               t_data;
-//
-//typedef struct  s_vars1 {
-//	void    	    *mlx;
-//	void    	    *win;
-//	t_data			*data_im;
-//	struct n_map	*map;
-//}               t_vars1;
+void xpm_test(char *path)
+{
+	t_win win;
+	t_texture 	n;
 
-#include <math.h>
+	win.mlx = mlx_init();
+	win.win = mlx_new_window(win.mlx, 640,
+							  480, "texture");
+	n.img = mlx_xpm_file_to_image(win.mlx, path, &n.width, &n.heigh);
+	n.addr = mlx_get_data_addr(n.img,
+								  &win.bits_per_pixel,
+								  &win.line_length,
+								  &win.endian);
+	win.img = mlx_new_image(win.mlx, 640, 480);
+	win.addr = mlx_get_data_addr(win.img,
+							  &win.bits_per_pixel,
+							  &win.line_length,
+							  &win.endian);
+	int i = 0;
+	int j = 0;
+	while (i != n.heigh ) {
+		while(j != n.width )
+		{
+			add_pixel_size(win.addr, n.addr, i, j);
+			j++;
+
+		}
+			j  = 0;
+			i++;
+	}
+	mlx_put_image_to_window(win.mlx,
+							win.win, win.img,100 , 100);
+	mlx_loop(win.mlx);
+}
 
 int main()
 {
@@ -67,13 +101,14 @@ int main()
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
 
-
+	xpm_test(full_map.n_texture);
+	return (9);
 	all.map = full_map.map;
 	find_player(all.map, &all.plr);
 
 
-	create_win(&full_map, &all);
 
+	create_win(&full_map, &all);
 	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
 	return 0;
 }

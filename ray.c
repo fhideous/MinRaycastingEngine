@@ -28,13 +28,13 @@ void find_crossing(t_all *all, float  angle, t_win *win)
 		end.x = all->plr.x + c * cosf(angle);
 		end.y  = all->plr.y + c * sinf(angle);
 		c += (float)0.4;
-//		my_mlx_pixel_put(win, (int)(end.x) / 4,
-//						 (int)(end.y) / 4, 0xFF0000);
+		my_mlx_pixel_put(win, (int)(end.x) / 4,
+						 (int)(end.y) / 4, 0xFF0000);
 	}
 	all->plr.ray.x = end.x + SCALE / 2;
 	all->plr.ray.y = end.y + SCALE / 2;
 	all->plr.ray.len = c;
-//	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 
 }
 
