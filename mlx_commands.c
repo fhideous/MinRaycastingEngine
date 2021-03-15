@@ -5,7 +5,14 @@ void ft_close (t_all *all)
 	free_map(all->full_map);
 	mlx_destroy_image(all->full_win->mlx,all->full_win->img);
 	mlx_destroy_window(all->full_win->mlx, all->full_win->win);
-//		free(all->full_win->win);
+
+	mlx_destroy_image(all->full_win->mlx, all->textrs.spite.img_tmp);
+	mlx_destroy_image(all->full_win->mlx, all->textrs.w_tex.img_tmp);
+	mlx_destroy_image(all->full_win->mlx, all->textrs.n_tex.img_tmp);
+	mlx_destroy_image(all->full_win->mlx, all->textrs.e_tex.img_tmp);
+	mlx_destroy_image(all->full_win->mlx, all->textrs.s_tex.img_tmp);
+	free(all->full_win);
+
 	exit (0);
 }
 

@@ -1,10 +1,10 @@
 R 640 480
 NO ../textures/brick.xpm
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+SO ../textures/metal.xpm
+WE ../textures/wood.xpm
+EA ../textures/stone.xpm
 
-S ./path_to_the_sprite_texture
+S ../textures/stone.xpm
 F 220,100,0
 C 225,30,0
 

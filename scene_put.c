@@ -26,7 +26,7 @@ void 		scene_put(t_all *vars, t_cub_map *full_map)
 
 	i = 0;
 	j = 0;
-	start = vars->map;
+	start = vars->full_map->map;
 	while (start && (*start))
 	{
 		while (**(start))

@@ -31,7 +31,7 @@ void	free_map(t_cub_map *map)
 //	map->w_texture = NULL;
 	free(map->n_texture);
 //	map->n_texture = NULL;
-	free(map->sprite);
+//	free(map->sprite);
 //	map->sprite = NULL;
 	ss_free(map->map);
 }
@@ -57,20 +57,21 @@ void xpm_test(char *path)
 {
 	t_win win;
 	t_texture 	n;
-
-	win.mlx = mlx_init();
-	win.win = mlx_new_window(win.mlx, 640,
-							  480, "texture");
-	n.img = mlx_xpm_file_to_image(win.mlx, path, &n.width, &n.heigh);
-	n.addr = mlx_get_data_addr(n.img,
-								  &win.bits_per_pixel,
-								  &win.line_length,
-								  &win.endian);
-	win.img = mlx_new_image(win.mlx, 640, 480);
-	win.addr = mlx_get_data_addr(win.img,
-							  &win.bits_per_pixel,
-							  &win.line_length,
-							  &win.endian);
+	{
+		win.mlx = mlx_init();
+		win.win = mlx_new_window(win.mlx, 640,
+								 480, "texture");
+		n.img_tmp = mlx_xpm_file_to_image(win.mlx, path, &n.width, &n.heigh);
+		n.addr = mlx_get_data_addr(n.img_tmp,
+								   &win.bits_per_pixel,
+								   &win.line_length,
+								   &win.endian);
+		win.img = mlx_new_image(win.mlx, 640, 480);
+		win.addr = mlx_get_data_addr(win.img,
+									 &win.bits_per_pixel,
+									 &win.line_length,
+									 &win.endian);
+	}
 	int i = 0;
 	int j = 0;
 	while (i != n.heigh ) {
@@ -88,10 +89,36 @@ void xpm_test(char *path)
 	mlx_loop(win.mlx);
 }
 
+int get_xpm_addr(t_win *win, t_texture *tex, char **path)
+{
+	tex->img_tmp = mlx_xpm_file_to_image(win->mlx, *path, &tex->width, &tex->heigh);
+	if(!tex->img_tmp)
+		return -1;
+	tex->addr = mlx_get_data_addr(tex->img_tmp,
+							   &win->bits_per_pixel,
+							   &win->line_length,
+							   &win->endian);
+//	free(tex);
+//	mlx_destroy_image(win->mlx, tex->img_tmp);
+}
+
+int	texture_open(t_win *win, t_textures *textrs, t_cub_map *cub_map)
+{
+	int err;
+
+	err = 0;
+	err += get_xpm_addr(win, &textrs->n_tex, &cub_map->n_texture);
+	err += get_xpm_addr(win, &textrs->s_tex, &cub_map->s_texture);
+	err += get_xpm_addr(win, &textrs->e_tex, &cub_map->e_texture);
+	err += get_xpm_addr(win, &textrs->w_tex, &cub_map->w_texture);
+	err += get_xpm_addr(win, &textrs->spite, &cub_map->sprite);
+
+
+}
+
 int main()
 {
 	int fd;
-	int i;
 	char *path = "../map.cub";
 //	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
@@ -100,15 +127,17 @@ int main()
 
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
+//
+//	xpm_test(full_map.n_texture);
+//	return (9);
+	all.full_map = &full_map;
 
-	xpm_test(full_map.n_texture);
-	return (9);
-	all.map = full_map.map;
-	find_player(all.map, &all.plr);
+	find_player(all.full_map->map, &all.plr);
 
-
-
-	create_win(&full_map, &all);
-	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
+	all.full_win = malloc(sizeof (t_win));
+	all.full_win->mlx = mlx_init();
+	texture_open(all.full_win,&all.textrs, all.full_map);
+	create_win(&all);
+//	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
 	return 0;
 }

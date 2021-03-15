@@ -59,16 +59,15 @@ int     render_next_frame(t_all *all)
 	all->full_win->img = mlx_new_image(all->full_win->mlx,
 									all->full_map->resolution.x,
 							 all->full_map->resolution.y);
-//	all->full_win->addr = mlx_get_data_addr(all->full_win->img,
-//								  &all->full_win->bits_per_pixel,
-//								  &all->full_win->line_length,
-//								  &all->full_win->endian);
+	all->full_win->addr = mlx_get_data_addr(all->full_win->img,
+								  &all->full_win->bits_per_pixel,
+								  &all->full_win->line_length,
+								  &all->full_win->endian);
 
 
-
-	add_flour(all);
-	scene_put(all, all->full_map);
-	add_plr(all);
+//	add_flour(all);
+//	scene_put(all, all->full_map);
+//	add_plr(all);
 	add_ray(all, &all->full_map->resolution);
 
 }
@@ -79,22 +78,20 @@ int		render_plr_frame(t_all *all)
 //	add_ray(all, res);
 }
 
-int	create_win(t_cub_map *full_map, t_all *all)
+int	create_win(t_all *all)
 {
-	t_win 	*win;
+//	t_win 	*win;
 
-	win = malloc(sizeof(t_win));
-	win->mlx = mlx_init();
-	win->win = mlx_new_window(win->mlx, full_map->resolution.x,
-								  full_map->resolution.y, "cub3d");
-	win->img = mlx_new_image(win->mlx, full_map->resolution.x,
-							 full_map->resolution.y);
-	win->addr = mlx_get_data_addr(win->img,
-								  &win->bits_per_pixel,
-								  &win->line_length,
-								  &win->endian);
-	all->full_map = full_map;
-	all->full_win = win;
+//	win = malloc(sizeof(t_win));
+	all->full_win->win = mlx_new_window(all->full_win->mlx, all->full_map->resolution.x,
+								  all->full_map->resolution.y, "cub3d");
+	all->full_win->img = mlx_new_image(all->full_win->mlx, all->full_map->resolution.x,
+							 all->full_map->resolution.y);
+	all->full_win->addr = mlx_get_data_addr(all->full_win->img,
+								  &all->full_win->bits_per_pixel,
+								  &all->full_win->line_length,
+								  &all->full_win->endian);
+//	all->full_win = win;
 //	render_next_frame(&all, &full_map);
 	mlx_loop_hook(all->full_win->mlx, render_next_frame, &all->full_win);
 
