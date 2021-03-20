@@ -9,6 +9,8 @@
 
 #define SCALE 32
 #define ANGLE_STEP 0.02
+#define M_PI_6_N -0.523598776
+#define M_PI_6 0.523598776
 /*
  * len of player vector
  */
@@ -94,8 +96,8 @@ typedef struct	s_texture
 	void 	*img_tmp;
 	unsigned  int	*addr;
 //	char	*addr;
-
-	//	void	*addr;
+//
+//		void	*addr;
 	int		width;
 	int		heigh;
 }				t_texture;
