@@ -40,6 +40,11 @@ void add_flour(t_all *all)
 
 }
 
+void	scale_texture(t_all *all)
+{
+
+}
+
 int     render_next_frame(t_all *all)
 {
 //	mlx_destroy_image(all->full_win->mlx, all->full_win->img);
@@ -54,8 +59,9 @@ int     render_next_frame(t_all *all)
 
 
 	add_flour(all);
-//	scene_put(all, all->full_map);
-//	add_plr(all);
+
+//	scale_texture(all);
+
 	add_ray(all, &all->full_map->resolution);
 
 }

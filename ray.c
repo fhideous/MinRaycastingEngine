@@ -69,7 +69,7 @@ int		add_n_pixels(t_all *all, int n, int w_it, int *txt_it)
 
 int		add_texture_line(t_all *all, int n, float high, int dir)
 {
-	int i;
+	float i;
 	unsigned  int *win_addr;
 	unsigned int *txtr_addr;
 
@@ -93,13 +93,17 @@ int		add_texture_line(t_all *all, int n, float high, int dir)
 				((all->full_map->resolution.y >> 1) - ((int)high >> 1));
 //		if (!(i % 2))
 //		add_n_pixels(all,  ((int)high % 32) ,w_it, &txt_it);
-		int j = -1;
-		while (++j <= (int) high / 2 )
-			all->full_win->addr[w_it + (i + j) * all->full_map->resolution.x] = all->textrs.n_tex.addr[txt_it];
+		int j = 0;
+		while (j <= (int) high)
+		{
+			all->full_win->addr[(int)(w_it + (i + j) * all->full_map->resolution.x)] =
+					all->textrs.n_tex.addr[txt_it];
+			j++;
+		}
 		txt_it += SCALE;
-//		if(txt_it > 1024)
-//			break;
-		i += ( 1);
+		if(txt_it > 1024)
+			break;
+		i += (1);
 	}
 
 
@@ -129,6 +133,37 @@ int		add_texture_line(t_all *all, int n, float high, int dir)
 //						 all->full_win->img, 0, 20);
 }
 
+void	add_scale_line(t_all *all, int n, int hign)
+{
+	int HIGH =  hign;
+	int i = 0;
+	float ratio = (float)HIGH / SCALE;
+	float k = 0;
+	float j = 0;
+	i = n % SCALE;
+	float j_rat = (float)ratio * SCALE;
+//	while (i < SCALE)
+//	{
+		j = 0;
+		while (j < j_rat)
+		{
+			k = 0;
+			while (k < ratio)
+			{
+				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n +
+						all->full_map->resolution.x *
+								((all->full_map->resolution.y >> 1) - (hign >> 1)) ]  =
+					all->textrs.e_tex.addr[(int) (j * SCALE / ratio) + i];
+				k++;
+			}
+			j += ratio;
+		}
+		i++;
+//	}
+
+
+}
+
 int		add_ray(t_all *all,const t_point *res)
 {
 	float	angle;
@@ -151,8 +186,9 @@ int		add_ray(t_all *all,const t_point *res)
 		///&&&&&&&????????
 		angle += 1.0 /res->x ;
 		high = SCALE / all->plr.ray.len / 2 * res->y / k;
-		add_texture_line(all, n, (int)high, 0);
-		n++;
+//		add_texture_line(all, n, (int)high, 0);
+		add_scale_line(all,n, (int)(high));
+		n += 1;
 	}
 //	add_texture(all);
 }
