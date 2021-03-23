@@ -18,36 +18,86 @@ void ft_close (t_all *all)
 
 void go_right(t_plr *plr)
 {
-	if (plr->ray.x < plr->x)
-		plr->y += 10;
-	if(plr->ray.angle > 3 * M_PI / 2)
-		plr->x += 10;
-//	else if (plr->ray.angle < M_PI)
-//		plr->y -= 10;
-//	else
-//		plr->y += 10;
+	if (plr->ray.angle <= M_PI_4)
+		plr->y += SPEED_Y;
+	else if (plr->ray.angle <= 3 * M_PI_4)
+		plr->x -= SPEED_X;
+	else if (plr->ray.angle <= 5 * M_PI_4)
+		plr->y -= SPEED_Y;
+	else if (plr->ray.angle <= 7* M_PI_4)
+		plr->x += SPEED_X;
+	else
+		plr->y += SPEED_Y;
 }
+
+void go_left(t_plr *plr)
+{
+	if (plr->ray.angle <= M_PI_4)
+		plr->y -= SPEED_Y;
+	else if (plr->ray.angle <= 3 * M_PI_4)
+		plr->x += SPEED_X;
+	else if (plr->ray.angle <= 5 * M_PI_4)
+		plr->y += SPEED_Y;
+	else if (plr->ray.angle <= 7* M_PI_4)
+		plr->x -= SPEED_X;
+	else
+		plr->y -= SPEED_Y;
+}
+
+void go_back(t_plr *plr)
+{
+	if (plr->ray.angle <= M_PI_4)
+		plr->x += SPEED_Y;
+	else if (plr->ray.angle <= 3 * M_PI_4)
+		plr->y += SPEED_X;
+	else if (plr->ray.angle <= 5 * M_PI_4)
+		plr->x -= SPEED_Y;
+	else if (plr->ray.angle <= 7* M_PI_4)
+		plr->y -= SPEED_X;
+	else
+		plr->x += SPEED_Y;
+}
+
+void go_forward(t_plr *plr)
+{
+	if (plr->ray.angle <= M_PI_4)
+		plr->x -= SPEED_Y;
+	else if (plr->ray.angle <= 3 * M_PI_4)
+		plr->y -= SPEED_X;
+	else if (plr->ray.angle <= 5 * M_PI_4)
+		plr->x += SPEED_Y;
+	else if (plr->ray.angle <= 7* M_PI_4)
+		plr->y += SPEED_X;
+	else
+		plr->x -= SPEED_Y;
+}
+
+void change_angle(t_ray *ray, float value)
+{
+	ray->angle += value;
+	if (ray->angle > M_PI * 2)
+		ray->angle -= M_PI * 2;
+	if (ray->angle < 0)
+		ray->angle += M_PI * 2;
+}
+
 
 int			key_commands(int keycode, t_all *all)
 {
 	if (keycode == 65307)
 		ft_close(all);
-//	if (keycode == 3)
-//		vars->pos.color = 0xFF0000;
-//	if (keycode == 4)
-//		vars->pos.color = 0x00FF00;
 	else if (keycode == 100)
-//		go_right(&all->plr);
-		all->plr.x += STEP_Y;
+		go_right(&all->plr);
 	else if (keycode == 97)
-		all->plr.x -= STEP_Y;
+		go_left(&all->plr);
 	else if (keycode == 119)
-		all->plr.y -= STEP_Y;
+		go_back(&all->plr);
 	else if (keycode == 115)
-		all->plr.y += STEP_Y;
+		go_forward(&all->plr);
 	else if (keycode == 65361)
-		all->plr.ray.angle -= 0.1;
+		change_angle(&all->plr.ray, -ROTATE_SPEED);
 	else if (keycode == 65363)
-		all->plr.ray.angle += 0.1;
+		change_angle(&all->plr.ray, ROTATE_SPEED);
+
 
 }

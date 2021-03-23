@@ -133,7 +133,7 @@ int		add_texture_line(t_all *all, int n, float high, int dir)
 //						 all->full_win->img, 0, 20);
 }
 
-void	add_scale_line(t_all *all, int n, int hign)
+void	add_scale_line(t_all *all, int n, int hign, t_texture *textr)
 {
 	int HIGH =  hign;
 	int i = 0;
@@ -153,7 +153,7 @@ void	add_scale_line(t_all *all, int n, int hign)
 				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n +
 						all->full_map->resolution.x *
 								((all->full_map->resolution.y >> 1) - (hign >> 1)) ]  =
-					all->textrs.e_tex.addr[(int) (j * SCALE / ratio) + i];
+					textr->addr[(int) (j * SCALE / ratio) + i];
 				k++;
 			}
 			j += ratio;
@@ -164,16 +164,42 @@ void	add_scale_line(t_all *all, int n, int hign)
 
 }
 
+t_texture texture_define(t_ray *ray_new, t_textures *all_txtr)
+{
+	static t_ray ray_old;
+	t_texture	tmp_txtr;
+	float		x_delt;
+	float		y_delt;
+
+	if (ray_old.len == 0)
+	{
+		ray_old = *ray_new;
+		return all_txtr->n_tex;
+	}
+	x_delt = ray_new->x - ray_old.x;
+	y_delt = ray_new->y - ray_old.y;
+	if(ABS(x_delt) > ABS(y_delt) && x_delt > 0)
+		tmp_txtr = all_txtr->s_tex;
+	else if (ABS(y_delt) > ABS(x_delt) && y_delt > 0)
+		tmp_txtr = all_txtr->e_tex;
+	else if (ABS(x_delt) > ABS(y_delt) && x_delt < 0)
+		tmp_txtr = all_txtr->n_tex;
+	else
+		tmp_txtr = all_txtr->w_tex;
+	ray_old = *ray_new;
+	return tmp_txtr;
+}
+
 int		add_ray(t_all *all,const t_point *res)
 {
 	float	angle;
 	float	k;
 	int		n;
 	float high;
+	t_texture texture;
 
 	n = 0;
 	angle = M_PI_6_N;
-//	ft_rotate(all->plr.ray, )
 	while (n < res->x)
 	{
 		k = cos(angle);
@@ -181,13 +207,13 @@ int		add_ray(t_all *all,const t_point *res)
 			k = 1;
 		find_crossing(all, all->plr.ray.angle + angle,
 					   all->full_win);
-//		k = ABS (SCALE / all->plr.ray.len * res->x / 2 / tan(angle / 57.2958));
-
 		///&&&&&&&????????
 		angle += 1.0 /res->x ;
 		high = SCALE / all->plr.ray.len / 2 * res->y / k;
 //		add_texture_line(all, n, (int)high, 0);
-		add_scale_line(all,n, (int)(high));
+
+		texture = texture_define(&all->plr.ray, &all->textrs);
+		add_scale_line(all,n, (int)(high), &texture);
 		n += 1;
 	}
 //	add_texture(all);

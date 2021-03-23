@@ -17,6 +17,12 @@
 #define STEP_X 5
 #define STEP_Y 5
 
+
+#define SPEED_X 3
+#define SPEED_Y 3
+#define ROTATE_SPEED 0.1
+
+
 /*
  * window
  */
