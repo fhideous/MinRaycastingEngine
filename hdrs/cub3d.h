@@ -17,8 +17,8 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 5
-#define SPEED_Y 5
+#define SPEED_X 4
+#define SPEED_Y 4
 #define ROTATE_SPEED 0.1
 
 
@@ -96,6 +96,16 @@ typedef struct	s_cub_map
 	char		**map;
 }				  t_cub_map;
 
+typedef struct	s_sprite
+{
+	void 	*img_tmp;
+	unsigned  int	*addr;
+	float	angle;
+	float	k;
+	int		width;
+	int		heigh;
+}				t_sprite;
+
 typedef struct	s_texture
 {
 	void 	*img_tmp;
@@ -113,7 +123,7 @@ typedef struct s_textures
 	t_texture		s_tex;
 	t_texture		w_tex;
 	t_texture		e_tex;
-	t_texture		spite;
+	t_sprite 		spite;
 
 }				t_textures;
 
@@ -139,7 +149,7 @@ void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 void 		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
 void	add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
-
+void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
 
 void		free_map(t_cub_map *map);
 

@@ -45,6 +45,11 @@ void	scale_texture(t_all *all)
 
 }
 
+int		add_sprite(t_all *all, t_sprite sprite, int scale)
+{
+//	while ()
+}
+
 int     render_next_frame(t_all *all)
 {
 //	mlx_destroy_image(all->full_win->mlx, all->full_win->img);
@@ -63,7 +68,9 @@ int     render_next_frame(t_all *all)
 //	scale_texture(all);
 
 	add_ray(all, &all->full_map->resolution);
-
+	all->textrs.spite.angle = 0;
+	all->textrs.spite.k = 1;
+	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
 }
 
 
