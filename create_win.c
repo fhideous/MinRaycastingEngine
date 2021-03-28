@@ -9,20 +9,20 @@ void            my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color)
 	*(unsigned int*)dst = color;
 }
 
-int		add_plr(t_all *all)
-{
-	static int color = 0xFC69900;
-	static int cnt = 0;
-	static int i = 1;
-
-	for(int j = 0; j < SCALE / 4; j++)
-		for (int i = 0; i < SCALE /4; i++)
-			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 4 / 2,
-					j + all->plr.y - SCALE / 4 / 2, color);
-
-	mlx_put_image_to_window(all->full_win->mlx,
-							all->full_win->win, all->full_win->img, 0, 0);
-}
+//int		add_plr(t_all *all)
+//{
+//	static int color = 0xFC69900;
+//	static int cnt = 0;
+//	static int i = 1;
+//
+//	for(int j = 0; j < SCALE / 4; j++)
+//		for (int i = 0; i < SCALE /4; i++)
+//			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 4 / 2,
+//					j + all->plr.y - SCALE / 4 / 2, color);
+//
+//	mlx_put_image_to_window(all->full_win->mlx,
+//							all->full_win->win, all->full_win->img, 0, 0);
+//}
 
 void add_flour(t_all *all)
 {

@@ -7,19 +7,18 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-#define SCALE 32
 #define ANGLE_STEP 0.02
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 /*
  * len of player vector
  */
-#define STEP_X 5
-#define STEP_Y 5
+#define STEP_X 1
+#define STEP_Y 1
 
 
-#define SPEED_X 3
-#define SPEED_Y 3
+#define SPEED_X 5
+#define SPEED_Y 5
 #define ROTATE_SPEED 0.1
 
 
@@ -128,7 +127,7 @@ typedef struct	s_all
 
 char		**get_map(int fd, char *line);
 int			parse_set(t_cub_map *, int);
-int			find_player(char **, t_plr *);
+int			find_player(char **, t_plr *, int);
 
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *);

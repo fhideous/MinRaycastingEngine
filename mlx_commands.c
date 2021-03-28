@@ -16,7 +16,23 @@ void ft_close (t_all *all)
 	exit (0);
 }
 
-void go_right(t_plr *plr)
+void check_crossing(t_plr *plr, char **map)
+{
+	float x_plr;
+	float y_plr;
+
+//	x_plr = plr->x / SCALE;
+//	y_plr = plr->y / SCALE;
+//	printf("x: %d\n",x_plr);
+//	printf("x: %d\n",y_plr);
+//	if (map[(int)y_plr][(int)x_plr] == '1')
+//	{
+//		plr->x -= 10 *SPEED_X;
+//		plr->y -= 10 * SPEED_Y;
+//	}
+}
+
+void go_right(t_plr *plr, t_cub_map *map)
 {
 	if (plr->ray.angle <= M_PI_4)
 		plr->y += SPEED_Y;
@@ -28,9 +44,10 @@ void go_right(t_plr *plr)
 		plr->x += SPEED_X;
 	else
 		plr->y += SPEED_Y;
+	check_crossing(plr, map->map);
 }
 
-void go_left(t_plr *plr)
+void go_left(t_plr *plr, t_cub_map *map)
 {
 	if (plr->ray.angle <= M_PI_4)
 		plr->y -= SPEED_Y;
@@ -42,9 +59,10 @@ void go_left(t_plr *plr)
 		plr->x -= SPEED_X;
 	else
 		plr->y -= SPEED_Y;
+	check_crossing(plr, map->map);
 }
 
-void go_back(t_plr *plr)
+void go_back(t_plr *plr, t_cub_map *map)
 {
 	if (plr->ray.angle <= M_PI_4)
 		plr->x += SPEED_Y;
@@ -56,9 +74,10 @@ void go_back(t_plr *plr)
 		plr->y -= SPEED_X;
 	else
 		plr->x += SPEED_Y;
+	check_crossing(plr, map->map);
 }
 
-void go_forward(t_plr *plr)
+void go_forward(t_plr *plr, t_cub_map *map)
 {
 	if (plr->ray.angle <= M_PI_4)
 		plr->x -= SPEED_Y;
@@ -70,6 +89,7 @@ void go_forward(t_plr *plr)
 		plr->y += SPEED_X;
 	else
 		plr->x -= SPEED_Y;
+	check_crossing(plr, map->map);
 }
 
 void change_angle(t_ray *ray, float value)
@@ -87,13 +107,13 @@ int			key_commands(int keycode, t_all *all)
 	if (keycode == 65307)
 		ft_close(all);
 	else if (keycode == 100)
-		go_right(&all->plr);
+		go_right(&all->plr, all->full_map);
 	else if (keycode == 97)
-		go_left(&all->plr);
+		go_left(&all->plr, all->full_map);
 	else if (keycode == 119)
-		go_back(&all->plr);
+		go_back(&all->plr, all->full_map);
 	else if (keycode == 115)
-		go_forward(&all->plr);
+		go_forward(&all->plr, all->full_map);
 	else if (keycode == 65361)
 		change_angle(&all->plr.ray, -ROTATE_SPEED);
 	else if (keycode == 65363)

@@ -4,7 +4,7 @@
 //#include "hdrs/get_next_line.h"
 
 
-int find_player(char **map, t_plr *player)
+int find_player(char **map, t_plr *player, int scale)
 {
 	int i;
 	int j;
@@ -20,8 +20,8 @@ int find_player(char **map, t_plr *player)
 		i++;
 	}
 	player->ray.angle = -1;
-	player->x = (float)j * SCALE + SCALE / 2;
-	player->y = (float)i * SCALE + SCALE / 2;
+	player->x = (float)j * scale + (scale /  2);
+	player->y = (float)i * scale + (scale / 2);
 	if (map[i][j] == 'E')
 		player->ray.angle = 0;
 	else if (map[i][j] == 'N')
