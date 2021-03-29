@@ -52,7 +52,7 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 {
 	int i ;
 	float ratio;
-	float k;
+	int k;
 	float j;
 	int cnt;
 
@@ -71,11 +71,10 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 			if(((int)(hign >> 1) <=  all->full_map->resolution.y >> 1) ||
 					((k + j) > ABS((float)((all->full_map->resolution.y >> 1) - (int)(hign >> 1)))))
 			{
-				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n - cnt  +
+				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
 						textr->addr[(int) ((j * textr->width / ratio) + i )];
-
 			}
 			k ++;
 		}

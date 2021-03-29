@@ -13,7 +13,7 @@ void ft_close (t_all *all)
 	mlx_destroy_image(all->full_win->mlx, all->textrs.s_tex.img_tmp);
 	free(all->full_win);
 
-	exit (0);
+	exit (250);
 }
 
 void check_crossing(t_plr *plr, t_all *all, int is_x)
@@ -31,17 +31,18 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 //		plr->x -= 10 *SPEED_X;
 //		plr->y -= 10 * SPEED_Y;
 //	}
-	find_crossing(all, all->plr.ray.angle - ( M_PI_6), all->full_win, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle - M_PI_12, all->full_win, &all->textrs.n_tex);
 	left_len = all->plr.ray.len;
-	find_crossing(all, all->plr.ray.angle + ( M_PI_6 ), all->full_win, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle + M_PI_12, all->full_win, &all->textrs.n_tex);
 	right_len = all->plr.ray.len;
 	find_crossing(all, all->plr.ray.angle, all->full_win, &all->textrs.n_tex);
 	center_len = all->plr.ray.len;
 
-	if(right_len < 64 || left_len < 64 ||  center_len < 120)
+	if(right_len < all->textrs.n_tex.width || left_len < all->textrs.n_tex.width
+	||  (int)center_len < (all->textrs.n_tex.width << 1))
 	{
 		if (is_x == 1 || is_x == -1)
-			plr->x -= 1 * SPEED_X;
+			plr->x -= is_x * SPEED_X;
 		else
 			plr->y -= is_x * SPEED_Y / 2;
 	}

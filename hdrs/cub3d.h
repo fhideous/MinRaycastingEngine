@@ -10,6 +10,7 @@
 #define ANGLE_STEP 0.02
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
+#define M_PI_12 0.261799388
 /*
  * len of player vector
  */
@@ -19,7 +20,7 @@
 
 #define SPEED_X 4
 #define SPEED_Y 4
-#define ROTATE_SPEED 0.1
+#define ROTATE_SPEED 0.05
 
 
 /*
