@@ -63,20 +63,21 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 		i = (int)all->plr.ray.y % textr->width;
 	cnt = 0;
 	j = 0;
-	while (j < hign)
+	while (j < hign && j < (float)all->full_map->resolution.y)
 	{
 		k = 0;
 		while (k < ratio)
 		{
-			if((int)(hign >> 1) + cnt <= ((all->full_map->resolution.y >> 1)))
+			if(((int)(hign >> 1) <=  all->full_map->resolution.y >> 1) ||
+					((k + j) > ABS((float)((all->full_map->resolution.y >> 1) - (int)(hign >> 1)))))
 			{
 				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n - cnt  +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
-						textr->addr[(int) ((j * textr->width / ratio) + i)];
+						textr->addr[(int) ((j * textr->width / ratio) + i )];
 
 			}
-			k++;
+			k ++;
 		}
 		j += (ratio);
 	}
@@ -107,8 +108,8 @@ int		add_ray(t_all *all,const t_point *res)
 		find_crossing(all, all->plr.ray.angle + angle,
 					  all->full_win, &texture);
 		high = texture.width/ all->plr.ray.len * res->y / k * 1.7;
-		if(high > res->y)
-			high = 0;
+//		if(high > res->y)
+//			high = 0;
 		add_scale_line(all, n, (int)(high), &texture, is_x);
 
 		n += 1;
