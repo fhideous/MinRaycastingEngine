@@ -115,21 +115,28 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 //	mlx_destroy_image(win->mlx, tex->img_tmp);
 }
 
-int	texture_open(t_win *win, t_textures *textrs, t_cub_map *cub_map)
+int	texture_open(t_all all, t_textures *textrs)
 {
 	int err;
+	int i;
 
 	err = 0;
-	err += get_xpm_addr(win, &textrs->n_tex, &cub_map->n_texture);
-	err += get_xpm_addr(win, &textrs->s_tex, &cub_map->s_texture);
-	err += get_xpm_addr(win, &textrs->e_tex, &cub_map->e_texture);
-	err += get_xpm_addr(win, &textrs->w_tex, &cub_map->w_texture);
+	err += get_xpm_addr(all.full_win, &textrs->n_tex, &all.full_map->n_texture);
+	err += get_xpm_addr(all.full_win, &textrs->s_tex, &all.full_map->s_texture);
+	err += get_xpm_addr(all.full_win, &textrs->e_tex, &all.full_map->e_texture);
+	err += get_xpm_addr(all.full_win, &textrs->w_tex, &all.full_map->w_texture);
 	if (textrs->s_tex.width != textrs->n_tex.width ||
 			textrs->s_tex.width != textrs->e_tex.width ||
-			textrs->s_tex.width != textrs->w_tex.width)
+			textrs->s_tex.width != textrs->w_tex.width) {
 		return (-1);
-	err += get_xpm_addr_sprite(win, &textrs->spite, &cub_map->sprite);
-
+	}
+	err += get_xpm_addr_sprite(all.full_win, &textrs->spite, &all.full_map->sprite);
+	i = -1;
+	while (++i != all.sprts_crds.n)
+	{
+		all.sprts_crds.coordints[i].x *= textrs->s_tex.width;
+		all.sprts_crds.coordints[i].y *= textrs->s_tex.width;
+	}
 	return (0);
 }
 
@@ -148,11 +155,11 @@ int main()
 //	xpm_test(full_map.n_texture);
 //	return (9);
 	all.full_map = &full_map;
-
-
+	find_sprites(all.full_map->map, &all.sprts_crds);
+	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
 	all.full_win = malloc(sizeof (t_win));
 	all.full_win->mlx = mlx_init();
-	if(texture_open(all.full_win,&all.textrs, all.full_map) == -1)
+	if(texture_open(all, &all.textrs) == -1)
 		exit(32);
 
 	find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);

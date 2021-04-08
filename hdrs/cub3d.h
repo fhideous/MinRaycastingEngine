@@ -1,6 +1,7 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
+#define ABS(a) ((a) < 0 ? -(a) : (a))
 #include "../lib//libft.h"
 #include <math.h>
 #include <mlx.h>
@@ -128,15 +129,31 @@ typedef struct s_textures
 
 }				t_textures;
 
+typedef struct s_sprites_crds
+{
+	int		n;
+	t_point	*coordints;
+}				t_sprites_crds;
+
+typedef struct s_sprites_distns
+{
+	float 	dist;
+	float 	angle;
+}				t_sprites_distns;
+
 typedef struct	s_all
 {
-	t_win		*full_win;
-	t_plr		plr;
-	t_textures	textrs;
-	t_cub_map	*full_map;
+	t_win				*full_win;
+	t_plr				plr;
+	t_textures			textrs;
+	t_sprites_crds		sprts_crds;
+	t_sprites_distns	*spr_distans;
+	t_cub_map			*full_map;
 }				  t_all;
 
 char		**get_map(int fd, char *line);
+int			find_sprites(char **map, t_sprites_crds *sprts);
+
 int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
@@ -149,8 +166,9 @@ void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 
 void 		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
-void	add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
-void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
+void		distance_sprites(const t_sprites_crds *, const t_plr*, t_sprites_distns *);
+void		add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
+void		find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
 
 void		free_map(t_cub_map *map);
 

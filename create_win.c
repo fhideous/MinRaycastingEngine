@@ -9,20 +9,6 @@ void            my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color)
 	*(unsigned int*)dst = color;
 }
 
-//int		add_plr(t_all *all)
-//{
-//	static int color = 0xFC69900;
-//	static int cnt = 0;
-//	static int i = 1;
-//
-//	for(int j = 0; j < SCALE / 4; j++)
-//		for (int i = 0; i < SCALE /4; i++)
-//			my_mlx_pixel_put(all->full_win, i + all->plr.x - SCALE / 4 / 2,
-//					j + all->plr.y - SCALE / 4 / 2, color);
-//
-//	mlx_put_image_to_window(all->full_win->mlx,
-//							all->full_win->win, all->full_win->img, 0, 0);
-//}
 
 void add_flour(t_all *all)
 {
@@ -40,36 +26,55 @@ void add_flour(t_all *all)
 
 }
 
-void	scale_texture(t_all *all)
-{
-
-}
 
 int		add_sprite(t_all *all, t_sprite sprite, int scale)
 {
-//	while ()
+	int		i;
+
+	i = -1;
+	while(i++ != all->sprts_crds.n)
+	{
+		if (all->spr_distans[i].angle > all->plr.ray.angle - M_PI_6 * 2 &&
+				(all->spr_distans[i].angle < all->plr.ray.angle + M_PI_6 * 2))
+		{
+			int j = 0;
+			while (j < 300)
+			{
+				all->full_win->addr[j+  (all->full_map->resolution.x >> 1) - 150 +
+						all->full_map->resolution.x * (all->full_map->resolution.y >> 1)] =
+					0xFF0000;
+				j++;
+			}
+		}
+	}
 }
+
+void		distance_sprites(const t_sprites_crds *crds,
+					   const t_plr* plr,
+					   t_sprites_distns *distns)
+{
+	int		i;
+	float	x;
+	float	y;
+	i = -1;
+	while (++i < crds->n)
+	{
+		x = (crds->coordints[i].x - plr->x);
+		y = (crds->coordints[i].y - plr->y);
+		distns[i].dist =  sqrt(x * x + y * y);
+		distns[i].angle = atanf(y / x);
+	}
+}
+
 
 int     render_next_frame(t_all *all)
 {
-//	mlx_destroy_image(all->full_win->mlx, all->full_win->img);
-//
-//	all->full_win->img = mlx_new_image(all->full_win->mlx,
-//									all->full_map->resolution.x,
-//							 all->full_map->resolution.y);
-//	all->full_win->addr = mlx_get_data_addr(all->full_win->img,
-//								  &all->full_win->bits_per_pixel,
-//								  &all->full_win->line_length,
-//								  &all->full_win->endian);
-
-
 	add_flour(all);
-
-//	scale_texture(all);
 
 	add_ray(all, &all->full_map->resolution);
 	all->textrs.spite.angle = 0;
 	all->textrs.spite.k = 1;
+	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans);
 	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
 }
 

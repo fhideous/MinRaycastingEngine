@@ -8,7 +8,7 @@ set (MLX_DIR /home/fhideous/CLionProjects/cub3d/mlx/libmlx.a)
 #set(SOURCE_DIR /Users/fhideous/Desktop/fhideous/cub3d/minilibx_opengl_20191021/libmlx.a)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Ilmx -framework OpenGL -framework AppKit")
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
-set(CMAKE_C_FLAGS "-O2")
+set(CMAKE_C_FLAGS "-O3")
 add_executable(cub3d main.c parser_map.c gnl/get_next_line.c
         parse_set.c find_player.c create_win.c
         lib/libft.h hdrs/get_next_line.h hdrs/cub3d.h scene_put.c ray.c print_ray.c mlx_commands.c)

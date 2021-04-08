@@ -4,6 +4,7 @@
 #include "hdrs/map_puuser.h"
 #include "stdlib.h"
 #include "lib/libft.h"
+#include "hdrs/cub3d.h"
 //#include "lib/libft.h"
 
 void del_f(void *ch)
@@ -62,4 +63,47 @@ char		**get_map(int fd, char *line)
 	free(line);
 	map = list_to_massive(&hd, ft_lstsize(hd));
 	return (map);
+}
+
+int		count_sprites(char **map)
+{
+	int i;
+	int j;
+	int n;
+
+	n = 0;
+	i = 0;
+	while (map[++i])
+	{
+		j = -1;
+		while(map[i][++j])
+			if (map[i][j] == '2')
+				n++;
+	}
+	return (n);
+}
+
+int find_sprites(char **map, t_sprites_crds *sprts)
+{
+	int		i;
+	int		j;
+	int		cnt;
+	t_point  point;
+
+	sprts->n = 0;
+	sprts->n = count_sprites(map);
+	sprts->coordints = ft_calloc((sprts->n + 1), sizeof (t_point));
+	i = -1;
+	cnt = -1;
+	while (map[++i])
+	{
+		j = -1;
+		while(map[i][++j])
+			if (map[i][j] == '2')
+			{
+				point.x = j;
+				point.y = i;
+				sprts->coordints[++cnt] = point;
+			}
+	}
 }

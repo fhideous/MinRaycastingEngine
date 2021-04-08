@@ -1,5 +1,4 @@
 #include "hdrs/cub3d.h"
-#define ABS(a) ((a) < 0 ? -(a) : (a))
 
 void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 {
@@ -19,6 +18,30 @@ void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	all->plr.ray.x = end.x + (float)txtr->width / 2;
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
+}
+
+int find_sprite(t_all *all, float  angle, t_win *win, t_texture *txtr)
+{
+
+	t_ray end;
+	float  c;
+	int count = 0;
+
+	c = (float)0.2;
+	end.x = all->plr.x + c * cosf(angle);
+	end.y  = all->plr.y + c * sinf(angle);
+	while (all->full_map->map[(int)(end.y / (float)txtr->width)]
+		   [(int)(end.x / (float)txtr->width)] != '1')
+	{
+		end.x = all->plr.x + c * cosf(angle);
+		end.y  = all->plr.y + c * sinf(angle);
+		c += (float)ANGLE_STEP;
+		if (all->full_map->map[(int)(end.y / (float)txtr->width)]
+			[(int)(end.x / (float)txtr->width)] == '2')
+		{	count++; continue; }
+
+	}
+	return (count);
 }
 
 t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
@@ -94,6 +117,7 @@ int		add_ray(t_all *all,const t_point *res)
 	int 	is_x;
 
 	n = 0;
+	int all_sprites[res->x];
 	angle = M_PI_6_N;
 	while (n < res->x)
 	{
@@ -106,6 +130,8 @@ int		add_ray(t_all *all,const t_point *res)
 		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
 					  all->full_win, &texture);
+		all_sprites[n] = find_sprite(all, all->plr.ray.angle + angle,
+					all->full_win, &texture);
 		high = texture.width/ all->plr.ray.len * res->y / k * 1.7;
 //		if(high > res->y)
 //			high = 0;
@@ -114,4 +140,7 @@ int		add_ray(t_all *all,const t_point *res)
 		n += 1;
 		angle += 1.0 /res->x ;
 	}
+//	for(int i = 0; i < res->x; i++)
+//		printf("%d; ", all_sprites[i]);
+//	printf("\n");
 }
