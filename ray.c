@@ -53,14 +53,14 @@ t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
 
 	x_delt = ray_new->x - ray_old.x;
 	y_delt = ray_new->y - ray_old.y;
-	if(ABS(x_delt) > ABS(y_delt) && x_delt > 0)
+	if(ABS(x_delt) >= ABS(y_delt) && x_delt > 0)
 	{
 		tmp_txtr = all_txtr->s_tex;
 		*is_x = 1;
 	}
-	else if (ABS(y_delt) > ABS(x_delt) && y_delt > 0)
+	else if (ABS(y_delt) >= ABS(x_delt) && y_delt > 0)
 		tmp_txtr = all_txtr->e_tex;
-	else if (ABS(x_delt) > ABS(y_delt) && x_delt < 0)
+	else if (ABS(x_delt) >= ABS(y_delt) && x_delt < 0)
 	{
 		tmp_txtr = all_txtr->n_tex;
 		*is_x = 1;
@@ -86,20 +86,31 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 		i = (int)all->plr.ray.y % textr->width;
 	cnt = 0;
 	j = 0;
-	while (j < hign && j < (float)all->full_map->resolution.y)
+	int max = 0;
+	k = 0;
+	if (hign >= all->full_map->resolution.y)
+	{
+		while (k + (int)ratio <= ((hign - all->full_map->resolution.y) >> 1))
+			k++;
+//		j = k / ratio;
+		max+= ((int)k) + 20;
+	}
+	while ( ((int)j < all->full_map->resolution.y + max &&
+			((int)j < hign
+//			||(hign > all->full_map->resolution.y >> 1))
+			) ))
 	{
 		k = 0;
 		while (k < ratio)
 		{
-			if(((int)(hign >> 1) <=  all->full_map->resolution.y >> 1) ||
-					((k + j) > ABS((float)((all->full_map->resolution.y >> 1) - (int)(hign >> 1)))))
+			if(((k + (int)j+ (all->full_map->resolution.y >> 1) >= (hign >> 1))))
 			{
-				all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n +
+				all->full_win->addr[(k + (int)j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
-						textr->addr[(int) ((j * textr->width / ratio) + i )];
+						textr->addr[(((int)textr->width * (int)(j  / ratio)) + i)];
 			}
-			k ++;
+			k++;
 		}
 		j += (ratio);
 	}
@@ -115,7 +126,13 @@ int		add_ray(t_all *all,const t_point *res)
 	float high;
 	t_texture texture;
 	int 	is_x;
+	float 	x_y;
 
+	if(all->full_map->resolution.x > all->full_map->resolution.y )
+		x_y = all->full_map->resolution.x / all->full_map->resolution.y;
+	else
+//		wx_y = all->full_map->resolution.y / all->full_map->resolution.x;
+	x_y = 1;
 	n = 0;
 	int all_sprites[res->x];
 	angle = M_PI_6_N;
@@ -132,7 +149,7 @@ int		add_ray(t_all *all,const t_point *res)
 					  all->full_win, &texture);
 		all_sprites[n] = find_sprite(all, all->plr.ray.angle + angle,
 					all->full_win, &texture);
-		high = texture.width/ all->plr.ray.len * res->y / k * 1.7;
+		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;
 //		if(high > res->y)
 //			high = 0;
 		add_scale_line(all, n, (int)(high), &texture, is_x);

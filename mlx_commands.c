@@ -38,8 +38,8 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 	find_crossing(all, all->plr.ray.angle, all->full_win, &all->textrs.n_tex);
 	center_len = all->plr.ray.len;
 
-	if(right_len < all->textrs.n_tex.width || left_len < all->textrs.n_tex.width
-	||  (int)center_len < (all->textrs.n_tex.width << 1))
+	if (right_len < all->textrs.n_tex.width >> 1 || left_len < all->textrs.n_tex.width >> 1
+	||  ((int)center_len < (all->textrs.n_tex.width)))
 	{
 		if (is_x == 1 || is_x == -1)
 			plr->x -= is_x * SPEED_X;
@@ -133,13 +133,26 @@ void go_forward(t_plr *plr, t_all *all)
 	check_crossing(plr, all, is_x);
 }
 
-void change_angle(t_ray *ray, float value)
+void change_angle(t_all *all, float value)
 {
-	ray->angle += value;
-	if (ray->angle > M_PI * 2)
-		ray->angle -= M_PI * 2;
-	if (ray->angle < 0)
-		ray->angle += M_PI * 2;
+	float right_len;
+	float left_len;
+	all->plr.ray.angle +=  (value + value);
+	if (all->plr.ray.angle >= M_PI + M_PI) {
+		all->plr.ray.angle -= M_PI + M_PI;
+	}
+	else if (all->plr.ray.angle <= 0) {
+		all->plr.ray.angle += M_PI + M_PI;
+	}
+	find_crossing(all, all->plr.ray.angle + M_PI_6, all->full_win, &all->textrs.n_tex);
+	right_len =  all->plr.ray.len;
+	find_crossing(all, all->plr.ray.angle - M_PI_6, all->full_win, &all->textrs.n_tex);
+	left_len = all->plr.ray.len;
+	if (right_len < all->textrs.n_tex.width >> 2
+		|| left_len < all->textrs.n_tex.width >> 2)
+		all->plr.ray.angle -=  (value + value);
+	else all->plr.ray.angle -= value;
+
 }
 
 
@@ -156,9 +169,9 @@ int			key_commands(int keycode, t_all *all)
 	else if (keycode == 115)
 		go_forward(&all->plr, all);
 	else if (keycode == 65361)
-		change_angle(&all->plr.ray, -ROTATE_SPEED);
+		change_angle(all, -ROTATE_SPEED);
 	else if (keycode == 65363)
-		change_angle(&all->plr.ray, ROTATE_SPEED);
+		change_angle(all, ROTATE_SPEED);
 
 
 }

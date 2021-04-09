@@ -19,8 +19,8 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 4
-#define SPEED_Y 4
+#define SPEED_X 6
+#define SPEED_Y 6
 #define ROTATE_SPEED 0.05
 
 
