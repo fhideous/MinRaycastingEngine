@@ -101,7 +101,7 @@ int     render_next_frame(t_all *all)
 {
 	add_flour(all);
 
-	add_ray(all, &all->full_map->resolution);
+	add_ray(all, &all->full_map->resolution, (float)all->full_map->resolution.x / all->full_map->resolution.y );
 	all->textrs.spite.angle = 0;
 	all->textrs.spite.k = 1;
 	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans);

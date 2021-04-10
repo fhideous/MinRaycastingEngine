@@ -158,7 +158,7 @@ int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
-int			add_ray(t_all *all,const t_point *);
+int			add_ray(t_all *all,const t_point *, float );
 
 int			create_win(t_all *);
 
