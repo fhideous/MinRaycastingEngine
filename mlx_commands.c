@@ -21,6 +21,7 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 	float left_len;
 	float right_len;
 	float center_len;
+	int		x_y;
 
 //	x_plr = plr->x / SCALE;
 //	y_plr = plr->y / SCALE;
@@ -31,15 +32,15 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 //		plr->x -= 10 *SPEED_X;
 //		plr->y -= 10 * SPEED_Y;
 //	}
-	find_crossing(all, all->plr.ray.angle - (M_PI_12 + M_PI_12), all->full_win, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle - (M_PI_12 /*+ M_PI_12*/), all->full_win, &all->textrs.n_tex);
 	left_len = all->plr.ray.len;
-	find_crossing(all, all->plr.ray.angle + (M_PI_12 + M_PI_12), all->full_win, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle + (M_PI_12 /*+ M_PI_12*/), all->full_win, &all->textrs.n_tex);
 	right_len = all->plr.ray.len;
 	find_crossing(all, all->plr.ray.angle, all->full_win, &all->textrs.n_tex);
 	center_len = all->plr.ray.len;
-
-	if (right_len < all->textrs.n_tex.width >> 1 || left_len < all->textrs.n_tex.width >> 1
-	||  ((int)center_len < (all->textrs.n_tex.width)))
+	x_y = all->full_map->resolution.y /  all->full_map->resolution.x;
+	if (right_len <= all->textrs.n_tex.width >> (2 * x_y) || left_len <= all->textrs.n_tex.width >> (2 * x_y)
+	||  ((int)center_len <= (all->textrs.n_tex.width >> ( x_y))))
 	{
 		if (is_x == 1 || is_x == -1)
 			plr->x -= is_x * SPEED_X;

@@ -26,28 +26,31 @@ void add_flour(t_all *all)
 
 }
 
-void	add_sprite_line(t_all *all, int n, int high)
+void	add_sprite_line(t_all *all, int n, int high, int i)
 {
-	int		j;
+	float				j;
 	int					k;
 	float 				ratio;
-	int					i;
-
-	i = (int)all->plr.ray.x % all->textrs.spite.width;
+//	int					i;
+//	i = 0;
+//	i = ((int)all->plr.ray.y - 32) % all->textrs.spite.width;
+	if (high > all->full_map->resolution.y >> 1)
+		high = all->full_map->resolution.y >> 1;
 	ratio = (float)high / all->textrs.spite.width;
 	j = -ratio;
-	while(j < high)
+	while(j + ratio < high)
 	{
 		k = 0;
 		j += ratio;
-		if (all->textrs.spite.addr[(int) ((j * all->textrs.spite.width / ratio) + i )] == 0x000000)
+		if (all->textrs.spite.addr[(((int)(j / ratio) * all->textrs.spite.width) + i )] == 0x000000)
 			continue;
 		while (k < ratio)
 		{
-			all->full_win->addr[(int)(k + j) * all->full_map->resolution.x + n +
+			all->full_win->addr[(k + (int)j) * all->full_map->resolution.x + n +
 								all->full_map->resolution.x *
 								((all->full_map->resolution.y >> 1) - (int)(high >> 1))]  =
-					all->textrs.spite.addr[(int) ((j * all->textrs.spite.width / ratio) + i )];
+					all->textrs.spite.addr[(((int)(j / ratio ) * all->textrs.spite.width) +
+						i )];
 			k++;
 		}
 	}
@@ -56,23 +59,35 @@ void	add_sprite_line(t_all *all, int n, int high)
 int		add_sprite(t_all *all, t_sprite sprite, int scale)
 {
 	int		i;
-	float 	high;
+	int 	high;
 	int		n;
 	int		n_end;
-
+	float	step;
+	int		it_step;
+	int		k;
 	i = -1;
-	while(i++ != all->sprts_crds.n)
+	while(++i != all->sprts_crds.n)
 	{
-		if (all->spr_distans[i].angle > all->plr.ray.angle - M_PI_6 * 2 &&
-				(all->spr_distans[i].angle < all->plr.ray.angle + M_PI_6 * 2))
+//		if (all->spr_distans[i].angle > all->plr.ray.angle - M_PI_6 * 2 &&
+//				(all->spr_distans[i].angle < all->plr.ray.angle + M_PI_6 * 2))
 		{
 			n = all->full_map->resolution.x / 2 +
-					all->plr.ray.angle * all->full_map->resolution.x;
-			high = sprite.width / all->spr_distans[i].dist * all->full_map->resolution.y ;
-			n_end = n + all->textrs.spite.width;
+						 all->full_map->resolution.x;
+			high = (int)(sprite.width / all->spr_distans[i].dist * all->full_map->resolution.y) >> 1;
+			n_end = n + /*all->textrs.spite.width / all->full_map->resolution.x*/
+					high;
+			step = (float)high / sprite.width;
+			it_step = 0;
+			k = 0;
 			while (n < n_end)
 			{
-//				add_sprite_line(all, n, high);
+				add_sprite_line(all, n, high, k);
+				it_step++;
+				if ((float)it_step >= step)
+				{
+					it_step = 0;
+					k++;
+				}
 				n++;
 			}
 		}
@@ -104,8 +119,8 @@ int     render_next_frame(t_all *all)
 	add_ray(all, &all->full_map->resolution, (float)all->full_map->resolution.x / all->full_map->resolution.y );
 	all->textrs.spite.angle = 0;
 	all->textrs.spite.k = 1;
-	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans);
-	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
+//	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans);
+//	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
 }
 
 

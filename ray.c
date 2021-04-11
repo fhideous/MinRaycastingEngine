@@ -22,7 +22,6 @@ void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 
 int find_sprite(t_all *all, float  angle, t_win *win, t_texture *txtr)
 {
-
 	t_ray end;
 	float  c;
 	int count = 0;
@@ -81,16 +80,16 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 
 	ratio = (float)hign / textr->width;
 	if(is_x)
-		i = ((int)all->plr.ray.x - 16) % textr->width ;
+		i = ((int)all->plr.ray.x - (textr->width >> 1)) % textr->width ;
 	else
-		i = ((int)all->plr.ray.y -16) % textr->width;
+		i = ((int)all->plr.ray.y - (textr->width >> 1)) % textr->width;
 	j = 0;
 	max = 0;
 	if (hign > all->full_map->resolution.y)
 	{
 		max = (int)((hign - all->full_map->resolution.y)) >> 1;
 	}
-	while ( ((int)j < all->full_map->resolution.y + max  ) &&
+	while (/*((int)j < all->full_map->resolution.y + max) &&*/
 			((int)j < hign + max))
 	{
 		k = 0;
@@ -99,10 +98,10 @@ void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
 			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
 					(k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))
 					{
-				all->full_win->addr[(k + (int)j ) * all->full_map->resolution.x + n +
+				all->full_win->addr[(k + (int)j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
-						textr->addr[(((int)textr->width * (int)(j  / ratio)) + i)];
+						textr->addr[(((int)textr->width * (int)(j / ratio)) + i)];
 			}
 			k++;
 		}
@@ -119,15 +118,10 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 	t_texture texture;
 	int 	is_x;
 
-//	if(res->x > res->y )
-
-//	else
-//		x_y =(float)res->y/ res->x;
-//	x_y = 1;
 	n = 0;
-	int all_sprites[res->x];
+//	int all_sprites[res->x];
 	angle = M_PI_6_N;
-	while (n < res->x)
+	while (n < res->x )
 	{
 		is_x = 0;
 		k = cosf(angle);
@@ -136,17 +130,12 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
 					  all->full_win, &texture);
-		all_sprites[n] = find_sprite(all, all->plr.ray.angle + angle,
-					all->full_win, &texture);
+//		all_sprites[n] = find_sprite(all, all->plr.ray.angle + angle,
+//					all->full_win, &texture);
 		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;
-//		if(high > res->y)
-//			high = 0;
 		add_scale_line(all, n, (int)(high), &texture, is_x);
 
 		n += 1;
 		angle += 1.0 /res->x ;
 	}
-//	for(int i = 0; i < res->x; i++)
-//		printf("%d; ", all_sprites[i]);
-//	printf("\n");
 }
