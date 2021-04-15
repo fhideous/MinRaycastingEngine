@@ -140,7 +140,7 @@ int main()
 	parse_set(&full_map, fd);
 
 	all.full_map = &full_map;
-//	find_sprites(all.full_map->map, &all.sprts_crds);
+	find_sprites(all.full_map->map, &all.sprts_crds);
 //	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
 	all.full_win = malloc(sizeof (t_win));
 	all.full_win->mlx = mlx_init();

@@ -145,6 +145,7 @@ typedef struct s_sprites
 {
 	int					size;
 	t_point				*points;
+	t_point				*coords;
 	t_sprites_distns	*distns;
 }				t_sprites;
 

@@ -25,6 +25,8 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 				all->sprites_loc.distns[is_add].dist = c;
 				all->sprites_loc.distns[is_add].angle = angle;
 				all->sprites_loc.size = is_add;
+				all->sprites_loc.coords[is_add].x = end.x + (float)txtr->width / 2;
+				all->sprites_loc.coords[is_add].y=	end.y + (float)txtr->width / 2;
 			}
 		}
 		end.x = all->plr.x + c * cosf(angle);
@@ -137,7 +139,7 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 	n = 0;
 //	int all_sprites[res->x];
 	angle = M_PI_6_N;
-	while (n < res->x )
+	while (n < res->x)
 	{
 		is_x = 0;
 		k = cosf(angle);
@@ -152,7 +154,8 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 		add_scale_line(all, n, (int)(high), &texture, is_x);
 
 		n += 1;
-		angle += 1.0 /res->x ;
+//		angle += (float)1.0 / (float)res->x ;
+		angle += (M_PI_6 + M_PI_6) / res->x;
 	}
 
 }

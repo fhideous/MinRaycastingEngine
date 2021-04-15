@@ -117,22 +117,40 @@ void	sprite_sort()
 
 }
 
-int		add_sprite(const t_all *all, const t_sprites sprite_data) {
+int		add_sprite(const t_all *all, const t_sprites sprite_data, float x_y) {
 	int i;
 	int n;
 	int j;
+	int k;
 	int high;
+	float angle;
 
 	i = 0;
 	j = 0;
 	while (i <= sprite_data.size) {
-		n =  ((int)(sprite_data.distns[i].dist * cosf(sprite_data.distns[i].angle)));
+//		n = ((int)(sprite_data.distns[i].dist * cosf(sprite_data.distns[i].angle)));
+//		high = (int)(all->textrs.spite.width / sprite_data.distns[i].dist * all->full_map->resolution.y) >> 1;
+//		high = (all->full_map->resolution.y * all->textrs.spite.width / sprite_data.distns[i].dist);
+//		if (high > all->full_map->resolution.y ) {
+//			high = all->full_map->resolution.y ;
+//		}
+//		n = sprite_data.coords->y + high;
+		angle = sprite_data.distns[i].angle - all->plr.ray.angle;
+		high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / sprite_data.distns[i].dist);
+		if (high > all->full_map->resolution.y )
+			high = all->full_map->resolution.y;
+//		n =  sprite_data.points->y;
+//		n = (all->full_map->resolution.x -
+//				(int)(2 * sprite_data.distns[i].dist * (cosf(sprite_data.distns[i].angle)))) / 2;
+		n = all->full_map->resolution.x / 2 * (1 + ( angle / ( M_PI_6)));
+		while (j < high && j + n < all->full_map->resolution.x)
+		{
+			add_scale_line(all, n + j, high, &all->textrs.spite, 0);
+			j++;
+		}
 
-		high = (int)(all->textrs.spite.width / sprite_data.distns[i].dist * all->full_map->resolution.y) >> 1;
-
-		while (j++ < 100)
-			add_scale_line(all,j +  n, high, &all->textrs.spite, 0);
 		i++;
+		j = 0;
 	}
 }
 
@@ -149,7 +167,7 @@ int     render_next_frame(t_all *all)
 //	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans,all->textrs.n_tex.width );
 //	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
 	sprite_sort();
-	add_sprite(all, all->sprites_loc);
+	add_sprite(all, all->sprites_loc, (float)all->full_map->resolution.x / all->full_map->resolution.y );
 }
 
 
