@@ -1,16 +1,32 @@
 #include "hdrs/cub3d.h"
 
-void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
+int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 {
-	t_ray end;
-	float  c;
+	t_ray	end;
+	float	c;
+	char	ch;
+	int		cnt_sprts;
+	int		is_add;
 
 	c = (float)0.2;
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
-	while (all->full_map->map[(int)(end.y / (float)txtr->width)]
-					[(int)(end.x / (float)txtr->width)] != '1')
+	while ((ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
+					[(int)(end.x / (float)txtr->width)]) != '1')
 	{
+		if (ch == '2')
+		{
+			is_add = add_point(all->sprites_loc.points, (int)(end.y / (float)txtr->width),
+						  (int)(end.x / (float)txtr->width));
+			if (is_add == -19)
+				return -1;
+			if (is_add != -1)
+			{
+				all->sprites_loc.distns[is_add].dist = c;
+				all->sprites_loc.distns[is_add].angle = angle;
+				all->sprites_loc.size = is_add;
+			}
+		}
 		end.x = all->plr.x + c * cosf(angle);
 		end.y  = all->plr.y + c * sinf(angle);
 		c += (float)ANGLE_STEP;
@@ -19,29 +35,29 @@ void find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
 }
-
-int find_sprite(t_all *all, float  angle, t_win *win, t_texture *txtr)
-{
-	t_ray end;
-	float  c;
-	int count = 0;
-
-	c = (float)0.2;
-	end.x = all->plr.x + c * cosf(angle);
-	end.y  = all->plr.y + c * sinf(angle);
-	while (all->full_map->map[(int)(end.y / (float)txtr->width)]
-		   [(int)(end.x / (float)txtr->width)] != '1')
-	{
-		end.x = all->plr.x + c * cosf(angle);
-		end.y  = all->plr.y + c * sinf(angle);
-		c += (float)ANGLE_STEP;
-		if (all->full_map->map[(int)(end.y / (float)txtr->width)]
-			[(int)(end.x / (float)txtr->width)] == '2')
-		{	count++; continue; }
-
-	}
-	return (count);
-}
+//
+//int find_sprite(t_all *all, float  angle, t_win *win, t_texture *txtr)
+//{
+//	t_ray end;
+//	float  c;
+//	int count = 0;
+//
+//	c = (float)0.2;
+//	end.x = all->plr.x + c * cosf(angle);
+//	end.y  = all->plr.y + c * sinf(angle);
+//	while (all->full_map->map[(int)(end.y / (float)txtr->width)]
+//		   [(int)(end.x / (float)txtr->width)] != '1')
+//	{
+//		end.x = all->plr.x + c * cosf(angle);
+//		end.y  = all->plr.y + c * sinf(angle);
+//		c += (float)ANGLE_STEP;
+//		if (all->full_map->map[(int)(end.y / (float)txtr->width)]
+//			[(int)(end.x / (float)txtr->width)] == '2')
+//		{	count++; continue; }
+//
+//	}
+//	return (count);
+//}
 
 t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
 {
@@ -70,7 +86,7 @@ t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
 	return tmp_txtr;
 }
 
-void	add_scale_line(t_all *all, int n, int hign, t_texture *textr, int is_x)
+void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x)
 {
 	int		i;
 	float	ratio;
@@ -138,4 +154,5 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 		n += 1;
 		angle += 1.0 /res->x ;
 	}
+
 }

@@ -1,13 +1,13 @@
 #include "hdrs/cub3d.h"
 #include <math.h>
 
-void            my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color)
-{
-	char    *dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
+//void            my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color)
+//{
+//	char    *dst;
+//
+//	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+//	*(unsigned int*)dst = color;
+//}
 
 
 void add_flour(t_all *all)
@@ -34,8 +34,8 @@ void	add_sprite_line(t_all *all, int n, int high, int i)
 //	int					i;
 //	i = 0;
 //	i = ((int)all->plr.ray.y - 32) % all->textrs.spite.width;
-	if (high > all->full_map->resolution.y >> 1)
-		high = all->full_map->resolution.y >> 1;
+	if (high > all->full_map->resolution.y )
+		high = all->full_map->resolution.y ;
 	ratio = (float)high / all->textrs.spite.width;
 	j = -ratio;
 	while(j + ratio < high)
@@ -50,13 +50,13 @@ void	add_sprite_line(t_all *all, int n, int high, int i)
 								all->full_map->resolution.x *
 								((all->full_map->resolution.y >> 1) - (int)(high >> 1))]  =
 					all->textrs.spite.addr[(((int)(j / ratio ) * all->textrs.spite.width) +
-						i )];
+						i)];
 			k++;
 		}
 	}
 }
 
-int		add_sprite(t_all *all, t_sprite sprite, int scale)
+/*int		add_sprite(t_all *all, t_sprite sprite, int scale)
 {
 	int		i;
 	int 	high;
@@ -68,18 +68,17 @@ int		add_sprite(t_all *all, t_sprite sprite, int scale)
 	i = -1;
 	while(++i != all->sprts_crds.n)
 	{
-//		if (all->spr_distans[i].angle > all->plr.ray.angle - M_PI_6 * 2 &&
-//				(all->spr_distans[i].angle < all->plr.ray.angle + M_PI_6 * 2))
+		if (all->spr_distans[i].angle > M_PI_2  - M_PI_6 &&
+				(all->spr_distans[i].angle < M_PI_2 + M_PI_6))
 		{
-			n = all->full_map->resolution.x / 2 +
-						 all->full_map->resolution.x;
+			n = all->sprts_crds.coordints->x + ((int)(all->spr_distans[i].dist * cosf(all->spr_distans[i].angle)));
 			high = (int)(sprite.width / all->spr_distans[i].dist * all->full_map->resolution.y) >> 1;
-			n_end = n + /*all->textrs.spite.width / all->full_map->resolution.x*/
+			n_end = n + *//*all->textrs.spite.width / all->full_map->resolution.x*//*
 					high;
-			step = (float)high / sprite.width;
+			step = (float)high / (float)sprite.width;
 			it_step = 0;
 			k = 0;
-			while (n < n_end)
+			while (n <= n_end)
 			{
 				add_sprite_line(all, n, high, k);
 				it_step++;
@@ -92,11 +91,12 @@ int		add_sprite(t_all *all, t_sprite sprite, int scale)
 			}
 		}
 	}
-}
+}*/
 
+/*
 void		distance_sprites(const t_sprites_crds *crds,
 					   const t_plr* plr,
-					   t_sprites_distns *distns)
+					   t_sprites_distns *distns, int scale)
 {
 	int		i;
 	float	x;
@@ -105,22 +105,51 @@ void		distance_sprites(const t_sprites_crds *crds,
 	while (++i < crds->n)
 	{
 		x = (crds->coordints[i].x - plr->x);
-		y = (crds->coordints[i].y - plr->y);
+		y = (crds->coordints[i].y - (plr->y - (scale >> 1)));
 		distns[i].dist =  sqrt(x * x + y * y);
-		distns[i].angle = atanf(y / x);
+		distns[i].angle = asinf(ABS(x) / distns[i].dist);
 	}
 }
+*/
 
+void	sprite_sort()
+{
+
+}
+
+int		add_sprite(const t_all *all, const t_sprites sprite_data) {
+	int i;
+	int n;
+	int j;
+	int high;
+
+	i = 0;
+	j = 0;
+	while (i <= sprite_data.size) {
+		n =  ((int)(sprite_data.distns[i].dist * cosf(sprite_data.distns[i].angle)));
+
+		high = (int)(all->textrs.spite.width / sprite_data.distns[i].dist * all->full_map->resolution.y) >> 1;
+
+		while (j++ < 100)
+			add_scale_line(all,j +  n, high, &all->textrs.spite, 0);
+		i++;
+	}
+}
 
 int     render_next_frame(t_all *all)
 {
 	add_flour(all);
 
+	sprites_zero(all->sprites_loc.points);
+	sprites_dist_sero(all->sprites_loc.distns);
 	add_ray(all, &all->full_map->resolution, (float)all->full_map->resolution.x / all->full_map->resolution.y );
-	all->textrs.spite.angle = 0;
-	all->textrs.spite.k = 1;
-//	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans);
+//	all->textrs.spite.angle = 0;
+//	all->textrs.spite.k = 1;
+
+//	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans,all->textrs.n_tex.width );
 //	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
+	sprite_sort();
+	add_sprite(all, all->sprites_loc);
 }
 
 

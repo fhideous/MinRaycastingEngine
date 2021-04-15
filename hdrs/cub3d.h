@@ -7,7 +7,7 @@
 #include <mlx.h>
 #include "stdio.h"
 #include "stdlib.h"
-
+#define SPRITES_MAX 128
 #define ANGLE_STEP 0.02
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
@@ -125,7 +125,7 @@ typedef struct s_textures
 	t_texture		s_tex;
 	t_texture		w_tex;
 	t_texture		e_tex;
-	t_sprite 		spite;
+	t_texture 		spite;
 
 }				t_textures;
 
@@ -141,24 +141,39 @@ typedef struct s_sprites_distns
 	float 	angle;
 }				t_sprites_distns;
 
+typedef struct s_sprites
+{
+	int					size;
+	t_point				*points;
+	t_sprites_distns	*distns;
+}				t_sprites;
+
 typedef struct	s_all
 {
 	t_win				*full_win;
 	t_plr				plr;
 	t_textures			textrs;
+	t_cub_map			*full_map;
+
 	t_sprites_crds		sprts_crds;
 	t_sprites_distns	*spr_distans;
-	t_cub_map			*full_map;
+
+	t_sprites			sprites_loc;
 }				  t_all;
 
 char		**get_map(int fd, char *line);
 int			find_sprites(char **map, t_sprites_crds *sprts);
+int			add_point(t_point *, int , int);
 
 int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
+void		sprites_zero(t_point *);
+void sprites_dist_sero (t_sprites_distns *);
+
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *, float );
+void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x);
 
 int			create_win(t_all *);
 
@@ -166,9 +181,9 @@ void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 
 void 		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
-void		distance_sprites(const t_sprites_crds *, const t_plr*, t_sprites_distns *);
+//void		distance_sprites(const t_sprites_crds *, const t_plr*, t_sprites_distns *, int);
 void		add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
-void		find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
+int		find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
 
 void		free_map(t_cub_map *map);
 

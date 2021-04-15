@@ -65,7 +65,7 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 //	mlx_destroy_image(win->mlx, tex->img_tmp);
 }
 
-int	texture_open(t_all all, t_textures *textrs)
+int	texture_open(const t_all all, t_textures *textrs)
 {
 	int err;
 	int i;
@@ -80,15 +80,47 @@ int	texture_open(t_all all, t_textures *textrs)
 			textrs->s_tex.width != textrs->w_tex.width) {
 		return (-1);
 	}
-	err += get_xpm_addr_sprite(all.full_win, &textrs->spite, &all.full_map->sprite);
-	i = -1;
-	while (++i != all.sprts_crds.n)
-	{
-		all.sprts_crds.coordints[i].x *= textrs->s_tex.width;
-		all.sprts_crds.coordints[i].y *= textrs->s_tex.width;
-	}
-	return (0);
+	err += get_xpm_addr(all.full_win, &textrs->spite, &all.full_map->sprite);
+//	i = -1;
+//	while (++i != all.sprts_crds.n)
+//	{
+//		all.sprts_crds.coordints[i].x *= textrs->s_tex.width;
+//		all.sprts_crds.coordints[i].y *= textrs->s_tex.width;
+//	}
+	return (err);
 }
+
+void sprites_zero(t_point *coords)
+{
+	t_point tmp;
+	int i;
+
+	i = 0;
+	tmp.x = 0;
+	tmp.y = 0;
+	while (i < SPRITES_MAX)
+	{
+		coords[i] = tmp;
+		i++;
+	}
+}
+
+void sprites_dist_sero (t_sprites_distns *distns)
+{
+	t_sprites_distns tmp;
+	int i;
+
+	i = 0;
+	tmp.angle = 0;
+	tmp.dist = 0;
+
+	while (i < SPRITES_MAX)
+	{
+		distns[i] = tmp;
+		i++;
+	}
+}
+
 
 int main()
 {
@@ -97,21 +129,24 @@ int main()
 //	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
+	t_point 		sprites_loc[SPRITES_MAX];
+	t_sprites_distns sprites_dist[SPRITES_MAX];
+	sprites_dist_sero(sprites_dist);
 
-
+	all.sprites_loc.points = sprites_loc;
+	all.sprites_loc.distns = sprites_dist;
+	all.sprites_loc.size = 0;
 	fd = open(path, O_RDONLY);
 	parse_set(&full_map, fd);
-//
-//	xpm_test(full_map.n_texture);
-//	return (9);
+
 	all.full_map = &full_map;
-	find_sprites(all.full_map->map, &all.sprts_crds);
-	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
+//	find_sprites(all.full_map->map, &all.sprts_crds);
+//	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
 	all.full_win = malloc(sizeof (t_win));
 	all.full_win->mlx = mlx_init();
-	if(texture_open(all, &all.textrs) == -1)
+	if(texture_open(all, &all.textrs) == -1) {
 		exit(32);
-
+	}
 	find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);
 
 	create_win(&all);
