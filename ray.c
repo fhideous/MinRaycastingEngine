@@ -1,5 +1,26 @@
 #include "hdrs/cub3d.h"
 
+//int curr_width_sprite(const t_all *all ,float angle, int txtr_width, int cnt)
+//{
+//	int width;
+//	t_ray end;
+//	float c;
+//
+//	width = 0;
+//	c = all->sprites_loc.distns[cnt].dist;
+//	end.x = all->plr.x + c * cosf(angle);
+//	end.y  = all->plr.y + c * sinf(angle);
+//	while(all->full_map->map[(int)(end.y / (float)txtr_width)][(int)(end.x / (float)txtr_width)]
+//							== '2')
+//	{
+//		end.x = all->plr.x + c * cosf(angle);
+//		end.y  = all->plr.y + c * sinf(angle);
+//		c += (float)ANGLE_STEP;
+//		width++;
+//	}
+//	return (width);
+//}
+
 int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 {
 	t_ray	end;
@@ -8,7 +29,7 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	int		cnt_sprts;
 	int		is_add;
 
-	c = (float)0.2;
+	c = (float)LEN_STEP;
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
 	while ((ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
@@ -31,35 +52,12 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 		}
 		end.x = all->plr.x + c * cosf(angle);
 		end.y  = all->plr.y + c * sinf(angle);
-		c += (float)ANGLE_STEP;
+		c += (float)LEN_STEP;
 	}
 	all->plr.ray.x = end.x + (float)txtr->width / 2;
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
 }
-//
-//int find_sprite(t_all *all, float  angle, t_win *win, t_texture *txtr)
-//{
-//	t_ray end;
-//	float  c;
-//	int count = 0;
-//
-//	c = (float)0.2;
-//	end.x = all->plr.x + c * cosf(angle);
-//	end.y  = all->plr.y + c * sinf(angle);
-//	while (all->full_map->map[(int)(end.y / (float)txtr->width)]
-//		   [(int)(end.x / (float)txtr->width)] != '1')
-//	{
-//		end.x = all->plr.x + c * cosf(angle);
-//		end.y  = all->plr.y + c * sinf(angle);
-//		c += (float)ANGLE_STEP;
-//		if (all->full_map->map[(int)(end.y / (float)txtr->width)]
-//			[(int)(end.x / (float)txtr->width)] == '2')
-//		{	count++; continue; }
-//
-//	}
-//	return (count);
-//}
 
 t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
 {
@@ -96,7 +94,7 @@ void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, i
 	float	j;
 	int		max;
 
-	ratio = (float)hign / textr->width;
+	ratio = (float)hign / (float)textr->width;
 	if(is_x)
 		i = ((int)all->plr.ray.x - (textr->width >> 1)) % textr->width ;
 	else
@@ -111,7 +109,7 @@ void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, i
 			((int)j < hign + max))
 	{
 		k = 0;
-		while (k < ratio)
+		while (k - 1 < (int)ratio)
 		{
 			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
 					(k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))

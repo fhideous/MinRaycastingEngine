@@ -8,7 +8,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 #define SPRITES_MAX 128
-#define ANGLE_STEP 0.02
+#define LEN_STEP 0.05
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 #define M_PI_12 0.261799388
@@ -139,6 +139,8 @@ typedef struct s_sprites_distns
 {
 	float 	dist;
 	float 	angle;
+	int		width;
+
 }				t_sprites_distns;
 
 typedef struct s_sprites
@@ -179,6 +181,7 @@ void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, i
 int			create_win(t_all *);
 
 void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
+t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x);
 
 void 		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);

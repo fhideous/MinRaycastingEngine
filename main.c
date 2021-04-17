@@ -131,8 +131,9 @@ int main()
 	t_all 		all;
 	t_point 		sprites_loc[SPRITES_MAX];
 	t_sprites_distns sprites_dist[SPRITES_MAX];
+	t_point			sprts_coord[SPRITES_MAX];
 	sprites_dist_sero(sprites_dist);
-
+	all.sprites_loc.coords =sprts_coord;
 	all.sprites_loc.points = sprites_loc;
 	all.sprites_loc.distns = sprites_dist;
 	all.sprites_loc.size = 0;
