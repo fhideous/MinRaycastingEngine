@@ -26,16 +26,16 @@ void	print_sprite_line(const t_all *all,int n, int high, int it)
 
 	ratio = (float)high / (float)all->textrs.spite.width;
 //	i = ((int)all->sprites_loc.points->x /*- (all->textrs.spite.width >> 1)*/) % all->textrs.spite.width;
+//	i = ABS(high - all->sprites_loc.distns->width);
 	i = 0;
-//	i = l;
 	j = 0;
-	while (j < (float)high)
+	while ((int)j <high)
 	{
 		k = -1;
 		while ((float)++k < ratio)
 		{
-//			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
-//				continue;
+			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
+				continue;
 //			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
 //			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
 			{
@@ -49,9 +49,29 @@ void	print_sprite_line(const t_all *all,int n, int high, int it)
 	}
 }
 
-void	sprite_sort()
+void	sprite_sort(t_sprites_distns *distns, int size)
 {
+	int i;
+	int j;
+	t_sprites_distns tmp;
 
+	i = -1;
+	j = -1;
+	while (++i < size )
+	{
+		j = -1;
+		while (++j < size - i )
+		{
+			if (distns[j].dist < distns[j + 1].dist)
+			{
+				tmp.dist = distns[j].dist;
+				tmp.width = distns[j].width;
+				tmp.angle = distns[j].angle;
+				distns[j] = distns[j + 1];
+				distns[j + 1] = tmp;
+			}
+		}
+	}
 }
 
 int		crossing_sprite(const t_all *all, float angle, const t_texture *txtr)
@@ -118,7 +138,7 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 	i = -1;
 	j = 0;
 	while (++i <= sprite_data->size) {
-		if(sprite_data->distns[i].dist < 80)
+		if(sprite_data->distns[i].dist < 1)
 			continue;
 		angle = sprite_data->distns[i].angle - all->plr.ray.angle;
 		high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / sprite_data->distns[i].dist);
@@ -141,7 +161,7 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 				print_sprite_line(all, n + sp_step_step + j, high,  kek);
 				sp_step_step++;
 			}
-			kek ++;
+			kek++;
 			j += sp_step;
 		}
 
@@ -161,7 +181,7 @@ int     render_next_frame(t_all *all)
 
 //	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans,all->textrs.n_tex.width );
 //	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
-	sprite_sort();
+	sprite_sort(all->sprites_loc.distns, all->sprites_loc.size);
 	add_sprite(all, &all->sprites_loc, (float)all->full_map->resolution.x / all->full_map->resolution.y );
 }
 

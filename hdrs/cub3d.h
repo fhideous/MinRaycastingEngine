@@ -139,7 +139,7 @@ typedef struct s_sprites_distns
 {
 	float 	dist;
 	float 	angle;
-	float	angle_end;
+//	float	angle_end;
 	int		width;
 
 }				t_sprites_distns;
