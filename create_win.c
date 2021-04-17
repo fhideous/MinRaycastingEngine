@@ -25,9 +25,7 @@ void	print_sprite_line(const t_all *all,int n, int high, int it)
 	int			k;
 
 	ratio = (float)high / (float)all->textrs.spite.width;
-//	i = ((int)all->sprites_loc.points->x /*- (all->textrs.spite.width >> 1)*/) % all->textrs.spite.width;
-//	i = ABS(high - all->sprites_loc.distns->width);
-	i = 0;
+	i  = (all->sprites_loc.coords->x - (all->textrs.spite.width >> 1)) % all->textrs.spite.width;
 	j = 0;
 	while ((int)j <high)
 	{

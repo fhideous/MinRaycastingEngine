@@ -59,7 +59,7 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	all->plr.ray.len = c;
 }
 
-t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x)
+t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x)
 {
 	static t_ray ray_old;
 	t_texture tmp_txtr;

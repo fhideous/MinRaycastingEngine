@@ -182,7 +182,7 @@ void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, i
 int			create_win(t_all *);
 
 void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
-t_texture texture_define(t_ray *ray_new, t_textures *all_txtr, int *is_x);
+t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x);
 
 void 		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
