@@ -17,26 +17,48 @@ void add_flour(t_all *all)
 
 }
 
-void	print_sprite_line(const t_all *all,int n, int high, int it)
+int find_i(const t_all *all, int n)
+{
+	int i;
+
+	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
+			i  = -(all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else if (all->plr.ray.angle > M_PI_4 + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2)
+			i  = -(all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else if (all->plr.ray.angle > M_PI_4 + M_PI_2  + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2)
+			i  = (all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else if (all->plr.ray.angle > 0 && all->plr.ray.angle < M_PI_4 ||
+				(all->plr.ray.angle > M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2 && all->plr.ray.angle < M_PI + M_PI))
+			i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else
+		return -1;
+	return  i;
+}
+
+void	print_sprite_line(const t_all *all,int n, int high, int it, int i)
 {
 	float		ratio;
-	int			i;
+//	int			i;
 	float		j;
 	int			k;
 
 	ratio = (float)high / (float)all->textrs.spite.width;
-//	if (all->sprites_loc.distns->angle > 0)
-//		i  = (all->sprites_loc.coords->x) % all->textrs.spite.width;
-//	else
-		i  =((all->sprites_loc.coords->x) - (all->textrs.spite.width >> 1)) % all->textrs.spite.width;
+	printf("%f\n", all->plr.ray.angle);
 
+//	i  = -(all->sprites_loc.coords->x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	if (all->plr.ray.angle > 2.617993878 && all->plr.ray.angle < 3.665191429)
+//		i *= -1;
+	if (i == -1)
+		return;
 	j = 0;
 	while ((int)j <high)
 	{
 		k = -1;
 		while ((float)++k < ratio)
 		{
-			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
+//			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
+//				continue;
+			if (((int) all->textrs.spite.width * (int) (j / ratio) + i + it) > all->textrs.spite.width * all->textrs.spite.width)
 				continue;
 //			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
 //			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
@@ -160,7 +182,8 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 			sp_step_step = 0;
 			while (sp_step_step < sp_step)
 			{
-				print_sprite_line(all, n + sp_step_step + j, high,  kek);
+
+				print_sprite_line(all, n + sp_step_step + j, high,  kek, find_i(all,i ));
 				sp_step_step++;
 			}
 			kek++;
