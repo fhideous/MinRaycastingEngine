@@ -5,10 +5,10 @@
 #include "../lib//libft.h"
 #include <math.h>
 #include <mlx.h>
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.05
+#define LEN_STEP 0.03
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 #define M_PI_12 0.261799388
@@ -20,7 +20,7 @@
 
 
 #define SPEED_X 6
-#define SPEED_Y 6
+#define SPEED_Y 6l
 #define ROTATE_SPEED 0.05
 
 
@@ -139,6 +139,7 @@ typedef struct s_sprites_distns
 {
 	float 	dist;
 	float 	angle;
+	float	angle_end;
 	int		width;
 
 }				t_sprites_distns;
@@ -159,7 +160,7 @@ typedef struct	s_all
 	t_cub_map			*full_map;
 
 	t_sprites_crds		sprts_crds;
-	t_sprites_distns	*spr_distans;
+//	t_sprites_distns	*spr_distans;
 
 	t_sprites			sprites_loc;
 }				  t_all;

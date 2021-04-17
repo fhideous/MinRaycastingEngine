@@ -25,20 +25,24 @@ void	print_sprite_line(const t_all *all,int n, int high, int it)
 	int			k;
 
 	ratio = (float)high / (float)all->textrs.spite.width;
-	i = ((int)all->sprites_loc.coords->y - (all->textrs.spite.width >> 1)) % all->textrs.spite.width;
+//	i = ((int)all->sprites_loc.points->x /*- (all->textrs.spite.width >> 1)*/) % all->textrs.spite.width;
+	i = 0;
+//	i = l;
 	j = 0;
 	while (j < (float)high)
 	{
-		k = 0;
-		while ((float)k < ratio)
+		k = -1;
+		while ((float)++k < ratio)
 		{
-			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
-			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1))) {
+//			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
+//				continue;
+//			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
+//			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
+			{
 				all->full_win->addr[(k + (int) j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int) (high >> 1))] =
 						all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)];
-				k++;
 			}
 		}
 		j += ratio;
@@ -111,24 +115,25 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 	float j;
 	int high;
 	float angle;
-	int width;
-	i = 0;
+	i = -1;
 	j = 0;
-	while (i <= sprite_data->size) {
-
+	while (++i <= sprite_data->size) {
+		if(sprite_data->distns[i].dist < 80)
+			continue;
 		angle = sprite_data->distns[i].angle - all->plr.ray.angle;
 		high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / sprite_data->distns[i].dist);
 		if (high > all->full_map->resolution.y )
 			high = all->full_map->resolution.y;
-
+//			continue;
 		n = all->full_map->resolution.x / 2 * (1 + ( angle / ( M_PI_6)));
 
-		float sp_step_step = 0;
-		width = curr_sprite_width(all, (sprite_data->distns[i].angle), high);
-		printf("%d\n", width);
-		float sp_step = (float)width / all->textrs.spite.width;
+		float sp_step_step;
+		all->sprites_loc.distns[i].width = curr_sprite_width(all, (sprite_data->distns[i].angle), high);
+
+//		printf("%d\n", width);
+		float sp_step = (float)high / all->textrs.spite.width;
 		int kek = 0;
-		while ((int)j < width && j + n < all->full_map->resolution.x)
+		while ((int)j < all->sprites_loc.distns[i].width  && j + n < all->full_map->resolution.x)
 		{
 			sp_step_step = 0;
 			while (sp_step_step < sp_step)
@@ -140,7 +145,6 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 			j += sp_step;
 		}
 
-		i++;
 		j = 0;
 	}
 }
