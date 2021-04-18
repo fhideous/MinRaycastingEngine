@@ -13,11 +13,11 @@ void add_flour(t_all *all)
 	j = (all->full_map->resolution.y >> 1) * all->full_map->resolution.x;
 	 i = j;
 	while (i--)
-			all->full_win->addr[i] =color_c;
+			all->full_win.addr[i] =color_c;
 	i = -1;
 	while (++i != j)
-		all->full_win->addr[i + j] = color_f;
-	mlx_put_image_to_window(all->full_win->mlx, all->full_win->win, all->full_win->img, 0, 0);
+		all->full_win.addr[i + j] = color_f;
+	mlx_put_image_to_window(all->full_win.mlx, all->full_win.win, all->full_win.img, 0, 0);
 
 }
 #define M_PI_3 1.047197551
@@ -85,7 +85,7 @@ void	print_sprite_line(const t_all *all,int n, int high, int it, int i)
 //			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
 //			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
 			{
-				all->full_win->addr[(k + (int) j) * all->full_map->resolution.x + n +
+				all->full_win.addr[(k + (int) j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int) (high >> 1))] =
 						all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)];
@@ -238,21 +238,21 @@ int	create_win(t_all *all)
 //	t_win 	*win;
 
 //	win = malloc(sizeof(t_win));
-	all->full_win->win = mlx_new_window(all->full_win->mlx, all->full_map->resolution.x,
+	all->full_win.win = mlx_new_window(all->full_win.mlx, all->full_map->resolution.x,
 								  all->full_map->resolution.y, "cub3d");
 
-	all->full_win->img = mlx_new_image(all->full_win->mlx, all->full_map->resolution.x,
+	all->full_win.img = mlx_new_image(all->full_win.mlx, all->full_map->resolution.x,
 							 all->full_map->resolution.y);
-	all->full_win->addr = mlx_get_data_addr(all->full_win->img,
-								  &all->full_win->bits_per_pixel,
-								  &all->full_win->line_length,
-								  &all->full_win->endian);
+	all->full_win.addr = mlx_get_data_addr(all->full_win.img,
+								  &all->full_win.bits_per_pixel,
+								  &all->full_win.line_length,
+								  &all->full_win.endian);
 //	all->full_win = win;
 //	render_next_frame(&all, &full_map);
-	mlx_loop_hook(all->full_win->mlx, render_next_frame, &all->full_win);
+	mlx_loop_hook(all->full_win.mlx, render_next_frame, &all->full_win);
 
-	mlx_hook(all->full_win->win, 2, 1L << 0, key_commands, all);
+	mlx_hook(all->full_win.win, 2, 1L << 0, key_commands, all);
 //	render_next_frame(&all);
 
-	mlx_loop(all->full_win->mlx);
+	mlx_loop(all->full_win.mlx);
 }

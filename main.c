@@ -70,22 +70,22 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 }
 */
 
-int	texture_open(const t_all all, t_textures *textrs)
+int	texture_open(t_all all, t_textures *textrs)
 {
 	int err;
 	int i;
 
 	err = 0;
-	err += get_xpm_addr(all.full_win, &textrs->n_tex, &all.full_map->n_texture);
-	err += get_xpm_addr(all.full_win, &textrs->s_tex, &all.full_map->s_texture);
-	err += get_xpm_addr(all.full_win, &textrs->e_tex, &all.full_map->e_texture);
-	err += get_xpm_addr(all.full_win, &textrs->w_tex, &all.full_map->w_texture);
+	err += get_xpm_addr(&all.full_win, &textrs->n_tex, &all.full_map->n_texture);
+	err += get_xpm_addr(&all.full_win, &textrs->s_tex, &all.full_map->s_texture);
+	err += get_xpm_addr(&all.full_win, &textrs->e_tex, &all.full_map->e_texture);
+	err += get_xpm_addr(&all.full_win, &textrs->w_tex, &all.full_map->w_texture);
 	if (textrs->s_tex.width != textrs->n_tex.width ||
 			textrs->s_tex.width != textrs->e_tex.width ||
 			textrs->s_tex.width != textrs->w_tex.width) {
 		return (-1);
 	}
-	err += get_xpm_addr(all.full_win, &textrs->spite, &all.full_map->sprite);
+	err += get_xpm_addr(&all.full_win, &textrs->spite, &all.full_map->sprite);
 //	i = -1;
 //	while (++i != all.sprts_crds.n)
 //	{
@@ -126,9 +126,56 @@ void sprites_dist_sero (t_sprites_distns *distns)
 	}
 }
 
+void message2(int err)
+{
+	if (err == 10)
+		printf("");
+	else if (err == 11)
+		printf("");
+	else if (err == 12)
+		printf("");
+	else if (err == 13)
+		printf("");
+	else if (err == 14)
+		printf("");
+	else if (err == 15)
+		printf("");
+	else if (err == 16)
+		printf("");
+	else if (err == 17)
+		printf("");
+	else if (err == 18)
+		printf("");
+
+}
+
 void message(t_all *all)
 {
+	int err;
 
+	err = all->full_map->error.error_numb;
+	if (err > 9)
+		message2(err);
+	else if (err == 1)
+		//ft_printf
+		printf("");
+	else if (err == 2)
+		printf("");
+	else if (err == 3)
+		printf("");
+	else if (err == 4)
+		printf("");
+	else if (err == 5)
+		printf("");
+	else if (err == 6)
+		printf("");
+	else if (err == 7)
+		printf("");
+	else if (err == 8)
+		printf("");
+	else if (err == 9)
+		printf("");
+	exit(err);
 }
 
 int main()
@@ -155,10 +202,11 @@ int main()
 		message(&all);
 	}
 //	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
-	all.full_win = malloc(sizeof (t_win));
-	all.full_win->mlx = mlx_init();
+//	all.full_win = malloc(sizeof (t_win));
+	all.full_win.mlx = mlx_init();
 	if(texture_open(all, &all.textrs) == -1) {
 		all.full_map->error.error_numb = 12;
+		message(&all);
 	}
 	find_sprites(all.full_map->map, &all.sprts_crds);
 	find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);

@@ -164,7 +164,7 @@ typedef struct s_sprites
 
 typedef struct	s_all
 {
-	t_win				*full_win;
+	t_win				full_win;
 	t_plr				plr;
 	t_textures			textrs;
 	t_cub_map			*full_map;
