@@ -16,22 +16,40 @@ void add_flour(t_all *all)
 	mlx_put_image_to_window(all->full_win->mlx, all->full_win->win, all->full_win->img, 0, 0);
 
 }
-
+#define M_PI_3 1.047197551
+#define M_PI_6 0.523598776
+#define M_PI_12 0.261799388
 int find_i(const t_all *all, int n)
 {
 	int i;
 
-	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
-			i  = -(all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
-	else if (all->plr.ray.angle > M_PI_4 + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2)
-			i  = -(all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
-	else if (all->plr.ray.angle > M_PI_4 + M_PI_2  + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2)
-			i  = (all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
-	else if (all->plr.ray.angle > 0 && all->plr.ray.angle < M_PI_4 ||
-				(all->plr.ray.angle > M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2 && all->plr.ray.angle < M_PI + M_PI))
-			i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
-	else
-		return -1;
+	if (all->plr.ray.angle >= M_PI_3 && all->plr.ray.angle < M_PI_3 + M_PI_3)
+		i  = -((all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width);
+	else if (all->plr.ray.angle >= (M_PI_6) + M_PI_3 + M_PI_3 && all->plr.ray.angle <= M_PI_6 + M_PI_3 + M_PI_3 + M_PI_3)
+		i  = -((all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width);
+	else if (all->plr.ray.angle >= (M_PI_3) + M_PI_3 + M_PI_3 + M_PI_3&& all->plr.ray.angle <= M_PI_3 + M_PI_3 + M_PI_3 + M_PI_3 + M_PI_3)
+		i  = (all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else if (all->plr.ray.angle <= M_PI_6 ||
+			 (all->plr.ray.angle >= M_PI + M_PI - M_PI_6))
+		i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+	else if (all->plr.ray.angle <= M_PI_3 )
+		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width;
+
+			else
+	i = -1;
+//
+//	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
+//			i  = -(all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	else if (all->plr.ray.angle > M_PI_4 + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2)
+//			i  = -(all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	else if (all->plr.ray.angle > M_PI_4 + M_PI_2  + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2)
+//			i  = (all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	else if (all->plr.ray.angle > 0 && all->plr.ray.angle < M_PI_4 ||
+//				(all->plr.ray.angle > M_PI_4 + M_PI_2 + M_PI_2 + M_PI_2 && all->plr.ray.angle < M_PI + M_PI))
+//			i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	else
+//		return -1;
+
 	return  i;
 }
 
@@ -58,8 +76,8 @@ void	print_sprite_line(const t_all *all,int n, int high, int it, int i)
 		{
 //			if (all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)] == 0x000000)
 //				continue;
-			if (((int) all->textrs.spite.width * (int) (j / ratio) + i + it) > all->textrs.spite.width * all->textrs.spite.width)
-				continue;
+//			if (((int) all->textrs.spite.width * (int) (j / ratio) + i + it) > all->textrs.spite.width * all->textrs.spite.width)
+//				continue;
 //			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
 //			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
 			{
