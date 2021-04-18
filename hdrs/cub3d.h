@@ -84,6 +84,13 @@ typedef struct	s_color
  * map
  */
 
+typedef struct s_error
+{
+	int				error_numb;
+	char			*message;
+}		t_error;
+
+
 typedef struct	s_cub_map
 {
 	t_point 	resolution;
@@ -94,8 +101,8 @@ typedef struct	s_cub_map
 	char 		*sprite;
 	t_color		fl_color;
 	t_color		cel_color;
-
 	char		**map;
+	t_error		error;
 }				  t_cub_map;
 
 typedef struct	s_sprite
@@ -152,6 +159,8 @@ typedef struct s_sprites
 	t_sprites_distns	*distns;
 }				t_sprites;
 
+
+
 typedef struct	s_all
 {
 	t_win				*full_win;
@@ -161,7 +170,6 @@ typedef struct	s_all
 
 	t_sprites_crds		sprts_crds;
 //	t_sprites_distns	*spr_distans;
-
 	t_sprites			sprites_loc;
 }				  t_all;
 

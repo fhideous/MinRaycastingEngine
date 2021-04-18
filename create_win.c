@@ -5,14 +5,18 @@ void add_flour(t_all *all)
 {
 	int i;
 	int j;
+	unsigned int color_f;
+	unsigned int color_c;
 
+	color_f = (all->full_map->fl_color.R << 16) + (all->full_map->fl_color.G << 8) + all->full_map->fl_color.B;
+	color_c = (all->full_map->cel_color.R << 16) + (all->full_map->cel_color.G << 8) + all->full_map->cel_color.B;
 	j = (all->full_map->resolution.y >> 1) * all->full_map->resolution.x;
 	 i = j;
 	while (i--)
-			all->full_win->addr[i] = 0xE3CC87;
+			all->full_win->addr[i] =color_c;
 	i = -1;
 	while (++i != j)
-		all->full_win->addr[i + j] = 0xE3D29F;
+		all->full_win->addr[i + j] = color_f;
 	mlx_put_image_to_window(all->full_win->mlx, all->full_win->win, all->full_win->img, 0, 0);
 
 }
@@ -22,7 +26,6 @@ void add_flour(t_all *all)
 int find_i(const t_all *all, int n)
 {
 	int i;
-
 	if (all->plr.ray.angle >= M_PI_3 && all->plr.ray.angle < M_PI_3 + M_PI_3)
 		i  = -((all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width);
 	else if (all->plr.ray.angle >= (M_PI_6) + M_PI_3 + M_PI_3 && all->plr.ray.angle <= M_PI_6 + M_PI_3 + M_PI_3 + M_PI_3)
@@ -34,8 +37,7 @@ int find_i(const t_all *all, int n)
 		i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
 	else if (all->plr.ray.angle <= M_PI_3 )
 		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width;
-
-			else
+	else
 	i = -1;
 //
 //	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)

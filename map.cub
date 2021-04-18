@@ -3,10 +3,9 @@ NO ../textures/pics/wood.xpm
 SO ../textures/pics/colorstone.xpm
 WE ../textures/pics/mossy.xpm
 EA ../textures/pics/eagle.xpm
-S ../textures/pics/barrel.xpm
-F 220,100,0
-C 225,30,0
-
+S ../textures/pics/pillar.xpm
+F 227,204,135
+C 227,210,159
 
                                     11111111
 1111111111111111111111111111111111111111111111111111111 10000001

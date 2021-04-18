@@ -125,7 +125,8 @@ void sprites_dist_sero (t_sprites_distns *distns)
 int main()
 {
 	int fd;
-	char *path = "../map.cub";
+	char *path= "../map.cub";
+	int error;
 //	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
@@ -138,7 +139,9 @@ int main()
 	all.sprites_loc.distns = sprites_dist;
 	all.sprites_loc.size = 0;
 	fd = open(path, O_RDONLY);
-	parse_set(&full_map, fd);
+	error = parse_set(&full_map, fd);
+	if (error)
+		return (error);
 
 	all.full_map = &full_map;
 	find_sprites(all.full_map->map, &all.sprts_crds);
