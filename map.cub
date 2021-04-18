@@ -1,10 +1,13 @@
-R 1000 640
+
+R    1000 640
+
 NO ../textures/pics/wood.xpm
 SO ../textures/pics/colorstone.xpm
 WE ../textures/pics/mossy.xpm
 EA ../textures/pics/eagle.xpm
 S ../textures/pics/pillar.xpm
-F 227,204,135
+
+F  227,204,135
 C 227,210,159
 
                                     11111111

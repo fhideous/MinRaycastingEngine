@@ -18,7 +18,7 @@ int		parse_path(char **line, char **path)
 	return (0);
 }
 
-int		db_len(char **strs)
+int		dp_len(char **strs)
 {
 	int i;
 
@@ -35,7 +35,7 @@ int		digits_in_str(const char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[i]) && str[i] != ' ')
 			return 0;
 		i++;
 	}
@@ -52,7 +52,7 @@ int		parse_res(char **line, t_cub_map *f_map)
 		return 2;
 	(*line)++;
 	res = ft_split(*line, ' ');
-	if (db_len(res) != 2)
+	if (dp_len(res) != 2)
 		//R field has wrong number of arguments
 		return 3;
 	if (!digits_in_str(res[0]) || !digits_in_str(res[1]))
@@ -61,24 +61,66 @@ int		parse_res(char **line, t_cub_map *f_map)
 	res_x = ft_atoi(res[0]);
 	f_map->resolution.x = res_x;
 	f_map->resolution.y = ft_atoi(res[1]);
+	free(res[1]);
+	free(res[0]);
+	free(res);
 	return (0);
+}
+
+int check_valid_colors(char **colors)
+{
+	char **colors_tmp;
+	int i;
+
+	i = 0;
+	while (colors[i])
+	{
+		colors_tmp = ft_split(colors[i], ' ');
+		if (dp_len(colors_tmp) != 1)
+			return 1;
+		i++;
+	}
+	while (i--)
+		free(colors_tmp[i]);
+	free(colors_tmp);
+	return 0;
+}
+
+int check_valid_color(int color, unsigned char *flag)
+{
+	if (color < 255)
+		return color;
+	(*flag) += 1;
 }
 
 int parse_color(t_color *color, char **line)
 {
+	char **res;
+	unsigned  char flag;
+
+	if (color->flag)
+		//to many color fields
+		return 6;
 	(*line)++;
-	skip_spaces(line);
-	color->R = ft_atoi(*line);
-	while(ft_isdigit(**line))
-		(*line)++;
-	while(**line == ' ' || **line == ',')
-		(*line)++;
-	color->G = ft_atoi(*line);
-	while(ft_isdigit(**line))
-		(*line)++;
-	while(**line == ' ' || **line == ',')
-		(*line)++;
-	color->B = ft_atoi(*line);
+	res = ft_split(*line, ',');
+	if (dp_len(res) != 3)
+		//color field has wrong number of arguments
+		return 7;
+	if(!digits_in_str(res[0]) || !digits_in_str(res[1]) || !digits_in_str(res[2]))
+		//color field has non digit symbols
+		return 8;
+	flag = check_valid_colors(res);
+	color->R = check_valid_color(ft_atoi(res[0]), &flag);
+	color->G = check_valid_color(ft_atoi(res[1]), &flag);
+	color->B = check_valid_color(ft_atoi(res[2]), &flag);
+	if (flag != 0)
+		//color must include only [0: 255] numbers
+		return 9;
+	color->flag = 1;
+	free(res[2]);
+	free(res[1]);
+	free(res[0]);
+	free(res);
 	return (0);
 }
 
@@ -115,12 +157,8 @@ void full_map_init(t_cub_map *full_map)
 {
 	full_map->resolution.x = 0;
 	full_map->resolution.y = 0;
-	full_map->cel_color.R = -1;
-	full_map->cel_color.G = -1;
-	full_map->cel_color.B = -1;
-	full_map->fl_color.R = -1;
-	full_map->fl_color.G = -1;
-	full_map->fl_color.B = -1;
+	full_map->fl_color.flag = 0;
+	full_map->cel_color.flag = 0;
 	full_map->map = NULL;
 	full_map->n_texture = NULL;
 	full_map->e_texture = NULL;

@@ -77,6 +77,7 @@ typedef struct	s_color
 	unsigned char R;
 	unsigned char G;
 	unsigned char B;
+	unsigned char flag;
 }				  t_color;
 
 
