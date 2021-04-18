@@ -48,10 +48,14 @@ int get_xpm_addr(t_win *win, t_texture *tex, char **path)
 							   &win->bits_per_pixel,
 							   &win->line_length,
 							   &win->endian);
+	if (!tex->addr)
+		return -1;
+	return 0;
 //	free(tex);
 //	mlx_destroy_image(win->mlx, tex->img_tmp);
 }
 
+/*
 int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 {
 	tex->img_tmp = mlx_xpm_file_to_image(win->mlx, *path, &tex->width, &tex->heigh);
@@ -64,6 +68,7 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 //	free(tex);
 //	mlx_destroy_image(win->mlx, tex->img_tmp);
 }
+*/
 
 int	texture_open(const t_all all, t_textures *textrs)
 {
@@ -121,6 +126,10 @@ void sprites_dist_sero (t_sprites_distns *distns)
 	}
 }
 
+void message(t_all *all)
+{
+
+}
 
 int main()
 {
@@ -140,17 +149,18 @@ int main()
 	all.sprites_loc.size = 0;
 	fd = open(path, O_RDONLY);
 	error = parse_set(&full_map, fd);
-	if (error)
-		return (error);
 
 	all.full_map = &full_map;
-	find_sprites(all.full_map->map, &all.sprts_crds);
+	if (error) {
+		message(&all);
+	}
 //	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
 	all.full_win = malloc(sizeof (t_win));
 	all.full_win->mlx = mlx_init();
 	if(texture_open(all, &all.textrs) == -1) {
-		exit(32);
+		all.full_map->error.error_numb = 12;
 	}
+	find_sprites(all.full_map->map, &all.sprts_crds);
 	find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);
 
 	create_win(&all);

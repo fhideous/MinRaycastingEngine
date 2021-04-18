@@ -9,15 +9,6 @@ void skip_spaces(char **line)
 		(*line)++;
 }
 
-int		parse_path(char **line, char **path)
-{
-	(*line) += 2;
-	skip_spaces(line);
-	if(!(*path = ft_strjoin(*line, "")))
-		return (-1);
-	return (0);
-}
-
 int		dp_len(char **strs)
 {
 	int i;
@@ -26,6 +17,25 @@ int		dp_len(char **strs)
 	while (strs[i] != NULL)
 		i++;
 	return i;
+}
+
+int		parse_path(const char *line, char **path)
+{
+	(line) += 2;
+	char **res;
+
+	if (*path != NULL)
+		//to many paths fields
+		return 10;
+	res = ft_split(line, ' ');
+	if (!res)
+		//memory oooops
+		return 5;
+	if (dp_len(res) != 1)
+		//path field has wrong number of arguments
+		return 11;
+	*path = res[0];
+	return (0);
 }
 
 int		digits_in_str(const char *str)
@@ -52,6 +62,9 @@ int		parse_res(char **line, t_cub_map *f_map)
 		return 2;
 	(*line)++;
 	res = ft_split(*line, ' ');
+	if (!res)
+		//memory oooops;
+		return 5;
 	if (dp_len(res) != 2)
 		//R field has wrong number of arguments
 		return 3;
@@ -76,6 +89,9 @@ int check_valid_colors(char **colors)
 	while (colors[i])
 	{
 		colors_tmp = ft_split(colors[i], ' ');
+		if (!colors_tmp)
+		//memory ooops;
+			return 5;
 		if (dp_len(colors_tmp) != 1)
 			return 1;
 		i++;
@@ -103,6 +119,9 @@ int parse_color(t_color *color, char **line)
 		return 6;
 	(*line)++;
 	res = ft_split(*line, ',');
+	if (!res)
+		//memory ooooops
+		return 5;
 	if (dp_len(res) != 3)
 		//color field has wrong number of arguments
 		return 7;
@@ -136,19 +155,19 @@ int choise_type(int fd, char *line, t_cub_map *f_map)
 	else if(*line == 'C')
 		err = parse_color(&f_map->cel_color, &line);
 	else if(!ft_strncmp(line, "NO", 2))
-		err =parse_path(&line, &f_map->n_texture);
+		err =parse_path(line, &f_map->n_texture);
 	else if(!ft_strncmp(line, "SO", 2))
-		err =parse_path(&line, &f_map->s_texture);
+		err =parse_path(line, &f_map->s_texture);
 	else if(!ft_strncmp(line, "WE", 2))
-		err = parse_path(&line, &f_map->w_texture);
+		err = parse_path(line, &f_map->w_texture);
 	else if(!ft_strncmp(line, "EA", 2))
-		err = parse_path(&line, &f_map->e_texture);
+		err = parse_path(line, &f_map->e_texture);
 	else if(*line == 'S')
-		err = parse_path(&line,&f_map->sprite);
+		err = parse_path(line,&f_map->sprite);
 	else if(*line == ' ' || *line == '1')
 	{
 		f_map->map = get_map(fd, line);
-		return (5);
+		return (-42);
 	}
 	return (err);
 }
@@ -184,9 +203,9 @@ int parse_set(t_cub_map *full_map, int fd)
 	{
 		line_bn = line;
 		error = choise_type(fd, line, full_map);
-//		if(error == 5)
+//		if(error == -42)
 //			free(line_bn); else
-		if (error > 0 && error != 5)
+		if (error > 0)
 		{
 			full_map->error.error_numb = error;
 			return (error);

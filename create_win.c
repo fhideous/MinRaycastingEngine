@@ -35,12 +35,14 @@ int find_i(const t_all *all, int n)
 	else if (all->plr.ray.angle <= M_PI_6 ||
 			 (all->plr.ray.angle >= M_PI + M_PI - M_PI_6))
 		i  = (all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
-	else if (all->plr.ray.angle <= M_PI_3 )
+	else if (all->plr.ray.angle <= M_PI_6 )
 		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width;
 	else
 	i = -1;
-//
-//	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
+//		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width +
+//		 (all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+
+	//	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
 //			i  = -(all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
 //	else if (all->plr.ray.angle > M_PI_4 + M_PI_2 && all->plr.ray.angle < M_PI_4 + M_PI_2 + M_PI_2)
 //			i  = -(all->sprites_loc.coords[n].y - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
@@ -63,7 +65,7 @@ void	print_sprite_line(const t_all *all,int n, int high, int it, int i)
 	int			k;
 
 	ratio = (float)high / (float)all->textrs.spite.width;
-	printf("%f\n", all->plr.ray.angle);
+//	printf("%f\n", all->plr.ray.angle);
 
 //	i  = -(all->sprites_loc.coords->x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
 //	if (all->plr.ray.angle > 2.617993878 && all->plr.ray.angle < 3.665191429)
