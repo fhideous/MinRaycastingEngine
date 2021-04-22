@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.03
+#define LEN_STEP 0.09
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 #define M_PI_12 0.261799388
@@ -19,8 +19,8 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 6
-#define SPEED_Y 6l
+#define SPEED_X 16
+#define SPEED_Y 16
 #define ROTATE_SPEED 0.05
 
 
@@ -172,6 +172,7 @@ typedef struct	s_all
 	t_sprites_crds		sprts_crds;
 //	t_sprites_distns	*spr_distans;
 	t_sprites			sprites_loc;
+	float 				*all_distns_1;
 }				  t_all;
 
 char		**get_map(int fd, char *line);

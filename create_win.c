@@ -25,7 +25,41 @@ void add_flour(t_all *all)
 #define M_PI_12 0.261799388
 int find_i(const t_all *all, int n)
 {
+	float xd;
+	float yd;
+
 	int i;
+	xd = (all->plr.x - all->sprites_loc.coords->x);
+	yd = (all->plr.y - all->sprites_loc.coords->y);
+
+	int	sign_x;
+	int	sign_y;
+
+	if (xd > 0)
+		sign_y = -1;
+	else
+		sign_y = 1;
+	if (yd > 0)
+		sign_x = 1;
+	else
+		sign_x = -1;
+	i  = sign_x * (all->sprites_loc.coords[n].x) % all->textrs.spite.width
+		 + (sign_y * (all->sprites_loc.coords[n].y ) % all->textrs.spite.width);
+
+//	if (ABS(yd) > ABS(xd))
+//	{
+//		if (yd > 0)
+//			i  = (all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//		else
+//			i  = -(all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+
+//	}
+//	else if (xd > 0)
+//		i  = -((all->sprites_loc.coords[n].y + (all->textrs.spite.width / 2)) % all->textrs.spite.width);
+//	else
+//		i  = ((all->sprites_loc.coords[n].y + (all->textrs.spite.width / 2)) % all->textrs.spite.width);
+	/*
+
 	if (all->plr.ray.angle >= M_PI_3 && all->plr.ray.angle < M_PI_3 + M_PI_3)
 		i  = -((all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width);
 	else if (all->plr.ray.angle >= (M_PI_6) + M_PI_3 + M_PI_3 && all->plr.ray.angle <= M_PI_6 + M_PI_3 + M_PI_3 + M_PI_3)
@@ -38,9 +72,10 @@ int find_i(const t_all *all, int n)
 	else if (all->plr.ray.angle <= M_PI_6 )
 		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width;
 	else
-	i = -1;
-//		i  = (all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width +
-//		 (all->sprites_loc.coords[n].x + (all->textrs.spite.width / 2)) % all->textrs.spite.width;
+//	i = -1;
+		i  = ABS(all->sprites_loc.coords[n].y - all->sprites_loc.coords[n].x) % all->textrs.spite.width +
+		 ABS(all->sprites_loc.coords[n].x + (all->sprites_loc.coords[n].y / 2)) % all->textrs.spite.width;
+*/
 
 	//	if (all->plr.ray.angle > M_PI_4 && all->plr.ray.angle < M_PI_4 + M_PI_2)
 //			i  = -(all->sprites_loc.coords[n].x - (all->textrs.spite.width / 2)) % all->textrs.spite.width;
@@ -82,13 +117,13 @@ void	print_sprite_line(const t_all *all,int n, int high, int it, int i)
 //				continue;
 //			if (((int) all->textrs.spite.width * (int) (j / ratio) + i + it) > all->textrs.spite.width * all->textrs.spite.width)
 //				continue;
-//			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
-//			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
+			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (high >> 1))) &&
+			   (k + (int)j < (high >> 1) + (all->full_map->resolution.y >> 1)))
 			{
 				all->full_win.addr[(k + (int) j) * all->full_map->resolution.x + n +
 									all->full_map->resolution.x *
 									((all->full_map->resolution.y >> 1) - (int) (high >> 1))] =
-						all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + i + it)];
+						all->textrs.spite.addr[(((int) all->textrs.spite.width * (int) (j / ratio)) + it + i)];
 			}
 		}
 		j += ratio;
@@ -120,30 +155,7 @@ void	sprite_sort(t_sprites_distns *distns, int size)
 	}
 }
 
-int		crossing_sprite(const t_all *all, float angle, const t_texture *txtr)
-{
-	t_ray	end;
-	float	c;
-	char	ch;
-
-	c = (float)LEN_STEP;
-	end.x = all->plr.x + c * cosf(angle);
-	end.y = all->plr.y + c * sinf(angle);
-	ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
-		 [(int)(end.x / (float)txtr->width)];
-	while (ch != '1')
-	{
-		if (ch == '2')
-			return 1;
-		ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
-			[(int)(end.x / (float)txtr->width)];
-		end.x = all->plr.x + c * cosf(angle);
-		end.y  = all->plr.y + c * sinf(angle);
-		c += (float)LEN_STEP;
-	}
-	return  0;
-}
-
+/*
 int		curr_sprite_width(const t_all *all, float angle, int high)
 {
 	int		curr;
@@ -174,7 +186,25 @@ int		curr_sprite_width(const t_all *all, float angle, int high)
 	}
 	return ABS((int)((left) / (float)(M_PI_6 + M_PI_6) * (float)all->full_map->resolution.x));
 }
+*/
 
+//void dist_from_angle(const t_all *all, float *angle)
+//{
+//	t_point *sprite;
+//	t_point plr;
+//	int dx;
+//	int dy;
+//
+//	sprite = all->sprites_loc.points;
+//	plr.x = (int)(all->plr.x / 64);
+//	plr.y = (int)(all->plr.y / 64);
+//	dx = ABS(plr.x - sprite->x);
+//	dy = ABS(plr.y - sprite->y);
+//	*angle = sqrtf((float)(dx * dx + dy * dy));
+//
+//}
+
+/*
 int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 	int i;
 	int n;
@@ -187,9 +217,10 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 		if(sprite_data->distns[i].dist < 1)
 			continue;
 		angle = sprite_data->distns[i].angle - all->plr.ray.angle;
-		high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / sprite_data->distns[i].dist);
-		if (high > all->full_map->resolution.y )
-			high = all->full_map->resolution.y;
+//		dist_from_angle(all, &sprite_data->distns[i].dist);
+//		high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / sprite_data->distns[i].dist);
+//		if (high > all->full_map->resolution.y )
+//			high = all->full_map->resolution.y;
 //			continue;
 		n = all->full_map->resolution.x / 2 * (1 + ( angle / ( M_PI_6)));
 
@@ -199,7 +230,7 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 //		printf("%d\n", width);
 		float sp_step = (float)high / all->textrs.spite.width;
 		int kek = 0;
-		while ((int)j < all->sprites_loc.distns[i].width  && j + n < all->full_map->resolution.x)
+		while ((int)j < all->sprites_loc.distns[i].width  && (int)j + n < all->full_map->resolution.x)
 		{
 			sp_step_step = 0;
 			while (sp_step_step < sp_step)
@@ -213,6 +244,78 @@ int		add_sprite(const t_all *all, const t_sprites *sprite_data, float x_y) {
 		}
 
 		j = 0;
+	}
+}
+*/
+
+void	do_kek(t_all *all)
+{
+	int i;
+
+	i = -1;
+	while (++i < all->full_map->resolution.y)
+	{
+		all->full_win.addr[i * all->full_map->resolution.x] = 0;
+	}
+	i = -1;
+	while (++i < all->full_map->resolution.y)
+	{
+		all->full_win.addr[1 + i * all->full_map->resolution.x] = 0;
+	}
+}
+
+float	crossing_sprite(const t_all *all, float angle, const t_texture *txtr)
+{
+	t_ray	end;
+	float	c;
+	char	ch;
+
+	c = (float)LEN_STEP;
+	end.x = all->plr.x + c * cosf(angle);
+	end.y = all->plr.y + c * sinf(angle);
+	ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
+	[(int)(end.x / (float)txtr->width)];
+	while (ch != '1')
+	{
+		if (ch == '2')
+			return c;
+		ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
+		[(int)(end.x / (float)txtr->width)];
+		end.x = all->plr.x + c * cosf(angle);
+		end.y  = all->plr.y + c * sinf(angle);
+		c += (float)LEN_STEP;
+	}
+	return  -1;
+}
+
+void	add_sprite_new(t_all *all)
+{
+	float	angle_start;
+	float	distns_sprite;
+	int		i;
+	int		n;
+	int		high;
+	int		x_y;
+	float k;
+
+	i = -1;
+	x_y = all->full_map->resolution.x / all->full_map->resolution.y;
+	while (++i <= all->sprites_loc.size)
+	{
+		angle_start = all->sprites_loc.distns[i].angle;
+		distns_sprite = crossing_sprite(all,angle_start,&all->textrs.spite);
+		n = all->full_map->resolution.x / 2 * (1 + ( angle_start / ( M_PI_6)));
+		while (distns_sprite != -1 && n < all->full_map->resolution.x)
+		{
+			k = cosf(angle_start);
+			if (k == 0)
+				k = 1;
+			high = (int)(x_y * all->full_map->resolution.y * all->textrs.spite.width / distns_sprite / k);
+			add_scale_line(all, n, high, &all->textrs.spite, find_i(all, i) );
+			angle_start += (M_PI_6 + M_PI_6) / all->full_map->resolution.x;
+			distns_sprite = crossing_sprite(all,angle_start,&all->textrs.spite);
+			n++;
+		}
 	}
 }
 
@@ -229,7 +332,9 @@ int     render_next_frame(t_all *all)
 //	distance_sprites(&all->sprts_crds, &all->plr, all->spr_distans,all->textrs.n_tex.width );
 //	add_sprite(all, all->textrs.spite, all->textrs.n_tex.width);
 	sprite_sort(all->sprites_loc.distns, all->sprites_loc.size);
-	add_sprite(all, &all->sprites_loc, (float)all->full_map->resolution.x / all->full_map->resolution.y );
+//	add_sprite(all, &all->sprites_loc, (float)all->full_map->resolution.x / all->full_map->resolution.y);
+	add_sprite_new(all);
+	do_kek(all);
 }
 
 

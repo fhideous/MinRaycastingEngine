@@ -126,6 +126,19 @@ void sprites_dist_sero (t_sprites_distns *distns)
 	}
 }
 
+void float_dists_zero(float *distns, int res)
+{
+	int i;
+
+	i = 0;
+
+	while (i < res)
+	{
+		distns[i] = 0;
+		i++;
+	}
+}
+
 void message2(int err)
 {
 	if (err == 10)
@@ -180,12 +193,15 @@ void message(t_all *all)
 
 int main()
 {
-	int fd;
-	char *path= "../map.cub";
-	int error;
-//	char *texture = "textures/brick.xpm";
+	int		fd;
+	char	*path= "../map.cub";
+	int		error;
+	float	all_distns_1[1920];
+	float_dists_zero(all_distns_1, 1920);
+	//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
+	all.all_distns_1 = all_distns_1;
 	t_point 		sprites_loc[SPRITES_MAX];
 	t_sprites_distns sprites_dist[SPRITES_MAX];
 	t_point			sprts_coord[SPRITES_MAX];
