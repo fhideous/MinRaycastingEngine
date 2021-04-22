@@ -209,7 +209,7 @@ int main()
 	all.sprites_loc.coords =sprts_coord;
 	all.sprites_loc.points = sprites_loc;
 	all.sprites_loc.distns = sprites_dist;
-	all.sprites_loc.size = 0;
+	all.sprites_loc.size = -1;
 	fd = open(path, O_RDONLY);
 	error = parse_set(&full_map, fd);
 

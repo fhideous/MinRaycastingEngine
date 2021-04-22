@@ -19,8 +19,8 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 16
-#define SPEED_Y 16
+#define SPEED_X 8
+#define SPEED_Y 8
 #define ROTATE_SPEED 0.05
 
 
@@ -142,6 +142,15 @@ typedef struct s_sprites_crds
 	int		n;
 	t_point	*coordints;
 }				t_sprites_crds;
+
+typedef struct s_sprite_dist_data
+{
+	float	x;
+	float	y;
+	float	angle;
+	float	dist;
+}				t_sprite_dist_data;
+
 
 typedef struct s_sprites_distns
 {
