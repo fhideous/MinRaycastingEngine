@@ -73,12 +73,16 @@ int		count_sprites(char **map)
 
 	n = 0;
 	i = 0;
-	while (map[++i])
+	while (map[i][j])
 	{
-		j = -1;
-		while(map[i][++j])
+		j = 0;
+		while(map[i][j])
+		{
 			if (map[i][j] == '2')
 				n++;
+			j++;
+		}
+		i++;
 	}
 	return (n);
 }
@@ -93,17 +97,22 @@ int find_sprites(char **map, t_sprites_crds *sprts)
 	sprts->n = 0;
 	sprts->n = count_sprites(map);
 	sprts->coordints = ft_calloc((sprts->n + 1), sizeof (t_point));
-	i = -1;
+	i = 0;
 	cnt = -1;
-	while (map[++i])
+	j = 0;
+	while (map[j])
 	{
-		j = -1;
-		while(map[i][++j])
-			if (map[i][j] == '2')
+		j = 0;
+		while(map[j] && map[j][i])
+		{
+			if (map[j][i] == '2')
 			{
 				point.x = j;
 				point.y = i;
 				sprts->coordints[++cnt] = point;
 			}
+			j++;
+		}
+		i++;
 	}
 }

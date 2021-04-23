@@ -149,7 +149,13 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 		find_crossing(all, all->plr.ray.angle + angle,
 					  &all->full_win, &texture);
 
+
+
+
 		all->all_distns_1[n] = all->plr.ray.len;
+
+
+
 
 		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;
 		add_scale_line(all, n, (int)(high), &texture, is_x);

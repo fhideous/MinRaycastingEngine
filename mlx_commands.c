@@ -44,8 +44,10 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 	{
 		if (is_x == 1 || is_x == -1)
 			plr->x -= is_x * SPEED_X;
+//			plr->x -= is_x * sinf(SPEED);
 		else
 			plr->y -= is_x * SPEED_Y / 2;
+//			plr->y -= is_x * cosf(SPEED);
 	}
 }
 
@@ -65,8 +67,11 @@ void go_right(t_plr *plr, t_all *all)
 		is_x = 2;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
+//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
+//		plr->y += is_x / 2 * cosf(SPEED);
+
 	check_crossing(plr, all, is_x);
 }
 
@@ -86,8 +91,11 @@ void go_left(t_plr *plr, t_all *all)
 		is_x = -2;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
+//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
+//		plr->y += is_x / 2 * cosf(SPEED);
+
 	check_crossing(plr, all, is_x);
 }
 
@@ -107,8 +115,10 @@ void go_back(t_plr *plr, t_all *all)
 		is_x = 1;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
+//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
+//		plr->y += is_x / cosf(SPEED);
 	check_crossing(plr, all, is_x);
 }
 
@@ -128,8 +138,10 @@ void go_forward(t_plr *plr, t_all *all)
 		is_x = -1;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
+//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
+//		plr->y += is_x / 2 * cosf(SPEED);
 
 	check_crossing(plr, all, is_x);
 }

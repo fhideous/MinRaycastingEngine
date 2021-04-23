@@ -191,12 +191,85 @@ void message(t_all *all)
 	exit(err);
 }
 
+int	check_opposite_sign(char **map, int i, int j, int sign)
+{
+	if (map[i][j + sign] == '\0')
+		return -1;
+	if (map[i + sign][j] == '\0')
+		return -1;
+	if (map[i + sign][j + sign] == '\0')
+		return -1;
+	if (map[i - sign][j + sign] == '\0')
+		return -1;
+	return 0;
+}
+
+
+int check_opposite(char **map, int i, int j)
+{
+	int flag;
+	flag = check_opposite_sign(map, j, i, 1);
+	flag += check_opposite_sign(map, j, i, -1);
+	if (flag != 0)
+		return -1;
+	return 0;
+}
+
+int		map_validate(char **map)
+{
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	while (map[j] && map[j][0])
+	{
+		if (map[j][0] != '1' && map[j][0] != ' ')
+			return 20;
+		j++;
+	}
+	while (map[0] && map[0][i])
+	{
+		if (map[0][i] != '1' && map[0][i] != ' ')
+			return 20;
+		i++;
+	}
+	i = 1;
+	j = 1;
+
+	while (map[j] && map[j][i])
+	{
+		while(map[j][i])
+			i++;
+		if (map[j ][i - 1] != '1' && map[j][i - 1] != ' ')
+			return 20;
+		j++;
+		i = 0;
+	}
+	i = 1;
+	j = 1;
+	while (map[j] && map[j][i])
+	{
+		i = 0;
+		while (map[j][i])
+		{
+			if (map[j][i] == '0')
+				if (check_opposite(map, i, j) == -1)
+					return 20;
+			i++;
+		}
+		j++;
+	}
+	return 0;
+}
+
 int main()
 {
 	int		fd;
 	char	*path= "../map.cub";
 	int		error;
 	float	all_distns_1[1920];
+
 	float_dists_zero(all_distns_1, 1920);
 	//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
@@ -212,22 +285,23 @@ int main()
 	all.sprites_loc.size = -1;
 	fd = open(path, O_RDONLY);
 	error = parse_set(&full_map, fd);
-
 	all.full_map = &full_map;
+	error += map_validate(all.full_map->map);
 	if (error) {
+		all.full_map->error.error_numb = error;
 		message(&all);
 	}
-//	all.spr_distans = ft_calloc((all.sprts_crds.n + 1), sizeof(t_sprites_distns));
-//	all.full_win = malloc(sizeof (t_win));
 	all.full_win.mlx = mlx_init();
 	if(texture_open(all, &all.textrs) == -1) {
 		all.full_map->error.error_numb = 12;
 		message(&all);
 	}
 	find_sprites(all.full_map->map, &all.sprts_crds);
-	find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);
+	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
+		all.full_map->error.error_numb = 13;
+		message(&all);
+	}
 
 	create_win(&all);
-//	mlx_destroy_window(all.full_win->mlx, all.full_win->win);
 	return 0;
 }

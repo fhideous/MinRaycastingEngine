@@ -8,9 +8,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.09
+#define LEN_STEP 0.2
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
+
+#define M_PI_3 1.047197551
+#define M_PI_6 0.523598776
+#define M_PI_12 0.261799388
+#define M_PI_3 1.047197551
+#define M_PI_12 0.261799388
+
 #define M_PI_12 0.261799388
 /*
  * len of player vector
@@ -19,9 +26,10 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 8
-#define SPEED_Y 8
+#define SPEED_X 16
+#define SPEED_Y 16
 #define ROTATE_SPEED 0.05
+#define SPEED 0.087266463
 
 
 /*
@@ -182,6 +190,7 @@ typedef struct	s_all
 //	t_sprites_distns	*spr_distans;
 	t_sprites			sprites_loc;
 	float 				*all_distns_1;
+
 }				  t_all;
 
 char		**get_map(int fd, char *line);
