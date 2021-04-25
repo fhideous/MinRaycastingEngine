@@ -108,6 +108,11 @@ float check_sprite_angle(const t_all *all, float angle, const t_texture *txtr)
 	c = (float)LEN_STEP;
 	end.x = all->plr.x + c * cosf(angle);
 	end.y = all->plr.y + c * sinf(angle);
+
+//	if (!all->full_map->map && !all->full_map->map[0])
+//	{
+//		return -1;
+//	}
 	ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
 	[(int)(end.x / (float)txtr->width)];
 	while (ch != '2')
@@ -210,8 +215,10 @@ void	add_sprite_new(t_all *all)
 	while (++i <= all->sprites_loc.size)
 	{
 		sprite_all_data_zero(sprite_all_data);
-		if (all->sprites_loc.distns[i].dist < all->textrs.n_tex.width)
-			continue;
+
+//		if (all->sprites_loc.distns[i].dist < 1)
+//			continue;
+
 		angle_start = all->sprites_loc.distns[i].angle;
 		float n_d_alpha = 0;
 		float sprite_dist_full;
@@ -219,7 +226,7 @@ void	add_sprite_new(t_all *all)
 		sprite_dist_full = check_sprite_angle(all, angle_start - M_PI_3 / all->full_map->resolution.x, &all->textrs.n_tex) ;
 
 		i = 0;
-		while (sprite_dist_full != -1)
+		while (sprite_dist_full != -1 && i < 1920)
 		{
 			sprites_dist_full[i] = sprite_dist_full;
 			n_d_alpha += M_PI_3 / all->full_map->resolution.x;
@@ -231,8 +238,10 @@ void	add_sprite_new(t_all *all)
 		spr_data = crossing_sprite(all, angle_start - n_d_alpha, &all->textrs.spite, &hehe);
 		int k = 0;
 		float n_d_alpha_max = n_d_alpha;
-		while (hehe != -1  || n_d_alpha > 0){
+		while (((hehe != -1  || n_d_alpha > 0)) && k < 1920){
 			sprite_all_data[k] = spr_data;
+//			if (k == 1940)
+//			{k+=1; k -=1;}
 			k++;
 			angle_start += (M_PI_6 + M_PI_6) / all->full_map->resolution.x;
 			spr_data = crossing_sprite(all, angle_start - n_d_alpha_max, &all->textrs.spite, &hehe);
@@ -248,8 +257,8 @@ void	add_sprite_new(t_all *all)
 
 		float	dist_for_high;
 
-		if (sprites_dist_full[k / 2] > 0) {
-			dist_for_high =  sprites_dist_full[k / 2];
+		if (sprites_dist_full[0] > 0) {
+			dist_for_high =  sprites_dist_full[0];
 		}
 		else {
 			dist_for_high = sprite_all_data[(int)(k / 2)].dist;

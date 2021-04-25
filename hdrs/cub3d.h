@@ -24,9 +24,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.1
+#define LEN_STEP 0.06
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
+
+/*
+
+1111111111111111111
+1 1111   1    1 1 1
+1     1   1      01
+1  111    1   1 1 1
+1 1     0 1       1
+1  1111 0 1   1 1 1
+1    0 000        1
+1 1 1 110101 1 1 1
+1 00    0     0 0 1
+1111    00    11111
+1  1   0 0       1
+1 11   00000011 111
+1 1    101   1    1
+1     1111 1 1    1
+1111111111111111111
+*/
+
+
 
 #define M_PI_3 1.047197551
 #define M_PI_6 0.523598776
@@ -42,8 +63,8 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 16
-#define SPEED_Y 16
+#define SPEED_X 8
+#define SPEED_Y 8
 #define ROTATE_SPEED 0.05
 #define SPEED 0.087266463
 
