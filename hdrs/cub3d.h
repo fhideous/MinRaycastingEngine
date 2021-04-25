@@ -1,6 +1,22 @@
 #ifndef CUB3D_H
 #define CUB3D_H
 
+/*1111111111111111111
+1 1111   1    1 1 1
+1     1   1      01
+1  111    1   1 1 1
+1 1     0 1       1
+1  1111 0 1   1 1 1
+1       0         1
+1 1 1 1 0 1 1 1 1 1
+1 00    0     0 0 1
+1111    00    11111
+1  1    0 0       1
+1 11   00000011 111
+1 1    101   1    1
+1     1111 1 1    1
+1111111111111111111*/
+
 #define ABS(a) ((a) < 0 ? -(a) : (a))
 #include "../lib//libft.h"
 #include <math.h>
@@ -8,7 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.2
+#define LEN_STEP 0.05
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 
@@ -175,6 +191,7 @@ typedef struct s_sprites
 	t_point				*points;
 	t_point				*coords;
 	t_sprites_distns	*distns;
+	float 				*angle_sprite_start;
 }				t_sprites;
 
 
@@ -196,16 +213,17 @@ typedef struct	s_all
 char		**get_map(int fd, char *line);
 int			find_sprites(char **map, t_sprites_crds *sprts);
 int			add_point(t_point *, int , int);
+void message(int err);
 
 int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
 void		sprites_zero(t_point *);
-void sprites_dist_sero (t_sprites_distns *);
+void		sprites_dist_sero (t_sprites_distns *);
 
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *, float );
-void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x);
+void		add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x);
 
 int			create_win(t_all *);
 

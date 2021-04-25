@@ -25,14 +25,11 @@ int		parse_path(const char *line, char **path)
 	char **res;
 
 	if (*path != NULL)
-		//to many paths fields
 		return 10;
 	res = ft_split(line, ' ');
 	if (!res)
-		//memory oooops
 		return 5;
 	if (dp_len(res) != 1)
-		//path field has wrong number of arguments
 		return 11;
 	*path = res[0];
 	return (0);
@@ -58,18 +55,14 @@ int		parse_res(char **line, t_cub_map *f_map)
 	char **res;
 
 	if (f_map->resolution.x || f_map->resolution.y)
-		//to many R fields
 		return 2;
 	(*line)++;
 	res = ft_split(*line, ' ');
 	if (!res)
-		//memory oooops;
 		return 5;
 	if (dp_len(res) != 2)
-		//R field has wrong number of arguments
 		return 3;
 	if (!digits_in_str(res[0]) || !digits_in_str(res[1]))
-		//R field has non digit symbols
 		return 4;
 	res_x = ft_atoi(res[0]);
 	f_map->resolution.x = res_x;
@@ -90,7 +83,6 @@ int check_valid_colors(char **colors)
 	{
 		colors_tmp = ft_split(colors[i], ' ');
 		if (!colors_tmp)
-		//memory ooops;
 			return 5;
 		if (dp_len(colors_tmp) != 1)
 			return 1;
@@ -115,25 +107,20 @@ int parse_color(t_color *color, char **line)
 	unsigned  char flag;
 
 	if (color->flag)
-		//to many color fields
 		return 6;
 	(*line)++;
 	res = ft_split(*line, ',');
 	if (!res)
-		//memory ooooops
 		return 5;
 	if (dp_len(res) != 3)
-		//color field has wrong number of arguments
 		return 7;
 	if(!digits_in_str(res[0]) || !digits_in_str(res[1]) || !digits_in_str(res[2]))
-		//color field has non digit symbols
 		return 8;
 	flag = check_valid_colors(res);
 	color->R = check_valid_color(ft_atoi(res[0]), &flag);
 	color->G = check_valid_color(ft_atoi(res[1]), &flag);
 	color->B = check_valid_color(ft_atoi(res[2]), &flag);
 	if (flag != 0)
-		//color must include only [0: 255] numbers
 		return 9;
 	color->flag = 1;
 	free(res[2]);
@@ -206,10 +193,7 @@ int parse_set(t_cub_map *full_map, int fd)
 //		if(error == -42)
 //			free(line_bn); else
 		if (error > 0)
-		{
-			full_map->error.error_numb = error;
-			return (error);
-		}
+			message(error);
 	}
 	free(line);
 	close(fd);

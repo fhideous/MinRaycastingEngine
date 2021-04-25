@@ -14,6 +14,7 @@ void ss_free(char** mas)
 	bn = mas;
 	while(mas && *mas)
 	{
+//		printf("%s\n", *mas);
 		free(*mas);
 		*mas = NULL;
 		mas++;
@@ -83,16 +84,14 @@ int	texture_open(t_all all, t_textures *textrs)
 	if (textrs->s_tex.width != textrs->n_tex.width ||
 			textrs->s_tex.width != textrs->e_tex.width ||
 			textrs->s_tex.width != textrs->w_tex.width) {
-		return (-1);
+		//textures must have a one size;
+		return (13);
 	}
 	err += get_xpm_addr(&all.full_win, &textrs->spite, &all.full_map->sprite);
-//	i = -1;
-//	while (++i != all.sprts_crds.n)
-//	{
-//		all.sprts_crds.coordints[i].x *= textrs->s_tex.width;
-//		all.sprts_crds.coordints[i].y *= textrs->s_tex.width;
-//	}
-	return (err);
+	if (err != 0)
+		//wrong path to textures/sprite;
+		return (12);
+	return (0);
 }
 
 void sprites_zero(t_point *coords)
@@ -142,11 +141,11 @@ void float_dists_zero(float *distns, int res)
 void message2(int err)
 {
 	if (err == 10)
-		printf("");
+		printf("To much paths fields");
 	else if (err == 11)
-		printf("");
-	else if (err == 12)
-		printf("");
+		printf("Path field has wrong number of arguments");
+	else if (err == 21)
+		printf("Wrong bit map");
 	else if (err == 13)
 		printf("");
 	else if (err == 14)
@@ -162,32 +161,31 @@ void message2(int err)
 
 }
 
-void message(t_all *all)
+void message(int err)
 {
-	int err;
-
-	err = all->full_map->error.error_numb;
+	if (err == 0)
+		return;
 	if (err > 9)
 		message2(err);
 	else if (err == 1)
 		//ft_printf
 		printf("");
 	else if (err == 2)
-		printf("");
+		printf("To much R fields");
 	else if (err == 3)
-		printf("");
+		printf("R field has wrong number of arguments");
 	else if (err == 4)
-		printf("");
+		printf("R field has non digit sumbols");
 	else if (err == 5)
-		printf("");
+		printf("Wow, memory error");
 	else if (err == 6)
-		printf("");
+		printf("To much color fields");
 	else if (err == 7)
-		printf("");
+		printf("Color field has wrong number of arguments");
 	else if (err == 8)
-		printf("");
+		printf("Color field has non digit symbols");
 	else if (err == 9)
-		printf("");
+		printf("Color must include only [0:255] numbers");
 	exit(err);
 }
 
@@ -278,6 +276,8 @@ int main()
 	t_point 		sprites_loc[SPRITES_MAX];
 	t_sprites_distns sprites_dist[SPRITES_MAX];
 	t_point			sprts_coord[SPRITES_MAX];
+	float 			sprts_angle[SPRITES_MAX];
+	all.sprites_loc.angle_sprite_start = sprts_angle;
 	sprites_dist_sero(sprites_dist);
 	all.sprites_loc.coords =sprts_coord;
 	all.sprites_loc.points = sprites_loc;
@@ -288,14 +288,12 @@ int main()
 	all.full_map = &full_map;
 	error += map_validate(all.full_map->map);
 	if (error) {
-		all.full_map->error.error_numb = error;
 		message(&all);
 	}
 	all.full_win.mlx = mlx_init();
-	if(texture_open(all, &all.textrs) == -1) {
-		all.full_map->error.error_numb = 12;
-		message(&all);
-	}
+	error = texture_open(all, &all.textrs);;
+	message(error);
+
 	find_sprites(all.full_map->map, &all.sprts_crds);
 	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
 		all.full_map->error.error_numb = 13;

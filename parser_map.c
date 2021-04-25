@@ -43,10 +43,62 @@ static char	**list_to_massive(t_list **hd, size_t len)
  * line приходит из parse_set
  */
 
+int 		find_max(const char **map_old)
+{
+	int i;
+	int j;
+	int max;
+
+	i = 0;
+	max = 0;
+	while (map_old[i])
+	{
+		j = 0;
+		while (map_old[i][j])
+			j++;
+		if (j > max)
+			max = j;
+		i++;
+	}
+	if (i > max)
+		max = i;
+	return max;
+}
+
+char		**map_to_square(char **map_old)
+{
+	char	**map_new;
+	int 	len_max;
+	int		i;
+	int		j;
+
+	len_max = find_max(map_old);
+	map_new = ft_calloc(len_max + 1, sizeof(char*));
+	i = -1;
+	while (++i <= len_max)
+		map_new[i] = ft_calloc(len_max + 1, sizeof(char));
+	i = 0;
+	while(map_old[i])
+	{
+		j = 0;
+		while (map_old[i][j])
+		{
+			map_new[i][j] = map_old[i][j];
+			j++;
+		}
+		i++;
+	}
+	while (i--)
+		free(map_old[i ]);
+	free(map_old);
+	return(map_new);
+}
+
 char		**get_map(int fd, char *line)
 {
 	t_list	*hd;
 	char	**map;
+	char	**square_map;
 
 	hd = NULL;
 	if (line)
@@ -62,7 +114,8 @@ char		**get_map(int fd, char *line)
 	ft_lstadd_back(&hd, ft_lstnew(line));
 	free(line);
 	map = list_to_massive(&hd, ft_lstsize(hd));
-	return (map);
+	square_map = map_to_square(map);
+	return (square_map);
 }
 
 int		count_sprites(char **map)
@@ -96,13 +149,12 @@ int find_sprites(char **map, t_sprites_crds *sprts)
 
 	sprts->n = 0;
 	sprts->n = count_sprites(map);
-	sprts->coordints = ft_calloc((sprts->n + 1), sizeof (t_point));
-	i = 0;
+	sprts->coordints = ft_calloc((sprts->n + 1), sizeof(t_point));
 	cnt = -1;
 	j = 0;
-	while (map[j])
+	while (map[j] && map[j][0])
 	{
-		j = 0;
+		i = 0;
 		while(map[j] && map[j][i])
 		{
 			if (map[j][i] == '2')
@@ -111,8 +163,8 @@ int find_sprites(char **map, t_sprites_crds *sprts)
 				point.y = i;
 				sprts->coordints[++cnt] = point;
 			}
-			j++;
+			i++;
 		}
-		i++;
+		j++;
 	}
 }

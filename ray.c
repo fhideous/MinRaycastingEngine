@@ -26,7 +26,6 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	t_ray	end;
 	float	c;
 	char	ch;
-	int		cnt_sprts;
 	int		is_add;
 
 	c = (float)LEN_STEP;
@@ -57,8 +56,6 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	all->plr.ray.x = end.x + (float)txtr->width / 2;
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
-//	if ( all->sprites_loc.distns[0].dist != 0)
-//		printf("%d, pl.y: %d\n", all->sprites_loc.coords->y,all->sprites_loc.coords->x);
 }
 
 t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x)

@@ -20,8 +20,8 @@ int find_player(char **map, t_plr *player, int scale)
 		i++;
 	}
 	player->ray.angle = -1;
-	player->x = (float)j * scale + scale /2;
-	player->y = (float)i * scale + scale /2;
+	player->x = (float)j * (float)scale + (float)scale /2;
+	player->y = (float)i * (float)scale + (float)scale /2;
 	if (map[i][j] == 'E')
 		player->ray.angle = 0;
 	else if (map[i][j] == 'N')
