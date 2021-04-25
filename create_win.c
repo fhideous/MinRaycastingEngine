@@ -108,11 +108,6 @@ float check_sprite_angle(const t_all *all, float angle, const t_texture *txtr)
 	c = (float)LEN_STEP;
 	end.x = all->plr.x + c * cosf(angle);
 	end.y = all->plr.y + c * sinf(angle);
-
-//	if (!all->full_map->map && !all->full_map->map[0])
-//	{
-//		return -1;
-//	}
 	ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
 	[(int)(end.x / (float)txtr->width)];
 	while (ch != '2')
@@ -138,10 +133,6 @@ void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *t
 	int		k;
 	float	j;
 	int		max;
-	int		step;
-
-	step = 0;
-//	while (data->dist > )
 
 	ratio = (float)hign / (float)textr->width;
 	j = 0;
@@ -150,8 +141,7 @@ void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *t
 	{
 		max = (int)((hign - all->full_map->resolution.y)) >> 1;
 	}
-	while (/*((int)j < all->full_map->resolution.y + max) &&*/
-			((int)j < hign + max))
+	while ((int)j < hign + max)
 	{
 		k = -1;
 		while (++k - 1 < (int)ratio)
@@ -159,17 +149,15 @@ void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *t
 
 			if (((int)textr->width * (int)(j / ratio)) + i > all->textrs.spite.width * all->textrs.spite.width)
 				continue;
-			if (textr->addr[((int)textr->width * (int)(j / ratio)) + i] == 0) {
+			if (textr->addr[((int)textr->width * (int)(j / ratio)) + i] == 0)
 				continue;
-			}
 			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
 			   (k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))
-//			if ((((int)textr->width * (int)(j / ratio)) + i + (int)((float)(hign - k_k) / ratio)) <= all->textrs.spite.width )
 			{
 				all->full_win.addr[(k + (int)j) * all->full_map->resolution.x + n +
 								   all->full_map->resolution.x *
 								   ((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
-						textr->addr[(((int)textr->width * (int)(j / ratio)) + i/* + (int)((float)(hign - k_k) / ratio)*/)];
+						textr->addr[(((int)textr->width * (int)(j / ratio)) + i)];
 			}
 		}
 		j += (ratio);
@@ -199,14 +187,14 @@ void	add_sprite_new(t_all *all)
 	t_sprite_dist_data 	spr_data;
 	int		i;
 	int		n;
-	float		high;
+	float	high;
 	float	x_y;
 //	int		k;
 	t_sprite_dist_data 	sprite_all_data[1920];
 	float 				sprites_dist_full[1920];
 	int		ik;
 	int		hehe;
-
+	int		j;
 	i = -1;
 	while (++i < 1920)
 		sprites_dist_full[i] = 0;
@@ -215,33 +203,29 @@ void	add_sprite_new(t_all *all)
 	while (++i <= all->sprites_loc.size)
 	{
 		sprite_all_data_zero(sprite_all_data);
-
-//		if (all->sprites_loc.distns[i].dist < 1)
-//			continue;
-
+		if (all->sprites_loc.distns[i].dist < all->textrs.n_tex.width - (all->textrs.n_tex.width >> 2))
+			continue;
 		angle_start = all->sprites_loc.distns[i].angle;
 		float n_d_alpha = 0;
 		float sprite_dist_full;
 
 		sprite_dist_full = check_sprite_angle(all, angle_start - M_PI_3 / all->full_map->resolution.x, &all->textrs.n_tex) ;
 
-		i = 0;
-		while (sprite_dist_full != -1 && i < 1920)
+		j = 0;
+		while (sprite_dist_full != -1 && j < 1920)
 		{
 			sprites_dist_full[i] = sprite_dist_full;
 			n_d_alpha += M_PI_3 / all->full_map->resolution.x;
 			sprite_dist_full = check_sprite_angle(all, angle_start - n_d_alpha , &all->textrs.n_tex) ;
-			i++;
+			j++;
 		}
-		i = 0;
+		j = 0;
 		n = all->full_map->resolution.x / 2 * (1 + ((angle_start - all->plr.ray.angle - n_d_alpha) / (M_PI_6)));
 		spr_data = crossing_sprite(all, angle_start - n_d_alpha, &all->textrs.spite, &hehe);
 		int k = 0;
 		float n_d_alpha_max = n_d_alpha;
-		while (((hehe != -1  || n_d_alpha > 0)) && k < 1920){
+		while ((hehe != -1  || n_d_alpha > 0) && k < 1920){
 			sprite_all_data[k] = spr_data;
-//			if (k == 1940)
-//			{k+=1; k -=1;}
 			k++;
 			angle_start += (M_PI_6 + M_PI_6) / all->full_map->resolution.x;
 			spr_data = crossing_sprite(all, angle_start - n_d_alpha_max, &all->textrs.spite, &hehe);
@@ -249,29 +233,19 @@ void	add_sprite_new(t_all *all)
 		}
 		ik = 0;
 
-//		n = all->full_map->resolution.x / 2 * (1 + ( (sprite_all_data[0].angle - all->plr.ray.angle)/ ( M_PI_6)));
-
-//		printf("%d\t%d\t%d\n", high, k, high - k);
 		int n_sprite;
 		n_sprite = 0;
 
 		float	dist_for_high;
 
-		if (sprites_dist_full[0] > 0) {
-			dist_for_high =  sprites_dist_full[0];
-		}
-		else {
-			dist_for_high = sprite_all_data[(int)(k / 2)].dist;
-		}
-		printf("%f\t%f\n", sprite_all_data[(int)(k / 2)].dist, sprites_dist_full[0]);
-
+		dist_for_high = sprite_all_data[(int)(k - 1)].dist;
+		printf("%f\n", dist_for_high);
 		high =  (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
 					  ABS(dist_for_high));
 		float k_rep0 = (float) high / (float)all->textrs.spite.width;
 		float k_rep = k_rep0;
 		float k_rep_i = 0;
-//		int	sprite_i = 0;
-		while (ik < k && n < all->full_map->resolution.x && n_sprite < all->textrs.spite.width) {
+		while (ik <= k && n < all->full_map->resolution.x && n_sprite < all->textrs.spite.width) {
 			if (sprite_all_data[ik].dist >= sprites_dist_full[ik] && n > 0) {
 				add_scale_line_sprite(all, n, (int)high, &all->textrs.spite, n_sprite);
 			}
@@ -339,6 +313,7 @@ int     render_next_frame(t_all *all)
 	find_angle_sprites(all);
 	add_sprite_new(all);
 	do_kek(all);
+//	screenshot(all);
 }
 
 

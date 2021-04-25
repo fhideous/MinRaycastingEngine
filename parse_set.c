@@ -64,9 +64,15 @@ int		parse_res(char **line, t_cub_map *f_map)
 		return 3;
 	if (!digits_in_str(res[0]) || !digits_in_str(res[1]))
 		return 4;
+
 	res_x = ft_atoi(res[0]);
+	if (res_x > 1920)
+		res_x = 1920;
 	f_map->resolution.x = res_x;
-	f_map->resolution.y = ft_atoi(res[1]);
+	res_x = ft_atoi(res[1]);
+	if(res_x > 1080)
+		res_x = 1080;
+	f_map->resolution.y = res_x;
 	free(res[1]);
 	free(res[0]);
 	free(res);
@@ -141,9 +147,9 @@ int choise_type(int fd, char *line, t_cub_map *f_map)
 		err = parse_color(&f_map->fl_color, &line);
 	else if(*line == 'C')
 		err = parse_color(&f_map->cel_color, &line);
-	else if(!ft_strncmp(line, "NO", 2))
-		err =parse_path(line, &f_map->n_texture);
 	else if(!ft_strncmp(line, "SO", 2))
+		err =parse_path(line, &f_map->n_texture);
+	else if(!ft_strncmp(line, "NO", 2))
 		err =parse_path(line, &f_map->s_texture);
 	else if(!ft_strncmp(line, "WE", 2))
 		err = parse_path(line, &f_map->w_texture);
@@ -189,7 +195,7 @@ int parse_set(t_cub_map *full_map, int fd)
 	while (get_next_line(fd, &line) == 1)
 	{
 		line_bn = line;
-		error = choise_type(fd, line, full_map);
+		error =choise_type(fd, line, full_map);
 //		if(error == -42)
 //			free(line_bn); else
 		if (error > 0)

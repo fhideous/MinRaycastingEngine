@@ -1,6 +1,6 @@
-#include "cub3d.h"
+#include "hdrs/cub3d.h"
 
-void head(int fd, t_cube3d *a, int tmp, int file_size)
+void head(int fd, t_all *all, int tmp, int file_size)
 {
 	char header[54];
 
@@ -17,7 +17,7 @@ void head(int fd, t_cube3d *a, int tmp, int file_size)
 	header[19] = (unsigned char)(tmp>> 8);
 	header[20] = (unsigned char)(tmp>> 16);
 	header[21] = (unsigned char)(tmp >> 24);
-	tmp = -a->prs.res_y;
+	tmp = -all->full_map->resolution.y;
 	header[22] = (unsigned char)(tmp);
 	header[23] = (unsigned char)(tmp >> 8);
 	header[24] = (unsigned char)(tmp >>16);
@@ -27,20 +27,20 @@ void head(int fd, t_cube3d *a, int tmp, int file_size)
 	write(fd, header, 54);
 }
 
-void screenshot(t_cube3d *a)
+void screenshot(t_all *all)
 {
 	int fd;
 	int tmp;
 	int file_size;
 	char *print;
 
-	if ((fd = open("screenshot.bmp", O_CREAT | O_RDWR)) < 0)
-		exit_all(a, "Screenshot, error");
-	tmp = a->prs.res_x;
-	file_size = 14 + 40 + (a->prs.res_x * a->prs.res_y) * 4;
-	head(fd, a, tmp, file_size);
-	print = (char *)a->img.addr;
-	write(fd, print, (a->prs.res_x * a->prs.res_y * 4));
+	if ((fd = open("screenshot.bmp", O_CREAT | O_RDWR, 07777)) < 0)
+		(all, "Screenshot, error");
+	tmp = all->full_map->resolution.x;
+	file_size = 14 + 40 + ( all->full_map->resolution.x *  all->full_map->resolution.y) * 4;
+	head(fd, all, tmp, file_size);
+	print = (char *)all->full_win.addr;;
+	write(fd, print, (all->full_map->resolution.x *  all->full_map->resolution.y* 4));
 	close(fd);
-	exit_all(a, 0);
+	ft_close(all);
 }

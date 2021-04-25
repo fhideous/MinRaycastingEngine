@@ -24,11 +24,11 @@ int find_player(char **map, t_plr *player, int scale)
 	player->y = (float)i * (float)scale + (float)scale /2;
 	if (map[i][j] == 'E')
 		player->ray.angle = 0;
-	else if (map[i][j] == 'N')
+	else if (map[i][j] == 'S')
 		player->ray.angle = M_PI / 2;
 	else if (map[i][j] == 'W')
 		player->ray.angle = M_PI;
-	else if (map[i][j] == 'S')
+	else if (map[i][j] == 'N')
 		player->ray.angle= 3 * M_PI / 2;
 	if (player->ray.angle == -1)
 		return (21);

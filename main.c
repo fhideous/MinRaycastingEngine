@@ -32,7 +32,7 @@ void	free_map(t_cub_map *map)
 //	map->w_texture = NULL;
 	free(map->n_texture);
 //	map->n_texture = NULL;
-//	free(map->sprite);
+	free(map->sprite);
 //	map->sprite = NULL;
 	ss_free(map->map);
 }
@@ -299,7 +299,6 @@ int main()
 		all.full_map->error.error_numb = 13;
 		message(&all);
 	}
-
 	create_win(&all);
 	return 0;
 }
