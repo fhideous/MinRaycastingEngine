@@ -91,15 +91,15 @@ t_sprite_dist_data crossing_sprite(const t_all *all, float angle, const t_textur
 		end.y  = all->plr.y + c * sinf(angle);
 		c += (float)LEN_STEP;
 	}
-	data.x = -1;
-	data.y = -1;
-	data.dist = -1;
-	data.angle = -1;
+	data.x = end.x;
+	data.y = end.y;
+	data.dist = c;
+	data.angle = angle;
 	*hehe = -1;
 	return  data;
 }
 
-int check_sprite_angle(const t_all *all, float angle, const t_texture *txtr)
+float check_sprite_angle(const t_all *all, float angle, const t_texture *txtr)
 {
 	t_ray	end;
 	float	c;
@@ -124,10 +124,10 @@ int check_sprite_angle(const t_all *all, float angle, const t_texture *txtr)
 		end.y  = all->plr.y + c * sinf(angle);
 		c += (float)LEN_STEP;
 	}
-	return  1;
+	return  c;
 }
 
-void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *textr, int i, int k_k)
+void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *textr, int i)
 {
 	float	ratio;
 	int		k;
@@ -151,9 +151,12 @@ void	add_scale_line_sprite(const t_all *all, int n, int hign, const t_texture *t
 		k = -1;
 		while (++k - 1 < (int)ratio)
 		{
-//			if (textr->addr[((int)textr->width * (int)(j / ratio)) + i] == 0)
-//				continue;
 
+			if (((int)textr->width * (int)(j / ratio)) + i > all->textrs.spite.width * all->textrs.spite.width)
+				continue;
+			if (textr->addr[((int)textr->width * (int)(j / ratio)) + i] == 0) {
+				continue;
+			}
 			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
 			   (k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))
 //			if ((((int)textr->width * (int)(j / ratio)) + i + (int)((float)(hign - k_k) / ratio)) <= all->textrs.spite.width )
@@ -191,12 +194,17 @@ void	add_sprite_new(t_all *all)
 	t_sprite_dist_data 	spr_data;
 	int		i;
 	int		n;
-	int		high;
+	float		high;
 	float	x_y;
-	int		k;
+//	int		k;
 	t_sprite_dist_data 	sprite_all_data[1920];
+	float 				sprites_dist_full[1920];
 	int		ik;
 	int		hehe;
+
+	i = -1;
+	while (++i < 1920)
+		sprites_dist_full[i] = 0;
 	i = -1;
 	x_y = (float)all->full_map->resolution.x / (float)all->full_map->resolution.y;
 	while (++i <= all->sprites_loc.size)
@@ -204,50 +212,64 @@ void	add_sprite_new(t_all *all)
 		sprite_all_data_zero(sprite_all_data);
 		if (all->sprites_loc.distns[i].dist < all->textrs.n_tex.width)
 			continue;
-	/// need to change
 		angle_start = all->sprites_loc.distns[i].angle;
-//		angle_start = all->sprites_loc.angle_sprite_start[i];
 		float n_d_alpha = 0;
-		while (check_sprite_angle(all, angle_start - n_d_alpha - M_PI_3 / all->full_map->resolution.x, &all->textrs.n_tex) != -1) {
+		float sprite_dist_full;
+
+		sprite_dist_full = check_sprite_angle(all, angle_start - M_PI_3 / all->full_map->resolution.x, &all->textrs.n_tex) ;
+
+		i = 0;
+		while (sprite_dist_full != -1)
+		{
+			sprites_dist_full[i] = sprite_dist_full;
 			n_d_alpha += M_PI_3 / all->full_map->resolution.x;
+			sprite_dist_full = check_sprite_angle(all, angle_start - n_d_alpha , &all->textrs.n_tex) ;
+			i++;
 		}
+		i = 0;
 		n = all->full_map->resolution.x / 2 * (1 + ((angle_start - all->plr.ray.angle - n_d_alpha) / (M_PI_6)));
-		spr_data = crossing_sprite(all, angle_start, &all->textrs.spite, &hehe);
-//		if (n_d_alpha != 0)
-//			printf("%f\n", n_d_alpha);
-//		printf("%f\t%f\n",angle_start - all->plr.ray.angle, all->sprites_loc.angle_sprite_start[i]);
-//		printf("%f", angle_start - all->plr.ray.angle);
-		k = 0;
-		while (hehe != -1) {
-//			if (spr_data.dist > 200)
-//				k++;
+		spr_data = crossing_sprite(all, angle_start - n_d_alpha, &all->textrs.spite, &hehe);
+		int k = 0;
+		float n_d_alpha_max = n_d_alpha;
+		while (hehe != -1  || n_d_alpha > 0){
 			sprite_all_data[k] = spr_data;
-			angle_start += (M_PI_6 + M_PI_6) / all->full_map->resolution.x;
-			spr_data = crossing_sprite(all, angle_start, &all->textrs.spite, &hehe);
 			k++;
+			angle_start += (M_PI_6 + M_PI_6) / all->full_map->resolution.x;
+			spr_data = crossing_sprite(all, angle_start - n_d_alpha_max, &all->textrs.spite, &hehe);
+			n_d_alpha -= M_PI_3 / all->full_map->resolution.x;
 		}
 		ik = 0;
+
 //		n = all->full_map->resolution.x / 2 * (1 + ( (sprite_all_data[0].angle - all->plr.ray.angle)/ ( M_PI_6)));
 
 //		printf("%d\t%d\t%d\n", high, k, high - k);
 		int n_sprite;
 		n_sprite = 0;
 
-		float k_rep0 = (float) k / (float) all->textrs.spite.width;
+		float	dist_for_high;
+
+		if (sprites_dist_full[k / 2] > 0) {
+			dist_for_high =  sprites_dist_full[k / 2];
+		}
+		else {
+			dist_for_high = sprite_all_data[(int)(k / 2)].dist;
+		}
+		printf("%f\t%f\n", sprite_all_data[(int)(k / 2)].dist, sprites_dist_full[0]);
+
+		high =  (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
+					  ABS(dist_for_high));
+		float k_rep0 = (float) high / (float)all->textrs.spite.width;
 		float k_rep = k_rep0;
 		float k_rep_i = 0;
 //		int	sprite_i = 0;
-		high = (int) (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
-					  ABS(sprite_all_data[k / 2].dist));
 		while (ik < k && n < all->full_map->resolution.x && n_sprite < all->textrs.spite.width) {
-//		while (ik < high && n < all->full_map->resolution.x && n_sprite < all->textrs.spite.width) {
-
-			add_scale_line_sprite(all, n, high, &all->textrs.spite, n_sprite, k);
+			if (sprite_all_data[ik].dist >= sprites_dist_full[ik] && n > 0) {
+				add_scale_line_sprite(all, n, (int)high, &all->textrs.spite, n_sprite);
+			}
 			ik++;
 			k_rep_i++;
 			if (k_rep_i >= k_rep) {
 				k_rep += k_rep0;
-//				n_sprite = (((int)sprite_all_data[ik].x + (int)sprite_all_data[ik].y) % 64);
 				n_sprite++;
 			}
 			n++;
@@ -270,8 +292,8 @@ void 	find_angle_sprites(t_all *all)
 	i = 0;
 	while (i <= all->sprites_loc.size)
 	{
-		dx = - (all->plr.x - 32) / 64 + (float)all->sprts_crds.coordints[i].y ;
-		dy = - (all->plr.y - 32) / 64 + (float)all->sprts_crds.coordints[i].x;
+		dx = - (all->plr.x - all->textrs.n_tex.width / 2) / all->textrs.n_tex.width + (float)all->sprts_crds.coordints[i].y ;
+		dy = - (all->plr.y - all->textrs.n_tex.width / 2) / all->textrs.n_tex.width + (float)all->sprts_crds.coordints[i].x;
 
 //		if(dx > 0 && dy >= 0)
 //		angle = atanf((float)dy / (float)dx );

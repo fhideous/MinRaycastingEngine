@@ -24,7 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.05
+#define LEN_STEP 0.1
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 
