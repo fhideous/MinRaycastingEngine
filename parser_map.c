@@ -43,7 +43,7 @@ static char	**list_to_massive(t_list **hd, size_t len)
  * line приходит из parse_set
  */
 
-int 		find_max(const char **map_old)
+int 		find_max(const char **map_old, int len)
 {
 	int i;
 	int j;
@@ -51,7 +51,7 @@ int 		find_max(const char **map_old)
 
 	i = 0;
 	max = 0;
-	while (map_old[i])
+	while (i < len)
 	{
 		j = 0;
 		while (map_old[i][j])
@@ -65,20 +65,31 @@ int 		find_max(const char **map_old)
 	return max;
 }
 
-char		**map_to_square(char **map_old)
+char		**map_to_square(char **map_old, int len)
 {
 	char	**map_new;
 	int 	len_max;
 	int		i;
 	int		j;
 
-	len_max = find_max(map_old);
+	len_max = find_max(map_old, len);
 	map_new = ft_calloc(len_max + 1, sizeof(char*));
 	i = -1;
 	while (++i <= len_max)
 		map_new[i] = ft_calloc(len_max + 1, sizeof(char));
 	i = 0;
-	while(map_old[i])
+	while (i < len_max)
+	{
+		j = 0;
+		while (j < len_max)
+		{
+			map_new[i][j] = ' ';
+			j++;
+		}
+		i++;
+	}
+	i = 0;
+	while(i < len)
 	{
 		j = 0;
 		while (map_old[i][j])
@@ -99,6 +110,7 @@ char		**get_map(int fd, char *line)
 	t_list	*hd;
 	char	**map;
 	char	**square_map;
+	int		n_lists;
 
 	hd = NULL;
 	if (line)
@@ -113,8 +125,9 @@ char		**get_map(int fd, char *line)
 	}
 	ft_lstadd_back(&hd, ft_lstnew(line));
 	free(line);
-	map = list_to_massive(&hd, ft_lstsize(hd));
-	square_map = map_to_square(map);
+	n_lists =  ft_lstsize(hd);
+	map = list_to_massive(&hd, n_lists);
+	square_map = map_to_square(map, n_lists);
 	return (square_map);
 }
 
@@ -126,7 +139,7 @@ int		count_sprites(char **map)
 
 	n = 0;
 	i = 0;
-	while (map[i][j])
+	while (map[i])
 	{
 		j = 0;
 		while(map[i][j])
@@ -140,16 +153,16 @@ int		count_sprites(char **map)
 	return (n);
 }
 
-int find_sprites(char **map, t_sprites_crds *sprts)
+int find_sprites(char **map, t_sprites *sprts)
 {
 	int		i;
 	int		j;
 	int		cnt;
 	t_point  point;
 
-	sprts->n = 0;
-	sprts->n = count_sprites(map);
-	sprts->coordints = ft_calloc((sprts->n + 1), sizeof(t_point));
+	sprts->size = 0;
+	sprts->size = count_sprites(map);
+	sprts->points = ft_calloc((sprts->size + 1), sizeof(t_point));
 	cnt = -1;
 	j = 0;
 	while (map[j] && map[j][0])
@@ -161,10 +174,11 @@ int find_sprites(char **map, t_sprites_crds *sprts)
 			{
 				point.x = j;
 				point.y = i;
-				sprts->coordints[++cnt] = point;
+				sprts->points[++cnt] = point;
 			}
 			i++;
 		}
 		j++;
 	}
+	return 0;
 }

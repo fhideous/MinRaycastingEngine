@@ -275,11 +275,11 @@ int main()
 	all.all_distns_1 = all_distns_1;
 	t_point 		sprites_loc[SPRITES_MAX];
 	t_sprites_distns sprites_dist[SPRITES_MAX];
-	t_point			sprts_coord[SPRITES_MAX];
+//	t_point			sprts_coord[SPRITES_MAX];
 	float 			sprts_angle[SPRITES_MAX];
 	all.sprites_loc.angle_sprite_start = sprts_angle;
 	sprites_dist_sero(sprites_dist);
-	all.sprites_loc.coords =sprts_coord;
+//	all.sprites_loc.coords =sprts_coord;
 	all.sprites_loc.points = sprites_loc;
 	all.sprites_loc.distns = sprites_dist;
 	all.sprites_loc.size = -1;
@@ -294,7 +294,7 @@ int main()
 	error = texture_open(all, &all.textrs);;
 	message(error);
 
-	find_sprites(all.full_map->map, &all.sprts_crds);
+	find_sprites(all.full_map->map, &all.sprites_loc);
 	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
 		all.full_map->error.error_numb = 13;
 		message(&all);

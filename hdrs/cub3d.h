@@ -36,6 +36,7 @@
 
 
 #define ABS(a) ((a) < 0 ? -(a) : (a))
+
 #include "../lib//libft.h"
 #include <math.h>
 #include <mlx.h>
@@ -44,7 +45,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #define SPRITES_MAX 128
-#define LEN_STEP 0.005
+#define LEN_STEP 0.05
 #define M_PI_6_N -0.523598776
 #define M_PI_6 0.523598776
 
@@ -62,24 +63,11 @@
 #define STEP_Y 1
 
 
-#define SPEED_X 8
-#define SPEED_Y 8
+#define SPEED_X 16
+#define SPEED_Y 16
 #define ROTATE_SPEED 0.2
 #define SPEED 0.087266463
 
-/*
-
-111111111111111111111111111
-100000000000000000000000001
-10000000000N000000000000001
-100000000000000000000000001
-100000000001200000000000001
-100000000000000000000000001
-100000000000000000000000001
-100000000000000000000000001
-100000000000000000000000001111
-111111111111111111111111111
-*/
 
 /*
  * window
@@ -87,15 +75,13 @@
 
 typedef struct	s_win
 {
-	void		*mlx;
-	void		*win;
-	void		*img;
+	void			*mlx;
+	void			*win;
+	void			*img;
 	unsigned int	*addr;
-//	char		*addr;
-//	void	*addr;
-	int			line_length;
-	int			bits_per_pixel;
-	int			endian;
+	int				line_length;
+	int				bits_per_pixel;
+	int				endian;
 }				  t_win;
 
 /*
@@ -165,23 +151,20 @@ typedef struct	s_cub_map
 
 typedef struct	s_sprite
 {
-	void 	*img_tmp;
-	unsigned  int	*addr;
-	float	angle;
-	float	k;
-	int		width;
-	int		heigh;
+	void			*img_tmp;
+	unsigned int 	*addr;
+	float			angle;
+	float			k;
+	int				width;
+	int				heigh;
 }				t_sprite;
 
 typedef struct	s_texture
 {
-	void 	*img_tmp;
-	unsigned  int	*addr;
-//	char	*addr;
-//
-//		void	*addr;
-	int		width;
-	int		heigh;
+	void			*img_tmp;
+	unsigned int	*addr;
+	int				width;
+	int				heigh;
 }				t_texture;
 
 typedef struct s_textures
@@ -194,11 +177,11 @@ typedef struct s_textures
 
 }				t_textures;
 
-typedef struct s_sprites_crds
-{
-	int		n;
-	t_point	*coordints;
-}				t_sprites_crds;
+//typedef struct s_sprites_crds
+//{
+//	int				n;
+//	t_point			*coordints;
+//}				t_sprites_crds;
 
 typedef struct s_sprite_dist_data
 {
@@ -213,8 +196,8 @@ typedef struct s_sprites_distns
 {
 	float 	dist;
 	float 	angle;
-//	float	angle_end;
 	int		width;
+	t_point	coord;
 
 }				t_sprites_distns;
 
@@ -222,7 +205,7 @@ typedef struct s_sprites
 {
 	int					size;
 	t_point				*points;
-	t_point				*coords;
+//	t_point				*coords;
 	t_sprites_distns	*distns;
 	float 				*angle_sprite_start;
 }				t_sprites;
@@ -236,17 +219,16 @@ typedef struct	s_all
 	t_textures			textrs;
 	t_cub_map			*full_map;
 
-	t_sprites_crds		sprts_crds;
-//	t_sprites_distns	*spr_distans;
+//	t_sprites_crds		sprts_crds;
 	t_sprites			sprites_loc;
 	float 				*all_distns_1;
 
 }				  t_all;
 
 char		**get_map(int fd, char *line);
-int			find_sprites(char **map, t_sprites_crds *sprts);
+int			find_sprites(char **map, t_sprites *sprts);
 int			add_point(t_point *, int , int);
-void message(int err);
+void		message(int err);
 
 int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
@@ -261,18 +243,15 @@ void		add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, 
 int			create_win(t_all *);
 
 void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
-t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x);
+t_texture	texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x);
 
-void 		scene_put(t_all *vars, t_cub_map *);
+void		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
-//void		distance_sprites(const t_sprites_crds *, const t_plr*, t_sprites_distns *, int);
 void		add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
-int		find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
+int			find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
 
 void		free_map(t_cub_map *map);
-
-
 int			key_commands(int keycode, t_all *all);
 void		screenshot(t_all *all);
-void ft_close (t_all *all);
+void		ft_close(t_all *all);
 #endif

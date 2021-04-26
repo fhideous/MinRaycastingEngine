@@ -53,18 +53,21 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	float	c;
 	char	ch;
 	int		is_add;
+	t_point	*point;
 
 	c = (float)LEN_STEP;
 
 //	c = find_step(&all->plr, angle, txtr->width, all->full_map->map);
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
+	point  = malloc(sizeof (t_point) * all->sprites_loc.size);
+	int i = 0;
 	while ((ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
 					[(int)(end.x / (float)txtr->width)]) != '1')
 	{
 		if (ch == '2')
 		{
-			is_add = add_point(all->sprites_loc.points, (int)((end.y) / (float)txtr->width),
+			is_add = add_point(&point[i], (int)((end.y) / (float)txtr->width),
 						  (int)((end.x) / (float)txtr->width));
 			if (is_add == -19)
 				return -1;
@@ -72,9 +75,9 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 			{
 				all->sprites_loc.distns[is_add].dist = c;
 				all->sprites_loc.distns[is_add].angle = angle;
-				all->sprites_loc.size = is_add;
-				all->sprites_loc.coords[is_add].x = end.x + (float)txtr->width / 2;
-				all->sprites_loc.coords[is_add].y=	end.y + (float)txtr->width / 2;
+//				all->sprites_loc.size = is_add;
+//				all->sprites_loc.coords[is_add].x = end.x + (float)txtr->width / 2;
+//				all->sprites_loc.coords[is_add].y=	end.y + (float)txtr->width / 2;
 			}
 		}
 		end.x = all->plr.x + c * cosf(angle);
