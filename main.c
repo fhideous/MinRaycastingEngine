@@ -74,7 +74,7 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 int	texture_open(t_all all, t_textures *textrs)
 {
 	int err;
-	int i;
+//	int i;
 
 	err = 0;
 	err += get_xpm_addr(&all.full_win, &textrs->n_tex, &all.full_map->n_texture);
@@ -217,16 +217,18 @@ int		map_validate(char **map)
 {
 	int		i;
 	int		j;
+	int		max;
 
+	max = (int)ft_strlen(map[0]);
 	j = 0;
 	i = 0;
-	while (map[j] && map[j][0])
+	while (j < max)
 	{
 		if (map[j][0] != '1' && map[j][0] != ' ')
 			return 20;
 		j++;
 	}
-	while (map[0] && map[0][i])
+	while (i < max)
 	{
 		if (map[0][i] != '1' && map[0][i] != ' ')
 			return 20;
@@ -235,9 +237,9 @@ int		map_validate(char **map)
 	i = 1;
 	j = 1;
 
-	while (map[j] && map[j][i])
+	while (j < max)
 	{
-		while(map[j][i])
+		while(i < max)
 			i++;
 		if (map[j ][i - 1] != '1' && map[j][i - 1] != ' ')
 			return 20;
@@ -246,10 +248,10 @@ int		map_validate(char **map)
 	}
 	i = 1;
 	j = 1;
-	while (map[j] && map[j][i])
+	while (j < max)
 	{
 		i = 0;
-		while (map[j][i])
+		while (i < max)
 		{
 			if (map[j][i] == '0')
 				if (check_opposite(map, i, j) == -1)
@@ -288,7 +290,7 @@ int main()
 	all.full_map = &full_map;
 	error += map_validate(all.full_map->map);
 	if (error) {
-		message(&all);
+		message(error);
 	}
 	all.full_win.mlx = mlx_init();
 	error = texture_open(all, &all.textrs);;
@@ -297,7 +299,7 @@ int main()
 	find_sprites(all.full_map->map, &all.sprites_loc);
 	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
 		all.full_map->error.error_numb = 13;
-		message(&all);
+		message(error);
 	}
 	create_win(&all);
 	return 0;
