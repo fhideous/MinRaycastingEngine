@@ -131,7 +131,7 @@ char		**get_map(int fd, char *line)
 	return (square_map);
 }
 
-int		count_sprites(char **map)
+int		count_sprites(const char **map)
 {
 	int i;
 	int j;
@@ -139,7 +139,7 @@ int		count_sprites(char **map)
 
 	n = 0;
 	i = 0;
-	while (map[i])
+	while (i < ft_strlen(map[0]))
 	{
 		j = 0;
 		while(map[i][j])
