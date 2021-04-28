@@ -148,7 +148,7 @@ typedef struct	s_cub_map
 	char		**map;
 	t_error		error;
 }				  t_cub_map;
-
+/*
 typedef struct	s_sprite
 {
 	void			*img_tmp;
@@ -157,7 +157,7 @@ typedef struct	s_sprite
 	float			k;
 	int				width;
 	int				heigh;
-}				t_sprite;
+}				t_sprite;*/
 
 typedef struct	s_texture
 {
@@ -192,6 +192,7 @@ typedef struct s_sprite_dist_data
 }				t_sprite_dist_data;
 
 
+/*
 typedef struct s_sprites_distns
 {
 	float 	dist;
@@ -200,15 +201,23 @@ typedef struct s_sprites_distns
 	t_point	coord;
 
 }				t_sprites_distns;
+*/
 
-typedef struct s_sprites
+
+typedef struct s_sprite
 {
-	int					size;
-	t_point				*points;
-//	t_point				*coords;
-	t_sprites_distns	*distns;
-	float 				*angle_sprite_start;
-}				t_sprites;
+	t_point				coords;
+	float				dist;
+	float				angle;
+}				t_sprite;
+
+//typedef struct s_sprite
+//{
+//	int					size;
+//	t_point				coords;
+//	float				dist;
+//	float				angle;
+//}				t_sprite;
 
 
 
@@ -218,15 +227,16 @@ typedef struct	s_all
 	t_plr				plr;
 	t_textures			textrs;
 	t_cub_map			*full_map;
+	int					size_sprites;
 
 //	t_sprites_crds		sprts_crds;
-	t_sprites			sprites_loc;
-	float 				*all_distns_1;
+	t_sprite			*sprites_loc;
+	float 				*all_distns_wall;
 
 }				  t_all;
 
 char		**get_map(int fd, char *line);
-int			find_sprites(char **map, t_sprites *sprts);
+int			find_sprites(const char **, t_all *);
 int			add_point(t_point *, int , int);
 void		message(int err);
 
@@ -234,7 +244,6 @@ int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
 void		sprites_zero(t_point *);
-void		sprites_dist_sero (t_sprites_distns *);
 
 void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *, float );

@@ -104,14 +104,14 @@ t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *
 
 	x_delt = ray_new->x - ray_old.x;
 	y_delt = ray_new->y - ray_old.y;
-	if(ABS(x_delt) > ABS(y_delt) && x_delt > 0)
+	if(ABS(x_delt) - ABS(y_delt) > 0 && x_delt > 0)
 	{
 		tmp_txtr = all_txtr->s_tex;
 		*is_x = 1;
 	}
-	else if (ABS(y_delt) > ABS(x_delt) && y_delt > 0)
+	else if (ABS(y_delt) - ABS(x_delt) > 0 && y_delt > 0)
 		tmp_txtr = all_txtr->e_tex;
-	else if (ABS(x_delt) > ABS(y_delt) && x_delt < 0)
+	else if (ABS(x_delt) - ABS(y_delt) > 0 && x_delt < 0)
 	{
 		tmp_txtr = all_txtr->n_tex;
 		*is_x = 1;
@@ -182,14 +182,7 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
 					  &all->full_win, &texture);
-
-
-
-
-		all->all_distns_1[n] = all->plr.ray.len;
-
-
-
+		all->all_distns_wall[n] = all->plr.ray.len;
 
 		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;
 		add_scale_line(all, n, (int)(high), &texture, is_x);
@@ -198,5 +191,5 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 //		angle += (float)1.0 / (float)res->x ;
 		angle += (M_PI_6 + M_PI_6) / res->x;
 	}
-
+//	printf("%f\n", angle);
 }
