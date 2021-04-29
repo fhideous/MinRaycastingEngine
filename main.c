@@ -270,13 +270,11 @@ int main()
 	int		fd;
 	char	*path= "../map.cub";
 	int		error;
-	float	all_distns_wall[1920];
 
-	float_dists_zero(all_distns_wall, 1920);
+//	float_dists_zero(all_distns_wall, 1920);
 	//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
-	all.all_distns_wall = all_distns_wall;
 
 	all.size_sprites = -1;
 	fd = open(path, O_RDONLY);

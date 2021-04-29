@@ -44,10 +44,9 @@ float find_step(const t_plr *plr,float angle, int width, const char **map)
 		end.y = plr->y + step * cosf(angle);
 		step += LEN_STEP;
 	}
-
 	return d_y > d_x ? d_x : d_y;
 }
-int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
+int find_crossing(t_all *all, float  angle, int i, t_texture *txtr)
 {
 	t_ray	end;
 	float	c;
@@ -61,7 +60,7 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
 //	point  = malloc(sizeof (t_point) * all->sprites_loc.size);
-	int i = 0;
+
 	while ((ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
 					[(int)(end.x / (float)txtr->width)]) != '1')
 	{
@@ -92,7 +91,10 @@ int find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr)
 	all->plr.ray.x = end.x + (float)txtr->width / 2;
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
-//	free(point);
+	if (i != -1)
+		all->all_distns_wall[i] = c;
+	//	free(point);
+
 }
 
 t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x)
@@ -181,7 +183,7 @@ int		add_ray(t_all *all,const t_point *res, float x_y)
 			k = 1;
 		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
-					  &all->full_win, &texture);
+					  n, &texture);
 		all->all_distns_wall[n] = all->plr.ray.len;
 
 		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;

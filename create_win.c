@@ -442,17 +442,25 @@ void sprite_to_image(t_all *all,  t_point start, int high)
 	int j;
 
 	i = 0;
-//	if (start.x < 0)
-//		return;
+
+
 	while (i < high)
 	{
 		j = 0;
+		if (all->all_distns_wall[start.x + i] < all->sprites_loc[i].dist)
+		{
+			i++;
+			continue;
+		}
 		while (j < high)
 		{
-			all->full_win.addr[start.x + j + (start.y + i) * all->full_map->resolution.x] = 0x000000;
+			{
+				all->full_win.addr[start.x + i + (start.y + j) * all->full_map->resolution.x] = 0x000000;
+			}
 			j++;
 		}
 		i++;
+//		printf ("%d\n",  (start.y + j) * all->full_map->resolution.x);
 	}
 }
 
@@ -475,8 +483,10 @@ void print_sprite(t_all *all)
 		high =  (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
 						all->sprites_loc[i].dist);
 		start.y =/* all->full_map->resolution.x * */(all->full_map->resolution.y / 2) - (int)(high/ 2);
+//		printf("%d\t%d\n", start.y, start.x);
 		start.x = (int)(( -all->sprites_loc[i].angle - all->plr.ray.angle) * (float)(all->full_map->resolution.x) / (M_PI_3)
 				);
+		printf("%d\t%d\n", start.x, start.y);
 //		start.x = 0;
 		sprite_to_image(all, start, high);
 	}

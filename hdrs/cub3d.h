@@ -220,7 +220,6 @@ typedef struct s_sprite
 //}				t_sprite;
 
 
-
 typedef struct	s_all
 {
 	t_win				full_win;
@@ -231,7 +230,7 @@ typedef struct	s_all
 
 //	t_sprites_crds		sprts_crds;
 	t_sprite			*sprites_loc;
-	float 				*all_distns_wall;
+	float 				all_distns_wall[1920];
 
 }				  t_all;
 
@@ -257,10 +256,11 @@ t_texture	texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *
 void		scene_put(t_all *vars, t_cub_map *);
 void		print_ray(t_win *, t_ray *start, t_ray *end, float);
 void		add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
-int			find_crossing(t_all *all, float  angle, t_win *win, t_texture *txtr);
+int			find_crossing(t_all *all, float  angle, int , t_texture *txtr);
 
 void		free_map(t_cub_map *map);
 int			key_commands(int keycode, t_all *all);
 void		screenshot(t_all *all);
 void		ft_close(t_all *all);
+
 #endif

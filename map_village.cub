@@ -1,4 +1,4 @@
-R 1000 600
+R 1920 200
 NO ../textures/pics/eagle.xpm
 SO ../textures/pics/mossy.xpm
 WE ../textures/pics/wood.xpm
