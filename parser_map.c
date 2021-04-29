@@ -153,16 +153,15 @@ int		count_sprites(const char **map)
 	return (n);
 }
 
-int find_sprites(char **map, t_sprites *sprts)
+int find_sprites(const char **map, t_all *all)
 {
 	int		i;
 	int		j;
 	int		cnt;
 	t_point  point;
 
-	sprts->size = 0;
-	sprts->size = count_sprites(map);
-	sprts->points = ft_calloc((sprts->size + 1), sizeof(t_point));
+	all->size_sprites =count_sprites(map);
+	all->sprites_loc = ft_calloc((all->size_sprites + 1), sizeof(t_sprite));
 	cnt = -1;
 	j = 0;
 	while (map[j] && map[j][0])
@@ -174,7 +173,7 @@ int find_sprites(char **map, t_sprites *sprts)
 			{
 				point.x = j;
 				point.y = i;
-				sprts->points[++cnt] = point;
+				all->sprites_loc[++cnt].coords = point;
 			}
 			i++;
 		}

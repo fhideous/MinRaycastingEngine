@@ -94,6 +94,7 @@ int	texture_open(t_all all, t_textures *textrs)
 	return (0);
 }
 
+/*
 void sprites_zero(t_point *coords)
 {
 	t_point tmp;
@@ -108,7 +109,9 @@ void sprites_zero(t_point *coords)
 		i++;
 	}
 }
+*/
 
+/*
 void sprites_dist_sero (t_sprites_distns *distns)
 {
 	t_sprites_distns tmp;
@@ -124,6 +127,7 @@ void sprites_dist_sero (t_sprites_distns *distns)
 		i++;
 	}
 }
+*/
 
 void float_dists_zero(float *distns, int res)
 {
@@ -268,23 +272,13 @@ int main()
 	int		fd;
 	char	*path= "../map.cub";
 	int		error;
-	float	all_distns_1[1920];
 
-	float_dists_zero(all_distns_1, 1920);
+//	float_dists_zero(all_distns_wall, 1920);
 	//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
-	all.all_distns_1 = all_distns_1;
-	t_point 		sprites_loc[SPRITES_MAX];
-	t_sprites_distns sprites_dist[SPRITES_MAX];
-//	t_point			sprts_coord[SPRITES_MAX];
-	float 			sprts_angle[SPRITES_MAX];
-	all.sprites_loc.angle_sprite_start = sprts_angle;
-	sprites_dist_sero(sprites_dist);
-//	all.sprites_loc.coords =sprts_coord;
-	all.sprites_loc.points = sprites_loc;
-	all.sprites_loc.distns = sprites_dist;
-	all.sprites_loc.size = -1;
+
+	all.size_sprites = -1;
 	fd = open(path, O_RDONLY);
 	error = parse_set(&full_map, fd);
 	all.full_map = &full_map;
@@ -296,7 +290,7 @@ int main()
 	error = texture_open(all, &all.textrs);;
 	message(error);
 
-	find_sprites(all.full_map->map, &all.sprites_loc);
+	find_sprites(all.full_map->map, &all);
 	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
 		all.full_map->error.error_numb = 13;
 		message(error);
