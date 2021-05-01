@@ -10,9 +10,11 @@
 void ss_free(char** mas)
 {
 	char **bn;
+	int i;
 
+	i = ft_strlen(*mas);
 	bn = mas;
-	while(mas && *mas)
+	while(i--)
 	{
 //		printf("%s\n", *mas);
 		free(*mas);
@@ -151,7 +153,7 @@ void message2(int err)
 	else if (err == 21)
 		printf("Wrong bit map");
 	else if (err == 13)
-		printf("");
+		printf("Fuck you and your color");
 	else if (err == 14)
 		printf("");
 	else if (err == 15)
@@ -265,7 +267,7 @@ int		map_validate(char **map)
 	return 0;
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	int		fd;
 	char	*path= "../map.cub";

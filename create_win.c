@@ -372,7 +372,7 @@ void	distance_to_sprites(t_all *all)
 		all->sprites_loc[i].dist = hypotf(all->plr.x -
 				(float)all->sprites_loc[i].coords.y * (float)all->textrs.n_tex.width - 32,
 				all->plr.y -
-				(float)all->sprites_loc[i].coords.x * (float)all->textrs.n_tex.width - 32) ;
+				(float)all->sprites_loc[i].coords.x * (float)all->textrs.n_tex.width - 32);
 		i++;
 	}
 
@@ -424,23 +424,35 @@ void find_angle_sprite(t_all *all)
 //		{
 //			all->sprites_loc[i].angle += 2 * M_PI;
 //		}
-
-
+//		all->sprites_loc[i].angle += M_PI_2;
+//		if (all->sprites_loc[i].angle < 0)
+//			all->sprites_loc[i].angle += M_PI + M_PI;
 //	if (all->sprites_loc[i].angle < 0)
 //			all->sprites_loc[i].angle += M_PI + M_PI;
 
-	while (all->sprites_loc[i].angle > M_PI_3)
-		all->sprites_loc[i].angle -= M_PI_3;
-	while (all->sprites_loc[i].angle < 0)
-			all->sprites_loc[i].angle += M_PI_3;
-
+{
+		all->sprites_loc[i].angle += M_PI;
+		all->sprites_loc[i].angle += 3 * M_PI / 2;
+		if(all->sprites_loc[i].angle > M_PI + M_PI)
+			all->sprites_loc[i].angle -= (M_PI + M_PI);
+		all->sprites_loc[i].angle *= -1;
+		all->sprites_loc[i].angle += (M_PI + M_PI);
+}
+/*
+		{
+			while (all->sprites_loc[i].angle > M_PI_3)
+				all->sprites_loc[i].angle -= M_PI_3;
+			while (all->sprites_loc[i].angle < 0)
+				all->sprites_loc[i].angle += M_PI_3;
+		}
+*/
 //				printf("%d\t",  (int)(57.2958 * (all->sprites_loc[i].angle)));
 //		printf("%d\n",  (int)(57.2958 * (all->plr.ray.angle)));
 
 //		all->sprites_loc[i].angle = acosf((all->plr.x - (float)all->sprites_loc[i].coords.y * (float)all->textrs.n_tex.width) /
 //									all->sprites_loc[i].dist) - all->plr.ray.angle;
 //
-//		printf("%d\t%f\n", (int)(57.295779513* all->sprites_loc[i].angle), all->plr.ray.angle);
+		printf("%d\t%f\n", (int)(57.295779513* all->sprites_loc[i].angle), all->plr.ray.angle);
 
 //		printf ("%d\t\n", (int)(57.295779513* (all->sprites_loc[i].angle - all->plr.ray.angle)));
 		i++;
@@ -449,24 +461,24 @@ void find_angle_sprite(t_all *all)
 	}
 }
 
-void sprite_to_image(t_all *all,  t_point start, int high)
+void sprite_to_image(t_all *all,  t_point start, int high, int n)
 {
 	int i;
 	int j;
-
 	i = 0;
 
 	if (high > all->full_map->resolution.y)
 //		high = all->full_map->resolution.y;
 			return;
+
 	while (i < high)
 	{
 		j = 0;
-//		if (all->all_distns_wall[start.x + i] < all->sprites_loc[i].dist)
-//		{
-//			i++;
-//			continue;
-//		}
+		if (all->all_distns_wall[start.x + i] < all->sprites_loc[n].dist)
+		{
+			i++;
+			continue;
+		}
 		while (j < high)
 		{
 				all->full_win.addr[start.x + i + (start.y + j) * all->full_map->resolution.x] = 0x000000;
@@ -489,39 +501,54 @@ void print_sprite(t_all *all)
 	i = -1;
 	x_y = (float)all->full_map->resolution.x / (float)all->full_map->resolution.y;
 	plr_angle = all->plr.ray.angle;
+/*
+	{
+
+		high =  (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
+				 all->sprites_loc[i].dist);
+		start.y = all->full_map->resolution.x * (all->full_map->resolution.y / 2) - (int)(high/ 2);
+		start.x = (int)((-all->sprites_loc[i].angle - plr_angle) * (float)(all->full_map->resolution.x) / (M_PI_3)) - ((int)high >> 1);
+		while (i < all->full_map->resolution.x && start.y > 0)
+		{
+			all->full_win.addr[i + all->full_map->resolution.x * start.y] = 0xFF0000;
+			all->full_win.addr[i + all->full_map->resolution.x * (start.y + (int)high)] = 0xFF0000;
+			i++;
+		}
+	}
+	*/
+	i = -1;
 	while (++i < all->size_sprites)
 	{
-//		if ((all->sprites_loc[i].angle - all->plr.ray.angle) < M_PI_6)
-//			continue;
-//		if (start.x > all->full_map->resolution.x || start.y > all->full_map->resolution.y)
-//			continue;
-		while (plr_angle > M_PI_3)
-			plr_angle -= M_PI_3;
-		while (plr_angle < M_PI_3)
-			plr_angle += M_PI_3;
-		high =  (x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
-						all->sprites_loc[i].dist);
+		high =	(x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
+				 all->sprites_loc[i].dist);
 		start.y =/* all->full_map->resolution.x * */(all->full_map->resolution.y / 2) - (int)(high/ 2);
-		start.x = (int)((-all->sprites_loc[i].angle - plr_angle) * (float)(all->full_map->resolution.x) / (M_PI_3)) - ((int)high >> 1);
-//		start.x = ABS(start.x);
-//		printf("%d\t%d\n", start.x, start.y);
-//		start.x = 0;
+		start.x = (int)((all->sprites_loc[i].angle - plr_angle) * (float)(all->full_map->resolution.x) / (M_PI_3)) - ((int)high >> 1);
+
+
 //		printf("%d\t", start.x);
-		while (start.x >= 1000) {
-			start.x -= 1000;
+//		printf("%d\t%d\n", (int)(57.2958 * (all->sprites_loc[i].angle )),(int)(57.2958 * plr_angle) );
+/*
+		while (start.x >= all->full_map->resolution.x)
+		{
+			start.x -= all->full_map->resolution.x;
 		}
+*/
 //		printf("%d\t", start.x);
-
-		while (start.x <= 0) {
-			start.x += 1000;
+//
+/*
+		while (start.x <= 0)
+		{
+			start.x += all->full_map->resolution.x;
 		}
-		printf("%d\n", start.x);
-		sprite_to_image(all, start, high);
-//		printf("%d\t%d\n", (int)(57.2958 * (all->sprites_loc[i].angle )),(int)(57.2958 * all->plr.ray.angle) );
+*/
+//		printf("%d\n", start.x);
+//		kek += i * 30;
 
+//		printf("%d\t\t\t%d\n", start.x, start.y);
+//		sprite_to_image(all, start, (int)high, i);
 
-		int i = 0;
-		while (i < all->full_map->resolution.x && start.y > 0)
+//		int i = 0;
+/*		while (i < all->full_map->resolution.x && start.y > 0)
 		{
 			all->full_win.addr[i + all->full_map->resolution.x * start.y] = 0x0000FF;
 			all->full_win.addr[i + all->full_map->resolution.x * (start.y + (int)high)] = 0x0000FF;
@@ -533,7 +560,7 @@ void print_sprite(t_all *all)
 			all->full_win.addr[i * all->full_map->resolution.x + start.x] = 0x0000FF;
 			all->full_win.addr[(i) * all->full_map->resolution.x + start.x + (int)high] = 0x0000FF;
 			i++;
-		}
+		}*/
 	}
 }
 
@@ -549,7 +576,6 @@ int     render_next_frame(t_all *all)
 	do_kek(all);
 //	screenshot(all);
 }
-
 
 int	create_win(t_all *all)
 {

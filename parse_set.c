@@ -64,7 +64,13 @@ int		parse_res(char **line, t_cub_map *f_map)
 		return 3;
 	if (!digits_in_str(res[0]) || !digits_in_str(res[1]))
 		return 4;
-
+	if (ft_strlen(res[0]) > 4 || ft_strlen(res[1]) > 4)
+	{
+		f_map->resolution.x = 1920;
+		f_map->resolution.y = 1080;
+		free(res);
+		return (0);
+	}
 	res_x = ft_atoi(res[0]);
 	if (res_x > 1920)
 		res_x = 1920;
@@ -102,9 +108,33 @@ int check_valid_colors(char **colors)
 
 int check_valid_color(int color, unsigned char *flag)
 {
-	if (color < 255)
+	if (color <= 255)
 		return color;
 	(*flag) += 1;
+}
+
+int is_only_three_digits(char **color)
+{
+	int i;
+	int j;
+	int cnt;
+
+	i = 0;
+	while (i < 3)
+	{
+		j = 0;
+		cnt = 0;
+		while (color[i][j])
+		{
+			if (ft_isdigit(color[i][j]))
+				cnt++;
+			j++;
+		}
+		if (cnt > 3)
+			return 0;
+		i++;
+	}
+	return 1;
 }
 
 int parse_color(t_color *color, char **line)
@@ -120,6 +150,7 @@ int parse_color(t_color *color, char **line)
 		return 5;
 	if (dp_len(res) != 3)
 		return 7;
+
 	if(!digits_in_str(res[0]) || !digits_in_str(res[1]) || !digits_in_str(res[2]))
 		return 8;
 	flag = check_valid_colors(res);
@@ -128,6 +159,8 @@ int parse_color(t_color *color, char **line)
 	color->B = check_valid_color(ft_atoi(res[2]), &flag);
 	if (flag != 0)
 		return 9;
+	if (!is_only_three_digits(res))
+		return 13;
 	color->flag = 1;
 	free(res[2]);
 	free(res[1]);
