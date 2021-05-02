@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <fcntl.h>
-//#include "hdrs/get_next_line.h"
 #include "hdrs/map_puuser.h"
 #include "stdlib.h"
 #include "lib/libft.h"
 #include "hdrs/cub3d.h"
-//#include "lib/libft.h"
 
 void del_f(void *ch)
 {
@@ -100,7 +98,7 @@ char		**map_to_square(char **map_old, int len)
 		i++;
 	}
 	while (i--)
-		free(map_old[i ]);
+		free(map_old[i]);
 	free(map_old);
 	return(map_new);
 }

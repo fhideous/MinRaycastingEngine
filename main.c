@@ -10,9 +10,11 @@
 void ss_free(char** mas)
 {
 	char **bn;
+	int i;
 
+	i = ft_strlen(*mas);
 	bn = mas;
-	while(mas && *mas)
+	while(i--)
 	{
 //		printf("%s\n", *mas);
 		free(*mas);
@@ -151,7 +153,7 @@ void message2(int err)
 	else if (err == 21)
 		printf("Wrong bit map");
 	else if (err == 13)
-		printf("");
+		printf("Fuck you and your color");
 	else if (err == 14)
 		printf("");
 	else if (err == 15)
@@ -161,7 +163,7 @@ void message2(int err)
 	else if (err == 17)
 		printf("");
 	else if (err == 18)
-		printf("");
+		printf("Open map");
 
 }
 
@@ -195,13 +197,13 @@ void message(int err)
 
 int	check_opposite_sign(char **map, int i, int j, int sign)
 {
-	if (map[i][j + sign] == '\0')
+	if (map[i][j + sign] == '\0' || map[i][j + sign] == ' ')
 		return -1;
-	if (map[i + sign][j] == '\0')
+	if (map[i + sign][j] == '\0' || map[i + sign][j] == ' ')
 		return -1;
-	if (map[i + sign][j + sign] == '\0')
+	if (map[i + sign][j + sign] == '\0' || map[i + sign][j + sign] == ' ')
 		return -1;
-	if (map[i - sign][j + sign] == '\0')
+	if (map[i - sign][j + sign] == '\0' || map[i - sign][j + sign] == ' ')
 		return -1;
 	return 0;
 }
@@ -210,6 +212,7 @@ int	check_opposite_sign(char **map, int i, int j, int sign)
 int check_opposite(char **map, int i, int j)
 {
 	int flag;
+
 	flag = check_opposite_sign(map, j, i, 1);
 	flag += check_opposite_sign(map, j, i, -1);
 	if (flag != 0)
@@ -221,45 +224,70 @@ int		map_validate(char **map)
 {
 	int		i;
 	int		j;
+<<<<<<< HEAD
+	size_t		ij_max;
+
+	ij_max = ft_strlen(map[0]);
+	j = 0;
+	i = 0;
+	while (j < ij_max)
+=======
 	int		max;
 
 	max = (int)ft_strlen(map[0]);
 	j = 0;
 	i = 0;
 	while (j < max)
+>>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 	{
 		if (map[j][0] != '1' && map[j][0] != ' ')
-			return 20;
+			return 18;
 		j++;
 	}
+<<<<<<< HEAD
+	while (i < ij_max)
+=======
 	while (i < max)
+>>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 	{
 		if (map[0][i] != '1' && map[0][i] != ' ')
-			return 20;
+			return 18;
 		i++;
 	}
 	i = 1;
 	j = 1;
+<<<<<<< HEAD
+	while (j < ij_max)
+	{
+		while(i < ij_max)
+=======
 
 	while (j < max)
 	{
 		while(i < max)
+>>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 			i++;
-		if (map[j ][i - 1] != '1' && map[j][i - 1] != ' ')
-			return 20;
+		if (map[j][i - 1] != '1' && map[j][i - 1] != ' ')
+			return 18;
 		j++;
 		i = 0;
 	}
-	i = 1;
 	j = 1;
+<<<<<<< HEAD
+	while (j < ij_max)
+	{
+		i = 1;
+		while (i < ij_max)
+=======
 	while (j < max)
 	{
 		i = 0;
 		while (i < max)
+>>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 		{
 			if (map[j][i] == '0')
 				if (check_opposite(map, i, j) == -1)
-					return 20;
+					return 18;
 			i++;
 		}
 		j++;
@@ -267,7 +295,7 @@ int		map_validate(char **map)
 	return 0;
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	int		fd;
 	char	*path= "../map.cub";

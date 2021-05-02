@@ -65,7 +65,7 @@
 
 #define SPEED_X 16
 #define SPEED_Y 16
-#define ROTATE_SPEED 0.2
+#define ROTATE_SPEED 0.06
 #define SPEED 0.087266463
 
 

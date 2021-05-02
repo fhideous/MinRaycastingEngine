@@ -21,31 +21,7 @@
 //	return (width);
 //}
 
-float find_step(const t_plr *plr,float angle, int width, const char **map)
-{
-//	t_ray	start; plr.x plr.y
-	t_ray	end;
-	float	step;
-	float	d_y;
-	float	d_x;
 
-	step = LEN_STEP;
-	end.x = plr->x + step * cosf(angle);
-	end.y = plr->y + step * sinf(angle);
-	while ((ABS((int)(plr->x - end.x)) < 1))
-	{
-		end.x = plr->x + step * cosf(angle);
-		step += LEN_STEP;
-	}
-	d_x = step;
-	step = LEN_STEP;
-	while (ABS((int)(plr->y - end.y))< 1)
-	{
-		end.y = plr->y + step * cosf(angle);
-		step += LEN_STEP;
-	}
-	return d_y > d_x ? d_x : d_y;
-}
 int find_crossing(t_all *all, float  angle, int i, t_texture *txtr)
 {
 	t_ray	end;
@@ -59,7 +35,6 @@ int find_crossing(t_all *all, float  angle, int i, t_texture *txtr)
 //	c = find_step(&all->plr, angle, txtr->width, all->full_map->map);
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
-//	point  = malloc(sizeof (t_point) * all->sprites_loc.size);
 
 	while ((ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
 					[(int)(end.x / (float)txtr->width)]) != '1')
