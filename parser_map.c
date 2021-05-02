@@ -137,7 +137,7 @@ int		count_sprites(const char **map)
 
 	n = 0;
 	i = 0;
-	while (i < ft_strlen(map[0]))
+	while (i < (int)ft_strlen(map[0]))
 	{
 		j = 0;
 		while(map[i][j])

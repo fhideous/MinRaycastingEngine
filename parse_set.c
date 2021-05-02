@@ -234,7 +234,7 @@ int parse_set(t_cub_map *full_map, int fd)
 		if (error > 0)
 			message(error);
 	}
-	free(line);
+//	free(line);
 	close(fd);
 	return 0;
 }
