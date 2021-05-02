@@ -163,7 +163,7 @@ void message2(int err)
 	else if (err == 17)
 		printf("");
 	else if (err == 18)
-		printf("");
+		printf("Open map");
 
 }
 
@@ -197,13 +197,13 @@ void message(int err)
 
 int	check_opposite_sign(char **map, int i, int j, int sign)
 {
-	if (map[i][j + sign] == '\0')
+	if (map[i][j + sign] == '\0' || map[i][j + sign] == ' ')
 		return -1;
-	if (map[i + sign][j] == '\0')
+	if (map[i + sign][j] == '\0' || map[i + sign][j] == ' ')
 		return -1;
-	if (map[i + sign][j + sign] == '\0')
+	if (map[i + sign][j + sign] == '\0' || map[i + sign][j + sign] == ' ')
 		return -1;
-	if (map[i - sign][j + sign] == '\0')
+	if (map[i - sign][j + sign] == '\0' || map[i - sign][j + sign] == ' ')
 		return -1;
 	return 0;
 }
@@ -212,6 +212,7 @@ int	check_opposite_sign(char **map, int i, int j, int sign)
 int check_opposite(char **map, int i, int j)
 {
 	int flag;
+
 	flag = check_opposite_sign(map, j, i, 1);
 	flag += check_opposite_sign(map, j, i, -1);
 	if (flag != 0)
@@ -223,43 +224,43 @@ int		map_validate(char **map)
 {
 	int		i;
 	int		j;
+	size_t		ij_max;
 
+	ij_max = ft_strlen(map[0]);
 	j = 0;
 	i = 0;
-	while (map[j] && map[j][0])
+	while (j < ij_max)
 	{
 		if (map[j][0] != '1' && map[j][0] != ' ')
-			return 20;
+			return 18;
 		j++;
 	}
-	while (map[0] && map[0][i])
+	while (i < ij_max)
 	{
 		if (map[0][i] != '1' && map[0][i] != ' ')
-			return 20;
+			return 18;
 		i++;
 	}
 	i = 1;
 	j = 1;
-
-	while (map[j] && map[j][i])
+	while (j < ij_max)
 	{
-		while(map[j][i])
+		while(i < ij_max)
 			i++;
-		if (map[j ][i - 1] != '1' && map[j][i - 1] != ' ')
-			return 20;
+		if (map[j][i - 1] != '1' && map[j][i - 1] != ' ')
+			return 18;
 		j++;
 		i = 0;
 	}
-	i = 1;
 	j = 1;
-	while (map[j] && map[j][i])
+	while (j < ij_max)
 	{
-		i = 0;
-		while (map[j][i])
+		i = 1;
+		while (i < ij_max)
 		{
 			if (map[j][i] == '0')
 				if (check_opposite(map, i, j) == -1)
-					return 20;
+					return 18;
 			i++;
 		}
 		j++;

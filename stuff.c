@@ -11,8 +11,7 @@ int point_cmp(const t_point *point1, const t_point *point2)
 	return 0;
 }
 
-int		add_dist_spr(t_sprite c)
-;
+
 
 int		add_point(t_point *massive, int x, int y)
 {
