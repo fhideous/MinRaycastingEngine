@@ -218,23 +218,34 @@ void full_map_init(t_cub_map *full_map)
  * 5 mean map
  */
 
+int check_new_line(char **map)
+{
+	int i;
+
+	i = 0;
+	while (map[i])
+	{
+		if (ft_strncmp(map[i], "", 4) <= 0)
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
 int parse_set(t_cub_map *full_map, int fd)
 {
 	char *line;
-	char *line_bn;
 	int error;
 
 	full_map_init(full_map);
 	while (get_next_line(fd, &line) == 1)
 	{
-		line_bn = line;
-		error =choise_type(fd, line, full_map);
-//		if(error == -42)
-//			free(line_bn); else
+		error = choise_type(fd, line, full_map);
 		if (error > 0)
 			message(error);
 	}
-//	free(line);
+
+	free(line);
 	close(fd);
 	return 0;
 }

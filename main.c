@@ -76,7 +76,7 @@ int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
 int	texture_open(t_all all, t_textures *textrs)
 {
 	int err;
-//	int i;
+	int i;
 
 	err = 0;
 	err += get_xpm_addr(&all.full_win, &textrs->n_tex, &all.full_map->n_texture);
@@ -224,31 +224,18 @@ int		map_validate(char **map)
 {
 	int		i;
 	int		j;
-<<<<<<< HEAD
 	size_t		ij_max;
 
 	ij_max = ft_strlen(map[0]);
 	j = 0;
 	i = 0;
 	while (j < ij_max)
-=======
-	int		max;
-
-	max = (int)ft_strlen(map[0]);
-	j = 0;
-	i = 0;
-	while (j < max)
->>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 	{
 		if (map[j][0] != '1' && map[j][0] != ' ')
 			return 18;
 		j++;
 	}
-<<<<<<< HEAD
 	while (i < ij_max)
-=======
-	while (i < max)
->>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 	{
 		if (map[0][i] != '1' && map[0][i] != ' ')
 			return 18;
@@ -256,16 +243,9 @@ int		map_validate(char **map)
 	}
 	i = 1;
 	j = 1;
-<<<<<<< HEAD
 	while (j < ij_max)
 	{
 		while(i < ij_max)
-=======
-
-	while (j < max)
-	{
-		while(i < max)
->>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 			i++;
 		if (map[j][i - 1] != '1' && map[j][i - 1] != ' ')
 			return 18;
@@ -273,17 +253,10 @@ int		map_validate(char **map)
 		i = 0;
 	}
 	j = 1;
-<<<<<<< HEAD
 	while (j < ij_max)
 	{
 		i = 1;
 		while (i < ij_max)
-=======
-	while (j < max)
-	{
-		i = 0;
-		while (i < max)
->>>>>>> 09e1e956cd1e93336b8024f17d510386cb97e02b
 		{
 			if (map[j][i] == '0')
 				if (check_opposite(map, i, j) == -1)

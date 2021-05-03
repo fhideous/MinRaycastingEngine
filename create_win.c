@@ -51,8 +51,6 @@ void	distance_to_sprites(t_all *all)
 	}
 }
 
-
-
 void	sprite_sort(t_sprite *sprs_CDA, int size)
 {
 	int i;
@@ -78,7 +76,7 @@ void	sprite_sort(t_sprite *sprs_CDA, int size)
 	}
 }
 
-void find_angle_sprite(t_all *all)
+void		find_angle_sprite(t_all *all)
 {
 	int i;
 
@@ -101,32 +99,74 @@ void find_angle_sprite(t_all *all)
 	}
 }
 
-void sprite_to_image(t_all *all,  t_point start, int high, int n)
+
+void		sprite_to_image(t_all *all,  t_point start, int high, int n)
 {
 	int i;
 	int j;
-	i = 0;
+	float	ratio;
+	float	ratio_i;
+	float	ratio_j;
+	int		i_s;
+	int		j_s;
 
-
+	ratio = (float)high / (float)all->textrs.spite.width;
+	ratio_i = ratio;
 	if (high > all->full_map->resolution.y)
-//		high = all->full_map->resolution.y;
-			return;
+		return;
+	i_s = 0;
+//	while (all->sprites_loc[i].dist)
+//		i++;
+//	i_s = (int)((float)(high - i) / ratio);
+	i = 0;
 	while (i < high)
 	{
-		j = -1;
 		if (all->all_distns_wall[start.x + i] < all->sprites_loc[n].dist)
 		{
 			i++;
+			if (i >= ratio_i)
+			{
+				ratio_i += ratio;
+				i_s++;
+			}
 			continue;
 		}
+		j_s = 0;
+		j = -1;
+		ratio_j = ratio;
 		while (++j < high && start.y + j < all->full_map->resolution.y)
 		{
 			if (start.x + i > all->full_map->resolution.x || start.x + i < 0)
 				continue;
-			all->full_win.addr[start.x + i + (start.y + j) * all->full_map->resolution.x] = all->textrs.spite.addr[i + 32 * j];
+//			printf("%d\n", start.y);
+			if (all->textrs.spite.addr[i_s + all->textrs.spite.width * j_s] != 0x000000)
+				all->full_win.addr[start.x + i + (start.y + j) * all->full_map->resolution.x] =
+						all->textrs.spite.addr[i_s + all->textrs.spite.width * j_s];
+			if (j >= ratio_j)
+			{
+				ratio_j += ratio;
+				j_s++;
+			}
 		}
 		i++;
+		if (i >= ratio_i)
+		{
+			ratio_i += ratio;
+			i_s++;
+		}
 	}
+}
+
+int check_valid_angle(float d_angle, float angle, float plr_angle)
+{
+	if (plr_angle > M_PI + M_PI - M_PI_6 && angle < M_PI_6 + d_angle )
+		return 1;
+	if (ABS(angle - plr_angle) < M_PI_6 + d_angle)
+		return 1;
+	if (angle > M_PI + M_PI - M_PI_6 - d_angle && plr_angle < M_PI_6)
+		return 1;
+
+	return 0;
 }
 
 void print_sprite(t_all *all)
@@ -135,30 +175,37 @@ void print_sprite(t_all *all)
 	float		high;
 	float		x_y;
 	t_point		start;
-	float		plr_angle;
+	float		plr_angle_cpy;
 
-	i = -1;
+
 	x_y = (float)all->full_map->resolution.x / (float)all->full_map->resolution.y;
-	plr_angle = all->plr.ray.angle;
 
 	i = -1;
 
+	plr_angle_cpy = all->plr.ray.angle;
 	while (++i < all->size_sprites)
 	{
-
 		high =	(x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
 				   all->sprites_loc[i].dist);
-		if (ABS(all->sprites_loc[i].angle - all->plr.ray.angle) > M_PI_6 + (float)high * M_PI_6 / (float)all->full_map->resolution.x /*&&
-				ABS(all->sprites_loc[i].angle - all->plr.ray.angle) < M_PI + M_PI - M_PI_6*/) {
+//		printf("%d\t%d\n", (int)(57.295779513* all->sprites_loc[i].angle),(int)(57.295779513* plr_angle_cpy));
+		if (!check_valid_angle((float)high * M_PI_6 / (float)all->full_map->resolution.x, all->sprites_loc[i].angle, plr_angle_cpy)) {
 			continue;
 		}
-//		printf("%d\t%d\n", (int)(57.295779513* all->sprites_loc[i].angle),(int)(57.295779513* all->plr.ray.angle));
+		if (all->sprites_loc[i].angle > M_PI + M_PI - M_PI_6 - (float)high * M_PI_6 / (float)all->full_map->resolution.x
+		&& all->plr.ray.angle < M_PI_6)
+			all->sprites_loc[i].angle -= M_PI + M_PI;
+		if (all->sprites_loc[i].angle < M_PI_6 && all->plr.ray.angle > M_PI + M_PI - M_PI_6 )
+			plr_angle_cpy -= M_PI + M_PI;
 
 		start.y = (all->full_map->resolution.y / 2) - (int)(high/ 2);
 //		while ((all->sprites_loc[i].angle - all->plr.ray.angle) > M_PI_6)
 //			all->sprites_loc[i].angle -= M_PI_3;
-		start.x = (int)((all->sprites_loc[i].angle - all->plr.ray.angle) * (float)(all->full_map->resolution.x) / (M_PI_3)) - ((int)high >> 1) + (all->full_map->resolution.x /2 );
-
+		start.x = (int)((all->sprites_loc[i].angle - plr_angle_cpy) * (float)(all->full_map->resolution.x) / (M_PI_3)) - ((int)high >> 1) + (all->full_map->resolution.x /2 );
+		if (start.x > 1000)
+		{
+			printf("kek\n");
+			continue;
+		}
 		sprite_to_image(all, start, (int)high, i);
 	}
 }

@@ -106,10 +106,8 @@ void go_back(t_plr *plr, t_all *all)
 		is_x = 1;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
-//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
-//		plr->y += is_x / cosf(SPEED);
 	check_crossing(plr, all, is_x);
 }
 
@@ -129,10 +127,8 @@ void go_forward(t_plr *plr, t_all *all)
 		is_x = -1;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
-//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
-//		plr->y += is_x / 2 * cosf(SPEED);
 
 	check_crossing(plr, all, is_x);
 }
