@@ -5,17 +5,6 @@
 #include "lib/libft.h"
 #include "hdrs/cub3d.h"
 
-void del_f(void *ch)
-{
-	free(ch);
-	ch = NULL;
-}
-
-
-/*
- * map parsing
- */
-
 static char	**list_to_massive(t_list **hd, size_t len)
 {
 	char	  **map;
@@ -36,10 +25,6 @@ static char	**list_to_massive(t_list **hd, size_t len)
 	}
 	return (map);
 }
-
-/*
- * line приходит из parse_set
- */
 
 int 		find_max(const char **map_old, int len)
 {

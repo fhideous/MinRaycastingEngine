@@ -1,7 +1,5 @@
 
 #include "hdrs/cub3d.h"
-//#include "lib/libft.h"
-//#include "hdrs/get_next_line.h"
 
 
 int find_player(char **map, t_plr *player, int scale)
@@ -31,14 +29,14 @@ int find_player(char **map, t_plr *player, int scale)
 	else if (map[i][j] == 'N')
 		player->ray.angle= 3 * M_PI / 2;
 	if (player->ray.angle == -1)
-		return (21);
+		return (19);
 	j++;
 	while (map[i] && map[i][j])
 	{
 		while(map[i][j] && !ft_isalpha(map[i][j]))
 			j++;
 		if(ft_isalpha(map[i][j]))
-			return (21);
+			return (19);
 		j = 0;
 		i++;
 	}

@@ -2,13 +2,6 @@
 #include "lib/libft.h"
 #include "hdrs/get_next_line.h"
 
-
-void skip_spaces(char **line)
-{
-	while(**line == ' ')
-		(*line)++;
-}
-
 int		dp_len(char **strs)
 {
 	int i;
@@ -137,10 +130,25 @@ int is_only_three_digits(char **color)
 	return 1;
 }
 
+void	check_RGB(t_color *color, char **res, unsigned char *flag)
+{
+	color->R = check_valid_color(ft_atoi(res[0]), flag);
+	color->G = check_valid_color(ft_atoi(res[1]), flag);
+	color->B = check_valid_color(ft_atoi(res[2]), flag);
+}
+
+void	free_RGB(char **res)
+{
+	free(res[2]);
+	free(res[1]);
+	free(res[0]);
+	free(res);
+}
+
 int parse_color(t_color *color, char **line)
 {
-	char **res;
-	unsigned  char flag;
+	char			**res;
+	unsigned char	flag;
 
 	if (color->flag)
 		return 6;
@@ -154,18 +162,13 @@ int parse_color(t_color *color, char **line)
 	if(!digits_in_str(res[0]) || !digits_in_str(res[1]) || !digits_in_str(res[2]))
 		return 8;
 	flag = check_valid_colors(res);
-	color->R = check_valid_color(ft_atoi(res[0]), &flag);
-	color->G = check_valid_color(ft_atoi(res[1]), &flag);
-	color->B = check_valid_color(ft_atoi(res[2]), &flag);
+	check_RGB(color, res, &flag);
 	if (flag != 0)
 		return 9;
 	if (!is_only_three_digits(res))
 		return 13;
 	color->flag = 1;
-	free(res[2]);
-	free(res[1]);
-	free(res[0]);
-	free(res);
+	free_RGB(res);
 	return (0);
 }
 
@@ -210,13 +213,7 @@ void full_map_init(t_cub_map *full_map)
 	full_map->s_texture = NULL;
 	full_map->w_texture = NULL;
 	full_map->sprite = NULL;
-	full_map->error.error_numb = 0;
-	full_map->error.message = NULL;
 }
-
-/*
- * 5 mean map
- */
 
 int check_new_line(char **map)
 {
@@ -232,6 +229,16 @@ int check_new_line(char **map)
 	return 1;
 }
 
+int		check_all_fields(t_cub_map *full_map)
+{
+	if (full_map->resolution.x == 0 || full_map->resolution.y == 0 ||
+	full_map->cel_color.flag == 0 || full_map->sprite == NULL || full_map->fl_color.flag == 0 ||
+	full_map->w_texture == NULL || full_map->s_texture == NULL || full_map->e_texture == NULL ||
+	full_map->n_texture == NULL || full_map->map == NULL)
+		return 0;
+	return 1;
+}
+
 int parse_set(t_cub_map *full_map, int fd)
 {
 	char *line;
@@ -244,7 +251,8 @@ int parse_set(t_cub_map *full_map, int fd)
 		if (error > 0)
 			message(error);
 	}
-
+	if(!check_all_fields(full_map))
+		return 17;
 	free(line);
 	close(fd);
 	return 0;

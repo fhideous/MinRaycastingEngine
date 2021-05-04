@@ -124,17 +124,6 @@ typedef struct	s_color
 }				  t_color;
 
 
-/*
- * map
- */
-
-typedef struct s_error
-{
-	int				error_numb;
-	char			*message;
-}		t_error;
-
-
 typedef struct	s_cub_map
 {
 	t_point 	resolution;
@@ -146,18 +135,7 @@ typedef struct	s_cub_map
 	t_color		fl_color;
 	t_color		cel_color;
 	char		**map;
-	t_error		error;
 }				  t_cub_map;
-/*
-typedef struct	s_sprite
-{
-	void			*img_tmp;
-	unsigned int 	*addr;
-	float			angle;
-	float			k;
-	int				width;
-	int				heigh;
-}				t_sprite;*/
 
 typedef struct	s_texture
 {
@@ -177,32 +155,6 @@ typedef struct s_textures
 
 }				t_textures;
 
-//typedef struct s_sprites_crds
-//{
-//	int				n;
-//	t_point			*coordints;
-//}				t_sprites_crds;
-
-typedef struct s_sprite_dist_data
-{
-	float	x;
-	float	y;
-	float	angle;
-	float	dist;
-}				t_sprite_dist_data;
-
-
-/*
-typedef struct s_sprites_distns
-{
-	float 	dist;
-	float 	angle;
-	int		width;
-	t_point	coord;
-
-}				t_sprites_distns;
-*/
-
 
 typedef struct s_sprite
 {
@@ -210,15 +162,6 @@ typedef struct s_sprite
 	float				dist;
 	float				angle;
 }				t_sprite;
-
-//typedef struct s_sprite
-//{
-//	int					size;
-//	t_point				coords;
-//	float				dist;
-//	float				angle;
-//}				t_sprite;
-
 
 typedef struct	s_all
 {
@@ -228,7 +171,6 @@ typedef struct	s_all
 	t_cub_map			*full_map;
 	int					size_sprites;
 
-//	t_sprites_crds		sprts_crds;
 	t_sprite			*sprites_loc;
 	float 				all_distns_wall[1920];
 
@@ -236,26 +178,18 @@ typedef struct	s_all
 
 char		**get_map(int fd, char *line);
 int			find_sprites(const char **, t_all *);
-int			add_point(t_point *, int , int);
 void		message(int err);
 
 int			parse_set(t_cub_map *, int);
 int			find_player(char **, t_plr *, int);
 
-void		sprites_zero(t_point *);
-
-void		ft_rotate(t_ray *x, t_ray *y, float angle);
 int			add_ray(t_all *all,const t_point *, float );
 void		add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x);
 
 int			create_win(t_all *);
 
-void		my_mlx_pixel_put(t_win *data, int x, int y,unsigned int color);
 t_texture	texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x);
 
-void		scene_put(t_all *vars, t_cub_map *);
-void		print_ray(t_win *, t_ray *start, t_ray *end, float);
-void		add_pixel_size(unsigned  int *w_addr,unsigned  int *addr, int x, int y);
 int			find_crossing(t_all *all, float  angle, int , t_texture *txtr);
 
 void		free_map(t_cub_map *map);

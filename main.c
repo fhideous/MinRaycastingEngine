@@ -16,7 +16,6 @@ void ss_free(char** mas)
 	bn = mas;
 	while(i--)
 	{
-//		printf("%s\n", *mas);
 		free(*mas);
 		*mas = NULL;
 		mas++;
@@ -27,20 +26,12 @@ void ss_free(char** mas)
 void	free_map(t_cub_map *map)
 {
 	free(map->e_texture);
-//	map->e_texture = NULL;
 	free(map->s_texture);
-//	map->s_texture = NULL;
 	free(map->w_texture);
-//	map->w_texture = NULL;
 	free(map->n_texture);
-//	map->n_texture = NULL;
 	free(map->sprite);
-//	map->sprite = NULL;
 	ss_free(map->map);
 }
-
-#define SCALE_TEX 10
-
 
 int get_xpm_addr(t_win *win, t_texture *tex, char **path)
 {
@@ -54,29 +45,11 @@ int get_xpm_addr(t_win *win, t_texture *tex, char **path)
 	if (!tex->addr)
 		return -1;
 	return 0;
-//	free(tex);
-//	mlx_destroy_image(win->mlx, tex->img_tmp);
 }
-
-/*
-int get_xpm_addr_sprite(t_win *win, t_sprite *tex, char **path)
-{
-	tex->img_tmp = mlx_xpm_file_to_image(win->mlx, *path, &tex->width, &tex->heigh);
-	if(!tex->img_tmp || tex->width != tex->heigh)
-		return -1;
-	tex->addr = mlx_get_data_addr(tex->img_tmp,
-								  &win->bits_per_pixel,
-								  &win->line_length,
-								  &win->endian);
-//	free(tex);
-//	mlx_destroy_image(win->mlx, tex->img_tmp);
-}
-*/
 
 int	texture_open(t_all all, t_textures *textrs)
 {
 	int err;
-	int i;
 
 	err = 0;
 	err += get_xpm_addr(&all.full_win, &textrs->n_tex, &all.full_map->n_texture);
@@ -86,62 +59,12 @@ int	texture_open(t_all all, t_textures *textrs)
 	if (textrs->s_tex.width != textrs->n_tex.width ||
 			textrs->s_tex.width != textrs->e_tex.width ||
 			textrs->s_tex.width != textrs->w_tex.width) {
-		//textures must have a one size;
 		return (13);
 	}
 	err += get_xpm_addr(&all.full_win, &textrs->spite, &all.full_map->sprite);
 	if (err != 0)
-		//wrong path to textures/sprite;
 		return (12);
 	return (0);
-}
-
-/*
-void sprites_zero(t_point *coords)
-{
-	t_point tmp;
-	int i;
-
-	i = 0;
-	tmp.x = 0;
-	tmp.y = 0;
-	while (i < SPRITES_MAX)
-	{
-		coords[i] = tmp;
-		i++;
-	}
-}
-*/
-
-/*
-void sprites_dist_sero (t_sprites_distns *distns)
-{
-	t_sprites_distns tmp;
-	int i;
-
-	i = 0;
-	tmp.angle = 0;
-	tmp.dist = 0;
-
-	while (i < SPRITES_MAX)
-	{
-		distns[i] = tmp;
-		i++;
-	}
-}
-*/
-
-void float_dists_zero(float *distns, int res)
-{
-	int i;
-
-	i = 0;
-
-	while (i < res)
-	{
-		distns[i] = 0;
-		i++;
-	}
 }
 
 void message2(int err)
@@ -154,14 +77,14 @@ void message2(int err)
 		printf("Wrong bit map");
 	else if (err == 13)
 		printf("Fuck you and your color");
-	else if (err == 14)
-		printf("");
+	else if (err == 19)
+		printf("To many players");
 	else if (err == 15)
 		printf("");
 	else if (err == 16)
 		printf("");
 	else if (err == 17)
-		printf("");
+		printf("Need more data");
 	else if (err == 18)
 		printf("Open map");
 
@@ -171,10 +94,10 @@ void message(int err)
 {
 	if (err == 0)
 		return;
+	printf("Error\n");
 	if (err > 9)
 		message2(err);
 	else if (err == 1)
-		//ft_printf
 		printf("");
 	else if (err == 2)
 		printf("To much R fields");
@@ -220,12 +143,16 @@ int check_opposite(char **map, int i, int j)
 	return 0;
 }
 
+//int		check
+
 int		map_validate(char **map)
 {
 	int		i;
 	int		j;
 	size_t		ij_max;
 
+	if (!map)
+		return 18;
 	ij_max = ft_strlen(map[0]);
 	j = 0;
 	i = 0;
@@ -268,34 +195,44 @@ int		map_validate(char **map)
 	return 0;
 }
 
+int check_argv(int argc,char **argv)
+{
+	int	i;
+
+	i = 0;
+	if (argc != 2)
+		return -1;
+	while (argv[1][i])
+		i++;
+	if (i <= 4)
+		return -1;
+	if (argv[1][i - 1] == 'b' && argv[1][i - 2] == 'u' && argv[1][i - 3] == 'c' && argv[1][i - 4] == '.')
+		return 0;
+	return -1;
+}
+
 int main(int argc, char **argv)
 {
 	int		fd;
-	char	*path= "../map.cub";
 	int		error;
 
-//	float_dists_zero(all_distns_wall, 1920);
-	//	char *texture = "textures/brick.xpm";
 	t_cub_map full_map;
 	t_all 		all;
-
+	error = check_argv(argc, argv);
+	message(error);
+	fd = open(argv[1], O_RDONLY);
 	all.size_sprites = -1;
-	fd = open(path, O_RDONLY);
-	error = parse_set(&full_map, fd);
+	error += parse_set(&full_map, fd);
+	message(error);
 	all.full_map = &full_map;
 	error += map_validate(all.full_map->map);
-	if (error) {
-		message(error);
-	}
+	message(error);
 	all.full_win.mlx = mlx_init();
 	error = texture_open(all, &all.textrs);;
 	message(error);
-
 	find_sprites(all.full_map->map, &all);
-	if(find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width)) {
-		all.full_map->error.error_numb = 13;
-		message(error);
-	}
+	error = find_player(all.full_map->map, &all.plr, all.textrs.n_tex.width);
+	message(error);
 	create_win(&all);
 	return 0;
 }
