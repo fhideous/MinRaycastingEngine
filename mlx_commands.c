@@ -21,7 +21,6 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 	float left_len;
 	float right_len;
 	float center_len;
-	float		x_y;
 
 	find_crossing(all, all->plr.ray.angle - (M_PI_12 + M_PI_12), -1, &all->textrs.n_tex);
 	left_len = all->plr.ray.len;
@@ -29,16 +28,13 @@ void check_crossing(t_plr *plr, t_all *all, int is_x)
 	right_len = all->plr.ray.len;
 	find_crossing(all, all->plr.ray.angle, -1, &all->textrs.n_tex);
 	center_len = all->plr.ray.len;
-	x_y = (float)all->full_map->resolution.y /  (float)all->full_map->resolution.x;
-	if (right_len <= all->textrs.n_tex.width * x_y  || left_len <= all->textrs.n_tex.width * x_y
+	if (right_len <= 1 || left_len <= 1
 	||  ((int)center_len <= (1) ))
 	{
 		if (is_x == 1 || is_x == -1)
 			plr->x -= (float)is_x * SPEED_X;
-//			plr->x -= is_x * sinf(SPEED);
 		else
 			plr->y -= (float)is_x * SPEED_Y / 2;
-//			plr->y -= is_x * cosf(SPEED);
 	}
 }
 
@@ -61,7 +57,6 @@ void go_right(t_plr *plr, t_all *all)
 //		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
-//		plr->y += is_x / 2 * cosf(SPEED);
 
 	check_crossing(plr, all, is_x);
 }
@@ -82,10 +77,8 @@ void go_left(t_plr *plr, t_all *all)
 		is_x = -2;
 	if (is_x == 1 || is_x == -1)
 		plr->x += is_x * SPEED_X;
-//		plr->x += is_x * sinf(SPEED);
 	else
 		plr->y += is_x / 2 * SPEED_Y;
-//		plr->y += is_x / 2 * cosf(SPEED);
 
 	check_crossing(plr, all, is_x);
 }

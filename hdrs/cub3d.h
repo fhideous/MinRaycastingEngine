@@ -170,7 +170,7 @@ typedef struct	s_all
 	t_textures			textrs;
 	t_cub_map			*full_map;
 	int					size_sprites;
-
+	int					screen;
 	t_sprite			*sprites_loc;
 	float 				all_distns_wall[1920];
 
@@ -181,10 +181,10 @@ int			find_sprites(const char **, t_all *);
 void		message(int err);
 
 int			parse_set(t_cub_map *, int);
-int			find_player(char **, t_plr *, int);
+int			find_player(const char **, t_plr *, int);
 
 int			add_ray(t_all *all,const t_point *, float );
-void		add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x);
+void		add_scale_line(t_all *all, int n, int hign, const t_texture *textr, int is_x);
 
 int			create_win(t_all *);
 

@@ -163,8 +163,6 @@ int check_valid_angle(float d_angle, float *angle, float *plr_angle)
 //		return 0;
 	if (*angle + *plr_angle > M_PI + M_PI - M_PI_6)
 		{
-	/*		if (*angle > M_PI_3 && *plr_angle > M_PI_3)
-				return 0;*/
 			if (*angle > M_PI + M_PI - M_PI_6 && *plr_angle < M_PI_6)
 			{
 				*angle -= 2 * M_PI;
@@ -197,8 +195,7 @@ void print_sprite(t_all *all)
 	{
 		high =	(x_y * (float) all->full_map->resolution.y * (float) all->textrs.spite.width /
 				   all->sprites_loc[i].dist);
-//		printf("%d\t%d\n", (int)(57.295779513* all->sprites_loc[i].angle),(int)(57.295779513* plr_angle_cpy));
-			if (!check_valid_angle((float)high * M_PI_6 / (float)all->full_map->resolution.x, &all->sprites_loc[i].angle, &plr_angle_cpy)) {
+			if (!check_valid_angle((float)high * (float)M_PI_6 / (float)all->full_map->resolution.x, &all->sprites_loc[i].angle, &plr_angle_cpy)) {
 			continue;
 		}
 		start.y = (all->full_map->resolution.y / 2) - (int)(high/ 2);
@@ -211,7 +208,7 @@ int     render_next_frame(t_all *all)
 {
 	add_flour(all);
 
-	add_ray(all, &all->full_map->resolution, (float)all->full_map->resolution.x / all->full_map->resolution.y);
+	add_ray(all, &all->full_map->resolution, (float)all->full_map->resolution.x / (float)all->full_map->resolution.y);
 	distance_to_sprites(all);
 	sprite_sort(all->sprites_loc, all->size_sprites);
 	find_angle_sprite(all);
@@ -227,7 +224,7 @@ int	create_win(t_all *all)
 
 	all->full_win.img = mlx_new_image(all->full_win.mlx, all->full_map->resolution.x,
 									  all->full_map->resolution.y);
-	all->full_win.addr = mlx_get_data_addr(all->full_win.img,
+	all->full_win.addr = (unsigned int*)mlx_get_data_addr(all->full_win.img,
 										   &all->full_win.bits_per_pixel,
 										   &all->full_win.line_length,
 										   &all->full_win.endian);

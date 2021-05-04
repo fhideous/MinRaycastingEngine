@@ -53,8 +53,10 @@ t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *
 	return tmp_txtr;
 }
 
+//void	pixel_line(const t_all *all, )
+//{}
 
-void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, int is_x)
+void	add_scale_line(t_all *all, int n, int hign, const t_texture *textr, int is_x)
 {
 	int		i;
 	float	ratio;
@@ -76,7 +78,7 @@ void	add_scale_line(const t_all *all, int n, int hign, const t_texture *textr, i
 	while ((int)j < hign + max)
 	{
 		k = 0;
-		while (k - 1 < (int)ratio)
+		while (k - 1 < (int)((float)hign / (float)textr->width))
 		{
 			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
 					(k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))
