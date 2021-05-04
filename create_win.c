@@ -201,7 +201,7 @@ int	render_next_frame(t_all *all)
 	find_angle_sprite(all);
 	print_sprite(all);
 	do_kek(all);
-//	screenshot(all);
+//
 }
 
 int	create_win(t_all *all)
@@ -215,6 +215,11 @@ int	create_win(t_all *all)
 													  &all->f_w.BPP,
 													  &all->f_w.l_len, &all->f_w.endian);
 	mlx_hook(all->f_w.win, 2, 1L << 0, key_commands, all);
+	if (all->screen)
+	{
+		render_next_frame(all);
+		screenshot(all);
+	}
 	mlx_loop_hook(all->f_w.mlx, render_next_frame, &all->f_w);
 	mlx_loop(all->f_w.mlx);
 }

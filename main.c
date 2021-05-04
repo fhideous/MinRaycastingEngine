@@ -2,237 +2,81 @@
 #include "lib/libft.h"
 #include <unistd.h>
 
-
-void ss_free(char** mas)
+int	get_xpm_addr(t_win *win, t_texture *tex, char **path)
 {
-	char		**bn;
-	size_t		i;
-
-	i = ft_strlen(*mas);
-	bn = mas;
-	while(i--)
-	{
-		free(*mas);
-		*mas = NULL;
-		mas++;
-	}
-	free(bn);
-}
-
-void	free_map(t_cub_map *map)
-{
-	free(map->e_t);
-	free(map->s_t);
-	free(map->w_t);
-	free(map->n_t);
-	free(map->s);
-	ss_free(map->map);
-}
-
-int get_xpm_addr(t_win *win, t_texture *tex, char **path)
-{
-	tex->img_tmp = mlx_xpm_file_to_image(win->mlx, *path, &tex->width, &tex->heigh);
-	if(!tex->img_tmp || tex->width != tex->heigh)
-		return -1;
+	tex->img_tmp = mlx_xpm_file_to_image(win->mlx, *path,
+			&tex->width, &tex->heigh);
+	if (!tex->img_tmp || tex->width != tex->heigh)
+		return (-1);
 	tex->addr = mlx_get_data_addr(tex->img_tmp,
-							   &win->BPP,
-							   &win->l_len,
-							   &win->endian);
+			   &win->BPP,
+			   &win->l_len,
+			   &win->endian);
 	if (!tex->addr)
-		return -1;
-	return 0;
+		return (-1);
+	return (0);
 }
 
 int	texture_open(t_all all, t_textures *textrs)
 {
-	int err;
+	int	err;
 
 	err = 0;
 	err += get_xpm_addr(&all.f_w, &textrs->n_tex, &all.f_map->n_t);
 	err += get_xpm_addr(&all.f_w, &textrs->s_tex, &all.f_map->s_t);
 	err += get_xpm_addr(&all.f_w, &textrs->e_tex, &all.f_map->e_t);
 	err += get_xpm_addr(&all.f_w, &textrs->w_tex, &all.f_map->w_t);
-	if (textrs->s_tex.width != textrs->n_tex.width ||
-			textrs->s_tex.width != textrs->e_tex.width ||
-			textrs->s_tex.width != textrs->w_tex.width) {
+	if (textrs->s_tex.width != textrs->n_tex.width
+		|| textrs->s_tex.width != textrs->e_tex.width
+		|| textrs->s_tex.width != textrs->w_tex.width)
 		return (13);
-	}
 	err += get_xpm_addr(&all.f_w, &textrs->spite, &all.f_map->s);
 	if (err != 0)
 		return (12);
 	return (0);
 }
 
-void message2(int err)
+int	check_save(int *screen, char *argv)
 {
-	if (err == 10)
-		printf("To much paths fields");
-	else if (err == 11)
-		printf("Path field has wrong number of arguments");
-	else if (err == 21)
-		printf("Wrong bit map");
-	else if (err == 13)
-		printf("Fuck you and your color");
-	else if (err == 19)
-		printf("To many players");
-	else if (err == 15)
-		printf("Empty line in map");
-	else if (err == 16)
-		printf("Screenshot");
-	else if (err == 17)
-		printf("Need more data");
-	else if (err == 18)
-		printf("Open map");
-
-}
-
-void message(int err)
-{
-	if (err == 0)
-		return;
-	printf("Error\n");
-	if (err > 9)
-		message2(err);
-	else if (err == 1)
-		printf("");
-	else if (err == 2)
-		printf("To much R fields");
-	else if (err == 3)
-		printf("R field has wrong number of arguments");
-	else if (err == 4)
-		printf("R field has non digit sumbols");
-	else if (err == 5)
-		printf("Wow, memory error");
-	else if (err == 6)
-		printf("To much color fields");
-	else if (err == 7)
-		printf("Color field has wrong number of arguments");
-	else if (err == 8)
-		printf("Color field has non digit symbols");
-	else if (err == 9)
-		printf("Color must include only [0:255] numbers");
-	exit(err);
-}
-
-int	check_opposite_sign(const char **map, int i, int j, int sign)
-{
-	if (map[i][j + sign] == '\0' || map[i][j + sign] == ' ')
-		return -1;
-	if (map[i + sign][j] == '\0' || map[i + sign][j] == ' ')
-		return -1;
-	if (map[i + sign][j + sign] == '\0' || map[i + sign][j + sign] == ' ')
-		return -1;
-	if (map[i - sign][j + sign] == '\0' || map[i - sign][j + sign] == ' ')
-		return -1;
-	return 0;
-}
-
-
-int check_opposite(const char **map, int i, int j)
-{
-	int flag;
-
-	flag = check_opposite_sign(map, j, i, 1);
-	flag += check_opposite_sign(map, j, i, -1);
-	if (flag != 0)
-		return -1;
-	return 0;
-}
-
-int		check_first_hv_line(const char **map, size_t ij_max)
-{
-	int j;
-	int i;
-
-	i = 0;
-	j = 0;
-	while (j < ij_max)
+	if (ft_strncmp(argv, "--save", 6) == 0)
 	{
-		if (map[j][0] != '1' && map[j][0] != ' ')
-			return 18;
-		j++;
+		*screen = 1;
+		return (0);
 	}
-	while (i < ij_max)
-	{
-		if (map[0][i] != '1' && map[0][i] != ' ')
-			return 18;
-		i++;
-	}
-	return 0;
+	return (22);
 }
 
-int		check_last_hv_line(const char **map, size_t ij_max)
-{
-	int i;
-	int j;
-
-	i = 1;
-	j = 1;
-	while (j < ij_max)
-	{
-		while(i < ij_max)
-			i++;
-		if (map[j][i - 1] != '1' && map[j][i - 1] != ' ')
-			return 18;
-		j++;
-		i = 0;
-	}
-	return 0;
-}
-
-int		map_validate(const char **map)
-{
-	int		i;
-	int		j;
-	size_t		ij_max;
-
-	if (!map)
-		return 18;
-	ij_max = ft_strlen(map[0]);
-	if (check_first_hv_line(map, ij_max))
-		return 18;
-	if (check_last_hv_line(map, ij_max))
-		return 18;
-	j = 1;
-	while (j < ij_max)
-	{
-		i = 1;
-		while (i < ij_max)
-		{
-			if (map[j][i] == '0')
-				if (check_opposite(map, i, j) == -1)
-					return 18;
-			i++;
-		}
-		j++;
-	}
-	return 0;
-}
-
-int check_argv(int argc,char **argv)
+int	check_argv(int *screen, int argc, char **argv)
 {
 	int	i;
 
 	i = 0;
-	if (argc != 2)
-		return -1;
+	if (argc > 3 || argc < 2)
+		return (22);
 	while (argv[1][i])
 		i++;
 	if (i <= 4)
-		return -1;
-	if (argv[1][i - 1] == 'b' && argv[1][i - 2] == 'u' && argv[1][i - 3] == 'c' && argv[1][i - 4] == '.')
-		return 0;
-	return -1;
+		return (22);
+	if (argv[1][i - 1] == 'b' && argv[1][i - 2] == 'u'
+	&& argv[1][i - 3] == 'c' && argv[1][i - 4] == '.')
+	{
+		if (argc == 3)
+			return (check_save(screen, argv[2]));
+		else
+			*screen = 0;
+		return (0);
+	}
+	return (22);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	int		fd;
-	int		error;
+	int			fd;
+	int			error;
+	t_cub_map	full_map;
+	t_all		all;
 
-	t_cub_map full_map;
-	t_all 		all;
-	error = check_argv(argc, argv);
+	error = check_argv(&all.screen, argc, argv);
 	message(error);
 	fd = open(argv[1], O_RDONLY);
 	all.s_spr = -1;
@@ -242,11 +86,11 @@ int main(int argc, char **argv)
 	error += map_validate(all.f_map->map);
 	message(error);
 	all.f_w.mlx = mlx_init();
-	error = texture_open(all, &all.textrs);;
+	error = texture_open(all, &all.textrs);
 	message(error);
 	find_sprites(all.f_map->map, &all);
 	error = find_player(all.f_map->map, &all.plr, all.textrs.n_tex.width);
 	message(error);
 	create_win(&all);
-	return 0;
+	return (0);
 }

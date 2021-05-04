@@ -1,7 +1,10 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-//#include "../lib//libft.h"
+#define ABS(a) ((a) < 0 ? -(a) : (a))
+
+
+#include "../lib//libft.h"
 # include <math.h>
 # include "mlx.h"
 # include <stdio.h>
@@ -138,6 +141,21 @@ int			key_commands(int keycode, t_all *all);
 int			find_max(char **map_old, int len);
 void		screenshot(t_all *all);
 void		ft_close(t_all *all);
-int			ABS(int a);
+int			map_validate(const char **map);
+void		ft_free_R(char **res);
+void		free_RGB(char **res);
+
+void		check_crossing(t_plr *plr, t_all *all, int is_x);
+void		go_right(t_plr *plr, t_all *all);
+void		go_left(t_plr *plr, t_all *all);
+void		go_back(t_plr *plr, t_all *all);
+void		go_forward(t_plr *plr, t_all *all);
+void		change_angle(t_all *all, float value);
+int			parse_color(t_color *color, char **line);
+int			digits_in_str(const char *str);
+int			dp_len(char **strs);
+void		full_map_init(t_cub_map *full_map);
+
+//int			ABS(int a);
 
 #endif

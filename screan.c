@@ -42,6 +42,5 @@ void	screenshot(t_all *all)
 	head(fd, all, tmp, file_size);
 	print = (char *)all->f_w.addr;
 	write(fd, print, (all->f_map->res.x * all->f_map->res.y * 4));
-	close(fd);
 	ft_close(all);
 }

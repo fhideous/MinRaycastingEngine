@@ -1,10 +1,49 @@
 #include "hdrs/cub3d.h"
 
 //#define ABS(a) ((a) < 0 ? -(a) : (a))
-
+//
+/*
 int ABS(int a)
 {
 	if (a < 0)
-		return (-a);
+		return (-1 * a);
 	return (a);
+}*/
+
+int	digits_in_str(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]) && str[i] != ' ')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	dp_len(char **strs)
+{
+	int	i;
+
+	i = 0;
+	while (strs[i] != NULL)
+		i++;
+	return (i);
+}
+
+void full_map_init(t_cub_map *full_map)
+{
+	full_map->res.x = 0;
+	full_map->res.y = 0;
+	full_map->fl_c.flag = 0;
+	full_map->cl_c.flag = 0;
+	full_map->map = NULL;
+	full_map->n_t = NULL;
+	full_map->e_t = NULL;
+	full_map->s_t = NULL;
+	full_map->w_t = NULL;
+	full_map->s = NULL;
 }
