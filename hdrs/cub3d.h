@@ -66,6 +66,16 @@ typedef struct s_color
 	unsigned char	flag;
 }	t_color;
 
+typedef struct s_kek
+{
+	float	*ratio_ij;
+	int		*ij_s;
+	float	high;
+	t_point	start;
+	int		i;
+	int		j;
+}	t_kek ;
+
 typedef struct s_cub_map
 {
 	t_point	res;
@@ -156,6 +166,7 @@ void		distance_to_sprites(t_all *all);
 void		print_sprite(t_all *all);
 void		find_angle_sprite(t_all *all);
 void		sprite_sort(t_sprite *sprs_CDA, int size);
+t_kek		kek_full(t_point start, float *ratio_ij, int *ij_s, int high);
 float		ABS(float a);
 
 #endif

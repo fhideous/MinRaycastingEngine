@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-float ABS(float a)
+float	ABS(float a)
 {
 	if (a < 0)
 		return (-1 * a);

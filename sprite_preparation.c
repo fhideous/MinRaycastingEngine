@@ -9,10 +9,10 @@ void	distance_to_sprites(t_all *all)
 	{
 		all->spr_loc[i].dist
 			= hypotf(all->plr.x
-					 - (float)all->spr_loc[i].coords.y
+				- (float)all->spr_loc[i].coords.y
 				* (float)all->ts.n_tex.width - 32,
-					 all->plr.y
-					 - (float)all->spr_loc[i].coords.x
+				 all->plr.y
+				 - (float)all->spr_loc[i].coords.x
 				   * (float)all->ts.n_tex.width - 32);
 		i++;
 	}
