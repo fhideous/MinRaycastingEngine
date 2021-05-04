@@ -73,8 +73,7 @@ typedef struct s_kek
 	float	high;
 	t_point	start;
 	int		i;
-	int		j;
-}	t_kek ;
+}	t_kek;
 
 typedef struct s_cub_map
 {
