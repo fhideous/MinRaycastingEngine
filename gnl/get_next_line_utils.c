@@ -14,7 +14,7 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-    void	*ptr;
+	void	*ptr;
 	char	*s;
 
 	ptr = malloc(count * size);
@@ -28,7 +28,7 @@ void	*ft_calloc(size_t count, size_t size)
 
 size_t	ft_strlen(const char *s)
 {
-	size_t cnt;
+	size_t	cnt;
 
 	if (!s)
 		return (0);

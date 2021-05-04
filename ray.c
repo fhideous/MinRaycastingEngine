@@ -59,11 +59,11 @@ int	check_max_choice_opposite(t_all *all, int is_x, int *max, int high)
 	int	i;
 
 	if (is_x)
-		i = ((int)all->plr.ray.x - (all->textrs.s_tex.width >> 1))
-			% all->textrs.s_tex.width;
+		i = ((int)all->plr.ray.x - (all->ts.s_tex.width >> 1))
+			% all->ts.s_tex.width;
 	else
-		i = ((int)all->plr.ray.y - (all->textrs.s_tex.width >> 1))
-			% all->textrs.s_tex.width;
+		i = ((int)all->plr.ray.y - (all->ts.s_tex.width >> 1))
+			% all->ts.s_tex.width;
 	*max = 0;
 	if (high > all->f_map->res.y)
 	{
@@ -72,8 +72,7 @@ int	check_max_choice_opposite(t_all *all, int is_x, int *max, int high)
 	return (i);
 }
 
-void	add_scale_line(t_all *all, int n, int hign,
-					const t_texture *textr, int is_x)
+void	add_scale_line(t_all *all, int n, int hign, int is_x)
 {
 	int		i;
 	int		k;
@@ -85,20 +84,20 @@ void	add_scale_line(t_all *all, int n, int hign,
 	while ((int)j < hign + max)
 	{
 		k = 0;
-		while (k - 1 < (int)((float)hign / (float)textr->width))
+		while (k - 1 < (int)((float)hign / (float)all->ts.c_t.width))
 		{
 			if (((k + (int)j + (all->f_map->res.y >> 1) >= (hign >> 1)))
 				&& (k + (int)j < (hign >> 1) + (all->f_map->res.y >> 1)))
 			{
 				all->f_w.addr[(k + (int)j)*all->f_map->res.x + n
-					+ all->f_map->res.x
-					* ((all->f_map->res.y >> 1) - (int)(hign >> 1))]
-					= textr->addr[(((int)textr->width
-							* (int)(j / ((float)hign / (float)textr->width))) + i)];
+					+ all->f_map->res.x * ((all->f_map->res.y >> 1)
+						- (hign >> 1))] = all->ts.c_t.addr[((all->ts.c_t.width
+							 * (int)(j / ((float)hign
+									/ (float)all->ts.c_t.width))) + i)];
 			}
 			k++;
 		}
-		j += ((float)hign / (float)textr->width);
+		j += ((float)hign / (float)all->ts.c_t.width);
 	}
 }
 
@@ -106,7 +105,6 @@ int	add_ray(t_all *all, const t_point *res, float x_y)
 {
 	float		angle;
 	int			n;
-	t_texture	texture;
 	int			is_x;
 
 	n = 0;
@@ -114,12 +112,12 @@ int	add_ray(t_all *all, const t_point *res, float x_y)
 	while (n < res->x)
 	{
 		is_x = 0;
-		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
+		all->ts.c_t = texture_define(&all->plr.ray, &all->ts, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
-			n, &texture);
+			n, &all->ts.c_t);
 		all->a_d_w[n] = all->plr.ray.len;
-		add_scale_line(all, n, (int)(x_y * (float)(res->y * texture.width)
-				/ (all->plr.ray.len * (float)cos(angle))), &texture, is_x);
+		add_scale_line(all, n, (int)(x_y * (float)(res->y * all->ts.c_t.width)
+				/ (all->plr.ray.len * (float)cos(angle))), is_x);
 		n += 1;
 		angle += (M_PI_6 + M_PI_6) / res->x;
 	}

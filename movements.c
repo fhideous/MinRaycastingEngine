@@ -94,12 +94,12 @@ void	change_angle(t_all *all, float value)
 		all->plr.ray.angle -= (M_PI + M_PI);
 	else if (all->plr.ray.angle <= 0)
 		all->plr.ray.angle += (M_PI + M_PI);
-	find_crossing(all, all->plr.ray.angle + M_PI_6, -1, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle + M_PI_6, -1, &all->ts.n_tex);
 	right_len = all->plr.ray.len;
-	find_crossing(all, all->plr.ray.angle - M_PI_6, -1, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle - M_PI_6, -1, &all->ts.n_tex);
 	left_len = all->plr.ray.len;
-	if (right_len < all->textrs.n_tex.width >> 1
-		|| left_len < all->textrs.n_tex.width >> 1)
+	if (right_len < all->ts.n_tex.width >> 1
+		|| left_len < all->ts.n_tex.width >> 1)
 		all->plr.ray.angle -= (value + value);
 	else
 		all->plr.ray.angle -= value;

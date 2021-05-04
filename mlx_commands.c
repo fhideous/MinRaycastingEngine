@@ -5,11 +5,11 @@ void	ft_close(t_all *all)
 	free_map(all->f_map);
 	mlx_destroy_image(all->f_w.mlx, all->f_w.img);
 	mlx_destroy_window(all->f_w.mlx, all->f_w.win);
-	mlx_destroy_image(all->f_w.mlx, all->textrs.spite.img_tmp);
-	mlx_destroy_image(all->f_w.mlx, all->textrs.w_tex.img_tmp);
-	mlx_destroy_image(all->f_w.mlx, all->textrs.n_tex.img_tmp);
-	mlx_destroy_image(all->f_w.mlx, all->textrs.e_tex.img_tmp);
-	mlx_destroy_image(all->f_w.mlx, all->textrs.s_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->ts.spite.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->ts.w_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->ts.n_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->ts.e_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->ts.s_tex.img_tmp);
 	exit (250);
 }
 
@@ -20,12 +20,12 @@ void	check_crossing(t_plr *plr, t_all *all, int is_x)
 	float	center_len;
 
 	find_crossing(all, all->plr.ray.angle
-		- (M_PI_12 + M_PI_12), -1, &all->textrs.n_tex);
+		- (M_PI_12 + M_PI_12), -1, &all->ts.n_tex);
 	left_len = all->plr.ray.len;
 	find_crossing(all, all->plr.ray.angle
-		+ (M_PI_12 + M_PI_12), -1, &all->textrs.n_tex);
+		+ (M_PI_12 + M_PI_12), -1, &all->ts.n_tex);
 	right_len = all->plr.ray.len;
-	find_crossing(all, all->plr.ray.angle, -1, &all->textrs.n_tex);
+	find_crossing(all, all->plr.ray.angle, -1, &all->ts.n_tex);
 	center_len = all->plr.ray.len;
 	if (right_len <= 1 || left_len <= 1
 		|| ((int)center_len <= (1)))

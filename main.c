@@ -86,10 +86,10 @@ int	main(int argc, char **argv)
 	error += map_validate(all.f_map->map);
 	message(error);
 	all.f_w.mlx = mlx_init();
-	error = texture_open(all, &all.textrs);
+	error = texture_open(all, &all.ts);
 	message(error);
 	find_sprites(all.f_map->map, &all);
-	error = find_player(all.f_map->map, &all.plr, all.textrs.n_tex.width);
+	error = find_player(all.f_map->map, &all.plr, all.ts.n_tex.width);
 	message(error);
 	create_win(&all);
 	return (0);
