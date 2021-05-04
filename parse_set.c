@@ -42,39 +42,66 @@ int		digits_in_str(const char *str)
 	return 1;
 }
 
-int		parse_res(char **line, t_cub_map *f_map)
+void	ft_free_R(char **res)
 {
-	int res_x;
-	char **res;
+	free(res[1]);
+	free(res[0]);
+	free(res);
+}
 
-	if (f_map->resolution.x || f_map->resolution.y)
-		return 2;
-	(*line)++;
-	res = ft_split(*line, ' ');
+int		check_error(char **res, t_point *resolution)
+{
 	if (!res)
 		return 5;
 	if (dp_len(res) != 2)
 		return 3;
 	if (!digits_in_str(res[0]) || !digits_in_str(res[1]))
 		return 4;
+	if (ft_strlen(res[0]) > 4)
+	{
+		resolution->x = 1920;
+		resolution->y = ft_atoi(res[1]);
+	}
+	if (ft_strlen(res[1]) > 4)
+	{
+		if (resolution->x != 1920)
+			resolution->x = ft_atoi(res[0]);
+		resolution->y = 1080;
+	}
 	if (ft_strlen(res[0]) > 4 || ft_strlen(res[1]) > 4)
 	{
-		f_map->resolution.x = 1920;
-		f_map->resolution.y = 1080;
-		free(res);
+		ft_free_R(res);
 		return (0);
 	}
+	return (1);
+}
+
+int		parse_res(char **line, t_cub_map *f_map)
+{
+	int		res_x;
+	char	**res;
+	int		error;
+
+	if (f_map->res.x || f_map->res.y)
+		return 2;
+	(*line)++;
+	res = ft_split(*line, ' ');
+	error = check_error(res, &f_map->res);
+	if (error != 1)
+		return error;
 	res_x = ft_atoi(res[0]);
 	if (res_x > 1920)
 		res_x = 1920;
-	f_map->resolution.x = res_x;
+	f_map->res.x = res_x;
 	res_x = ft_atoi(res[1]);
 	if(res_x > 1080)
 		res_x = 1080;
-	f_map->resolution.y = res_x;
-	free(res[1]);
-	free(res[0]);
-	free(res);
+	if (f_map->res.y < 480)
+		f_map->res.y = 480;
+	if (f_map->res.x < 640)
+		f_map->res.x = 640;
+	f_map->res.y = res_x;
+	ft_free_R(res);
 	return (0);
 }
 
@@ -180,61 +207,47 @@ int choise_type(int fd, char *line, t_cub_map *f_map)
 	if(*line == 'R')
 		err = parse_res(&line, f_map);
 	else if(*line == 'F')
-		err = parse_color(&f_map->fl_color, &line);
+		err = parse_color(&f_map->fl_c, &line);
 	else if(*line == 'C')
-		err = parse_color(&f_map->cel_color, &line);
+		err = parse_color(&f_map->cl_c, &line);
 	else if(!ft_strncmp(line, "SO", 2))
-		err =parse_path(line, &f_map->n_texture);
+		err =parse_path(line, &f_map->n_t);
 	else if(!ft_strncmp(line, "NO", 2))
-		err =parse_path(line, &f_map->s_texture);
+		err =parse_path(line, &f_map->s_t);
 	else if(!ft_strncmp(line, "WE", 2))
-		err = parse_path(line, &f_map->w_texture);
+		err = parse_path(line, &f_map->w_t);
 	else if(!ft_strncmp(line, "EA", 2))
-		err = parse_path(line, &f_map->e_texture);
+		err = parse_path(line, &f_map->e_t);
 	else if(*line == 'S')
-		err = parse_path(line,&f_map->sprite);
+		err = parse_path(line,&f_map->s);
 	else if(*line == ' ' || *line == '1')
 	{
-		f_map->map = get_map(fd, line);
-		return (-42);
+		f_map->map = get_map(fd, line, &err);
 	}
 	return (err);
 }
 
 void full_map_init(t_cub_map *full_map)
 {
-	full_map->resolution.x = 0;
-	full_map->resolution.y = 0;
-	full_map->fl_color.flag = 0;
-	full_map->cel_color.flag = 0;
+	full_map->res.x = 0;
+	full_map->res.y = 0;
+	full_map->fl_c.flag = 0;
+	full_map->cl_c.flag = 0;
 	full_map->map = NULL;
-	full_map->n_texture = NULL;
-	full_map->e_texture = NULL;
-	full_map->s_texture = NULL;
-	full_map->w_texture = NULL;
-	full_map->sprite = NULL;
+	full_map->n_t = NULL;
+	full_map->e_t = NULL;
+	full_map->s_t = NULL;
+	full_map->w_t = NULL;
+	full_map->s = NULL;
 }
 
-int check_new_line(char **map)
-{
-	int i;
-
-	i = 0;
-	while (map[i])
-	{
-		if (ft_strncmp(map[i], "", 4) <= 0)
-			return 0;
-		i++;
-	}
-	return 1;
-}
 
 int		check_all_fields(t_cub_map *full_map)
 {
-	if (full_map->resolution.x == 0 || full_map->resolution.y == 0 ||
-	full_map->cel_color.flag == 0 || full_map->sprite == NULL || full_map->fl_color.flag == 0 ||
-	full_map->w_texture == NULL || full_map->s_texture == NULL || full_map->e_texture == NULL ||
-	full_map->n_texture == NULL || full_map->map == NULL)
+	if (full_map->res.x == 0 || full_map->res.y == 0 ||
+		full_map->cl_c.flag == 0 || full_map->s == NULL || full_map->fl_c.flag == 0 ||
+		full_map->w_t == NULL || full_map->s_t == NULL || full_map->e_t == NULL ||
+		full_map->n_t == NULL || full_map->map == NULL)
 		return 0;
 	return 1;
 }

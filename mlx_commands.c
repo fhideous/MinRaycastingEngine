@@ -2,16 +2,16 @@
 
 void ft_close (t_all *all)
 {
-	free_map(all->full_map);
-	mlx_destroy_image(all->full_win.mlx,all->full_win.img);
-	mlx_destroy_window(all->full_win.mlx, all->full_win.win);
+	free_map(all->f_map);
+	mlx_destroy_image(all->f_w.mlx, all->f_w.img);
+	mlx_destroy_window(all->f_w.mlx, all->f_w.win);
 
-	mlx_destroy_image(all->full_win.mlx, all->textrs.spite.img_tmp);
-	mlx_destroy_image(all->full_win.mlx, all->textrs.w_tex.img_tmp);
-	mlx_destroy_image(all->full_win.mlx, all->textrs.n_tex.img_tmp);
-	mlx_destroy_image(all->full_win.mlx, all->textrs.e_tex.img_tmp);
-	mlx_destroy_image(all->full_win.mlx, all->textrs.s_tex.img_tmp);
-//	free(all->full_win);
+	mlx_destroy_image(all->f_w.mlx, all->textrs.spite.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->textrs.w_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->textrs.n_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->textrs.e_tex.img_tmp);
+	mlx_destroy_image(all->f_w.mlx, all->textrs.s_tex.img_tmp);
+//	free(all->f_w);
 
 	exit (250);
 }

@@ -9,21 +9,21 @@ int find_crossing(t_all *all, float  angle, int i, t_texture *txtr)
 	c = (float)LEN_STEP;
 	end.x = all->plr.x + c * cosf(angle);
 	end.y  = all->plr.y + c * sinf(angle);
-	ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
+	ch = all->f_map->map[(int)(end.y / (float)txtr->width)]
 	[(int)(end.x / (float)txtr->width)];
 	while (ch  != '1')
 	{
 		end.x = all->plr.x + c * cosf(angle);
 		end.y  = all->plr.y + c * sinf(angle);
 		c += (float)LEN_STEP;
-		ch = all->full_map->map[(int)(end.y / (float)txtr->width)]
+		ch = all->f_map->map[(int)(end.y / (float)txtr->width)]
 		[(int)(end.x / (float)txtr->width)];
 	}
 	all->plr.ray.x = end.x + (float)txtr->width / 2;
 	all->plr.ray.y = end.y + (float)txtr->width / 2;
 	all->plr.ray.len = c;
 	if (i != -1)
-		all->all_distns_wall[i] = c;
+		all->a_d_w[i] = c;
 }
 
 t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *is_x)
@@ -53,72 +53,68 @@ t_texture texture_define(const t_ray *ray_new, const t_textures *all_txtr, int *
 	return tmp_txtr;
 }
 
-//void	pixel_line(const t_all *all, )
-//{}
+int	check_max_choice_opposite(t_all *all, int is_x, int *max, int high)
+{
+	int i;
+
+	if(is_x)
+		i = ((int)all->plr.ray.x - (all->textrs.s_tex.width>> 1)) % all->textrs.s_tex.width ;
+	else
+		i = ((int)all->plr.ray.y - (all->textrs.s_tex.width >> 1)) % all->textrs.s_tex.width;
+	*max = 0;
+	if (high > all->f_map->res.y)
+	{
+		*max = (int)((high - all->f_map->res.y)) >> 1;
+	}
+	return i;
+
+}
 
 void	add_scale_line(t_all *all, int n, int hign, const t_texture *textr, int is_x)
 {
 	int		i;
-	float	ratio;
 	int		k;
 	float	j;
 	int		max;
 
-	ratio = (float)hign / (float)textr->width;
-	if(is_x)
-		i = ((int)all->plr.ray.x - (textr->width >> 1)) % textr->width ;
-	else
-		i = ((int)all->plr.ray.y - (textr->width >> 1)) % textr->width;
+	i = check_max_choice_opposite(all, is_x, &max, hign);
 	j = 0;
-	max = 0;
-	if (hign > all->full_map->resolution.y)
-	{
-		max = (int)((hign - all->full_map->resolution.y)) >> 1;
-	}
 	while ((int)j < hign + max)
 	{
 		k = 0;
 		while (k - 1 < (int)((float)hign / (float)textr->width))
 		{
-			if(((k + (int)j + (all->full_map->resolution.y >> 1) >= (hign >> 1))) &&
-					(k + (int)j < (hign >> 1) + (all->full_map->resolution.y >> 1)))
+			if(((k + (int)j + (all->f_map->res.y >> 1) >= (hign >> 1))) &&
+			   (k + (int)j < (hign >> 1) + (all->f_map->res.y >> 1)))
 			{
-				all->full_win.addr[(k + (int)j) * all->full_map->resolution.x + n +
-									all->full_map->resolution.x *
-									((all->full_map->resolution.y >> 1) - (int)(hign >> 1))]  =
-						textr->addr[(((int)textr->width * (int)(j / ratio)) + i)];
+				all->f_w.addr[(k + (int)j) * all->f_map->res.x + n +
+							  all->f_map->res.x *
+							  ((all->f_map->res.y >> 1) - (int)(hign >> 1))]  =
+						textr->addr[(((int)textr->width * (int)(j / ((float)hign / (float)textr->width))) + i)];
 			}
 			k++;
 		}
-		j += (ratio);
+		j += ((float)hign / (float)textr->width);
 	}
 }
 
 int		add_ray(t_all *all, const t_point *res, float x_y)
 {
-	float	angle;
-	float	k;
-	int		n;
-	float high;
-	t_texture texture;
-	int 	is_x;
+	float 			angle;
+	int				n;
+	t_texture		texture;
+	int				is_x;
 
 	n = 0;
 	angle = M_PI_6_N;
 	while (n < res->x)
 	{
 		is_x = 0;
-		k = cosf(angle);
-		if (k == 0)
-			k = 1;
 		texture = texture_define(&all->plr.ray, &all->textrs, &is_x);
 		find_crossing(all, all->plr.ray.angle + angle,
 					  n, &texture);
-		all->all_distns_wall[n] = all->plr.ray.len;
-
-		high = x_y * (float)(res->y * texture.width) / (all->plr.ray.len * k) ;
-		add_scale_line(all, n, (int)(high), &texture, is_x);
-
+		all->a_d_w[n] = all->plr.ray.len;
+		add_scale_line(all, n, (int)(x_y * (float)(res->y * texture.width) / (all->plr.ray.len * (float)cos(angle))), &texture, is_x);
 		n += 1;
 		angle += (M_PI_6 + M_PI_6) / res->x;
 	}
