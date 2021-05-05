@@ -8,7 +8,7 @@ set (MLX_DIR /home/fhideous/CLionProjects/cub3d/mlx/libmlx.a)
 set(CMAKE_C_FLAGS "-O0")
 add_executable(cub3d main.c parser_map.c get_next_line.c get_next_line_utils.c
         parse_set.c find_player.c create_win.c stuff.c
-        lib/libft.h hdrs/get_next_line.h hdrs/cub3d.h parser_map_stuff.c ray.c
+        parser_map_stuff.c ray.c
         mlx_commands.c screan.c messages.c map_validate.c all_free.c parse_color.c
         movements.c to_window.c sprite_preparation.c big_kek.c )
 

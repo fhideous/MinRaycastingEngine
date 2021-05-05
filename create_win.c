@@ -32,6 +32,6 @@ int	create_win(t_all *all)
 		screenshot(all);
 	}
 	mlx_loop_hook(all->f_w.mlx, render_next_frame, &all->f_w);
-	ft_close(all);
-//	mlx_loop(all->f_w.mlx);
+//	ft_close(all);
+	mlx_loop(all->f_w.mlx);
 }

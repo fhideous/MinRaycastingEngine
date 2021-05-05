@@ -1,30 +1,29 @@
 NAME	   = cub3D
 
-SRCS	   = main.c main_utils.c main_ray.c parser1.c\
-	parser2.c parser3.c parser_extras.c get_next_line.c\
-	config.c keyinput.c closeandforget.c sprites.c screenshot.c
+SRCS	   = main.c parser_map.c get_next_line.c get_next_line_utils.c \
+                     parse_set.c find_player.c create_win.c stuff.c \
+                     parser_map_stuff.c ray.c \
+                     mlx_commands.c screan.c messages.c map_validate.c all_free.c parse_color.c \
+                     movements.c to_window.c sprite_preparation.c big_kek.c
 
 OBJS	   =  ${SRCS:.c=.o}
 
-BONUS_OBJS =  ${BONUS_SRCS:.c=.o}
+MLX	       =  mlx
 
-MLX	       =  mlxlinux
+HDRS		= hdrs
 
-LIBFT		= libft
+LIBFT		= lib
 
-FLAGS	   = -Wall -Wextra -Werror -g
+
+FLAGS	   = -Wall -Wextra -Werror
 
 CC         = gcc
 
 $(NAME):     $(OBJS)
 	$(MAKE) -C $(MLX)
 	$(MAKE) -C $(LIBFT)
-	$(CC)   -o $(NAME) $(OBJS)  -L$(MLX) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT) -lft
-
-bonus:  	fclean $(BONUS_OBJS)
-	$(MAKE) -C $(MLX)
-	$(MAKE) -C $(LIBFT)
-	$(CC)   -o $(NAME) $(BONUS_OBJS)  -L$(MLX) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT) -lft
+	#$(CC)   -o $(NAME) $(OBJS)  -L$(MLX) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT) -lft -L$(HDRS)
+	$(CC) 	-o $(NAME) $(OBJS) -L$(MLX) /home/fhideous/CLionProjects/cub3d/mlx/libmlx_Linux.a -lmlx -lXext -lX11
 
 %.o: %.c
 	$(CC) $(FLAGS)  -c $< -o $@
@@ -33,7 +32,6 @@ all:        $(NAME)
 
 clean:
 			rm -f ${OBJS}
-			rm -f ${BONUS_OBJS}
 
 fclean:		clean
 			rm -f ${NAME}
