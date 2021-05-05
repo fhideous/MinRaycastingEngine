@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-void	player_cast(const char **map, float *angle, int i, int j)
+void	player_cast(char **map, float *angle, int i, int j)
 {
 	if (map[i][j] == 'E')
 		*angle = 0;
@@ -12,7 +12,7 @@ void	player_cast(const char **map, float *angle, int i, int j)
 		*angle = 3 * M_PI / 2;
 }
 
-void	skip_to_plr(const char **map, int *i, int *j)
+void	skip_to_plr(char **map, int *i, int *j)
 {
 	while ((map[*i + 1]))
 	{
@@ -25,7 +25,7 @@ void	skip_to_plr(const char **map, int *i, int *j)
 	}
 }
 
-int	find_player(const char **map, t_plr *player, int scale)
+int	find_player(char **map, t_plr *player, int scale)
 {
 	int	i;
 	int	j;

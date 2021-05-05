@@ -26,6 +26,7 @@ static int	check_valid_color(int color, unsigned char *flag)
 	if (color <= 255)
 		return (color);
 	(*flag) += 1;
+	return (1);
 }
 
 static int	is_only_three_digits(char **color)

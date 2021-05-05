@@ -37,7 +37,7 @@ void	check_crossing(t_plr *plr, t_all *all, int is_x)
 	}
 }
 
-int	key_commands(int keycode, t_all *all)
+void	key_commands(int keycode, t_all *all)
 {
 	if (keycode == 65307)
 		ft_close(all);

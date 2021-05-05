@@ -1,10 +1,10 @@
 #include "hdrs/cub3d.h"
 
-int	count_sprites (const char **map)
+int	count_sprites (char **map)
 {
-	int	i;
-	int	j;
-	int	n;
+	size_t	i;
+	int		j;
+	int		n;
 
 	n = 0;
 	i = 0;
@@ -22,7 +22,7 @@ int	count_sprites (const char **map)
 	return (n);
 }
 
-int	find_sprites (const char **map, t_all *all)
+int	find_sprites (char **map, t_all *all)
 {
 	int		i;
 	int		j;

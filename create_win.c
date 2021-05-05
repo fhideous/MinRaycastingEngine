@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-int	render_next_frame(t_all *all)
+void	render_next_frame(t_all *all)
 {
 	add_flour(all);
 	add_ray(all, &all->f_map->res,
@@ -13,7 +13,7 @@ int	render_next_frame(t_all *all)
 	do_kek(all);
 }
 
-int	create_win(t_all *all)
+void	create_win(t_all *all)
 {
 	all->f_w.win = mlx_new_window(all->f_w.mlx,
 			 all->f_map->res.x,
@@ -24,14 +24,14 @@ int	create_win(t_all *all)
 			&all->f_w.BPP,
 			&all->f_w.l_len,
 			&all->f_w.endian);
-//	mlx_hook(all->f_w.win, 17, 1L << 17, ft_close, all);
-	mlx_hook(all->f_w.win, 2, 1L << 0, key_commands, all);
+	mlx_hook(all->f_w.win, 2, 1L << 0, (void *)key_commands, all);
+	mlx_hook(all->f_w.win, 17, 1L << 17, ft_close, all);
 	if (all->screen)
 	{
 		render_next_frame(all);
 		screenshot(all);
 	}
-	mlx_loop_hook(all->f_w.mlx, render_next_frame, &all->f_w);
+	mlx_loop_hook(all->f_w.mlx, (void *)render_next_frame, &all->f_w);
 //	ft_close(all);
 	mlx_loop(all->f_w.mlx);
 }

@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-int	check_opposite_sign(const char **map, int i, int j, int sign)
+int	check_opposite_sign(char **map, int i, int j, int sign)
 {
 	if (map[i][j + sign] == '\0' || map[i][j + sign] == ' ')
 		return (-1);
@@ -13,7 +13,7 @@ int	check_opposite_sign(const char **map, int i, int j, int sign)
 	return (0);
 }
 
-int	check_opposite(const char **map, int i, int j)
+int	check_opposite(char **map, int i, int j)
 {
 	int	flag;
 
@@ -24,10 +24,10 @@ int	check_opposite(const char **map, int i, int j)
 	return (0);
 }
 
-int	check_first_hv_line(const char **map, size_t ij_max)
+int	check_first_hv_line(char **map, size_t ij_max)
 {
-	int	j;
-	int	i;
+	size_t	j;
+	size_t	i;
 
 	i = 0;
 	j = 0;
@@ -46,10 +46,10 @@ int	check_first_hv_line(const char **map, size_t ij_max)
 	return (0);
 }
 
-int	check_last_hv_line(const char **map, size_t ij_max)
+int	check_last_hv_line(char **map, size_t ij_max)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	size_t	j;
 
 	i = 1;
 	j = 1;
@@ -65,10 +65,10 @@ int	check_last_hv_line(const char **map, size_t ij_max)
 	return (0);
 }
 
-int	map_validate(const char **map)
+int	map_validate(char **map)
 {
-	int			i;
-	int			j;
+	size_t			i;
+	size_t			j;
 	size_t		ij_max;
 
 	if (!map)
@@ -82,7 +82,7 @@ int	map_validate(const char **map)
 	while (j < ij_max)
 	{
 		i = 1;
-		while (i < ij_max)
+		while ((size_t)i < ij_max)
 		{
 			if (map[j][i] == '0')
 				if (check_opposite(map, i, j) == -1)

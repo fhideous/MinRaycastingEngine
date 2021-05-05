@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-int	find_crossing(t_all *all, float angle, int i, t_texture *txtr)
+void	find_crossing(t_all *all, float angle, int i, t_texture *txtr)
 {
 	t_ray	end;
 	float	c;
@@ -101,7 +101,7 @@ void	add_scale_line(t_all *all, int n, int hign, int is_x)
 	}
 }
 
-int	add_ray(t_all *all, const t_point *res, float x_y)
+void	add_ray(t_all *all, const t_point *res, float x_y)
 {
 	float		angle;
 	int			n;

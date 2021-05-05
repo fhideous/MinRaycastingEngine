@@ -6,6 +6,8 @@ void	message2(int err)
 		printf("To much paths fields");
 	else if (err == 11)
 		printf("Path field has wrong number of arguments");
+	else if (err == 12)
+		printf("System WHUT");
 	else if (err == 21)
 		printf("Wrong bit map");
 	else if (err == 13)
@@ -32,7 +34,7 @@ void	message(int err)
 	if (err > 9)
 		message2(err);
 	else if (err == 1)
-		printf("");
+		printf(" ");
 	else if (err == 2)
 		printf("To much R fields");
 	else if (err == 3)

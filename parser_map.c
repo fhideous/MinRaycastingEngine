@@ -23,7 +23,7 @@ static char	**list_to_massive(t_list **hd, size_t len)
 	return (map);
 }
 
-char	**cal_plus_space(char **map_new, int len_max)
+void 	cal_plus_space(char **map_new, int len_max)
 {
 	int	i;
 	int	j;
@@ -42,6 +42,7 @@ char	**cal_plus_space(char **map_new, int len_max)
 		}
 		i++;
 	}
+
 }
 
 char	**map_to_square(char **map_old, int len)

@@ -1,6 +1,4 @@
 #include "hdrs/cub3d.h"
-#include "lib/libft.h"
-#include <unistd.h>
 
 int	get_xpm_addr(t_win *win, t_texture *tex, char **path)
 {
@@ -8,7 +6,7 @@ int	get_xpm_addr(t_win *win, t_texture *tex, char **path)
 			&tex->width, &tex->heigh);
 	if (!tex->img_tmp || tex->width != tex->heigh)
 		return (-1);
-	tex->addr = mlx_get_data_addr(tex->img_tmp,
+	tex->addr = (unsigned int *)mlx_get_data_addr(tex->img_tmp,
 			   &win->BPP,
 			   &win->l_len,
 			   &win->endian);
@@ -26,9 +24,9 @@ int	texture_open(t_all all, t_textures *textrs)
 	err += get_xpm_addr(&all.f_w, &textrs->s_tex, &all.f_map->s_t);
 	err += get_xpm_addr(&all.f_w, &textrs->e_tex, &all.f_map->e_t);
 	err += get_xpm_addr(&all.f_w, &textrs->w_tex, &all.f_map->w_t);
-	if (textrs->s_tex.width != textrs->n_tex.width
+	if ((textrs->s_tex.width != textrs->n_tex.width
 		|| textrs->s_tex.width != textrs->e_tex.width
-		|| textrs->s_tex.width != textrs->w_tex.width)
+		|| textrs->s_tex.width != textrs->w_tex.width) || err != 0)
 		return (13);
 	err += get_xpm_addr(&all.f_w, &textrs->spite, &all.f_map->s);
 	if (err != 0)

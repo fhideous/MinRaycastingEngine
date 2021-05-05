@@ -1,7 +1,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-#include "../lib//libft.h"
+#include "../lib/libft.h"
 # include "get_next_line.h"
 
 # include <math.h>
@@ -127,24 +127,24 @@ typedef struct s_all
 }				t_all;
 
 char		**get_map(int fd, char *line, int *error);
-int			find_sprites(const char **kek, t_all *all);
+int			find_sprites(char **kek, t_all *all);
 void		message(int err);
 int			parse_set(t_cub_map *kek, int lol);
-int			find_player(const char **kek, t_plr *lel, int lol);
-int			add_ray(t_all *all, const t_point *kek, float lol);
+int			find_player(char **kek, t_plr *lel, int lol);
+void			add_ray(t_all *all, const t_point *kek, float lol);
 
 void		add_scale_line(t_all *all, int n, int hign, int is_x);
 
-int			create_win(t_all *all);
+void			create_win(t_all *all);
 t_texture	texture_define(const t_ray *ray_new,
 				const t_textures *all_txtr, int *is_x);
-int			find_crossing(t_all *all, float angle, int kek, t_texture *textr);
+void			find_crossing(t_all *all, float angle, int kek, t_texture *textr);
 void		free_map(t_cub_map *map);
-int			key_commands(int keycode, t_all *all);
+void			key_commands(int keycode, t_all *all);
 int			find_max(char **map_old, int len);
 void		screenshot(t_all *all);
 int			ft_close(t_all *all);
-int			map_validate(const char **map);
+int			map_validate(char **map);
 void		ft_free_R(char **res);
 void		free_RGB(char **res);
 void		check_crossing(t_plr *plr, t_all *all, int is_x);
