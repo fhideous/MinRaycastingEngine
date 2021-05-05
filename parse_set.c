@@ -94,9 +94,9 @@ int	choise_type(int fd, char *line, t_cub_map *f_map)
 	else if (*line == 'S')
 		err = parse_path(line, &f_map->s);
 	else if (*line == ' ' || *line == '1')
-	{
 		f_map->map = get_map(fd, line, &err);
-	}
+//	if (f_map->map == NULL)
+//		free(line);
 	return (err);
 }
 

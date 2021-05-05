@@ -1,5 +1,5 @@
 #include "hdrs/get_next_line.h"
-
+#include "lib/libft.h"
 static char	*ft_begin(const char *s)
 {
 	char	*s1;
@@ -75,7 +75,7 @@ int	get_next_line(int fd, char **line)
 
 	if ((fd < 0) || (!(line)) || (BUFFER_SIZE <= 0))
 		return (-1);
-	buf = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	if (!(buf))
 		return (-1);
 	return (readfile(fd, buf, &ost, line));

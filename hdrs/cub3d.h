@@ -143,7 +143,7 @@ void		free_map(t_cub_map *map);
 int			key_commands(int keycode, t_all *all);
 int			find_max(char **map_old, int len);
 void		screenshot(t_all *all);
-void		ft_close(t_all *all);
+int			ft_close(t_all *all);
 int			map_validate(const char **map);
 void		ft_free_R(char **res);
 void		free_RGB(char **res);

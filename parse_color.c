@@ -15,8 +15,8 @@ static int	check_valid_colors(char **colors)
 			return (1);
 		i++;
 	}
-	while (i--)
-		free(colors_tmp[i]);
+	while (i > 0)
+		free(colors_tmp[--i]);
 	free(colors_tmp);
 	return (0);
 }

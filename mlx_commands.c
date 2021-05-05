@@ -1,6 +1,6 @@
 #include "hdrs/cub3d.h"
 
-void	ft_close(t_all *all)
+int	ft_close(t_all *all)
 {
 	free_map(all->f_map);
 	mlx_destroy_image(all->f_w.mlx, all->f_w.img);

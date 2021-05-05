@@ -24,6 +24,7 @@ int	create_win(t_all *all)
 			&all->f_w.BPP,
 			&all->f_w.l_len,
 			&all->f_w.endian);
+//	mlx_hook(all->f_w.win, 17, 1L << 17, ft_close, all);
 	mlx_hook(all->f_w.win, 2, 1L << 0, key_commands, all);
 	if (all->screen)
 	{
@@ -31,5 +32,6 @@ int	create_win(t_all *all)
 		screenshot(all);
 	}
 	mlx_loop_hook(all->f_w.mlx, render_next_frame, &all->f_w);
-	mlx_loop(all->f_w.mlx);
+	ft_close(all);
+//	mlx_loop(all->f_w.mlx);
 }
