@@ -1,20 +1,17 @@
 #Cub3d
 
+Program name: cub3D
 
-0.Connect gnl to lib
-0. Create Makefile
+Turn in files: All your files
 
-1.Ma p parser 
-0. Parsing to the linked list
-1. Linked list -> **massive
-2. Check map validation
+Makefileall mast contain clean, fclean, re rules
+External functs:      
+•open, close, read, write, printf, malloc, free, perror, strerror, exit     
+•All functions of the mathlibrary (-lm man man 3 math)  
+•All functions of the MinilibX
 
-2.Raycast algoritm
+Description: You must create a “realistic” 3D graphicalrepresentation of the inside of a maze from afirst-person perspective.  You have to create thisrepresentation using the Ray-Casting principlesmentioned earlier.Must realize creating bmp snapshoot of screen. 
 
-3.Drawing with mlx
+Example of bmp screenshot: 
 
-4.Texturing
-
-5.Error processing
-
-5.Snapshot
+![Screenshot_2021-05-31 en subject pdf](https://user-images.githubusercontent.com/73652632/120121624-22116380-c1ad-11eb-93b4-c1663e53d586.png)
