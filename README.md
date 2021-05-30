@@ -1,4 +1,4 @@
-#Cub3d
+#MyMinRaycastingEngine
 
 Program name: cub3D
 
